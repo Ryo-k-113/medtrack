@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+
+
+// ユーザー情報
+model User {
+  id              Int      @id @default(autoincrement()) 
+  email           String   @unique
+  password        String
+  role            Role   @default(USER) 
+
+  // リレーション
+  BookmarkDrugs   BookmarkDrug[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// ユーザーがブックマークした医薬品
+model BookmarkDrug {
+  id              Int      @id @default(autoincrement())
+  createAt        DateTime @default(now())
+  
+  // 外部キー (Int に修正)
+  UserId          Int
+  DrugId          Int
+  
+  // リレーション
+  User            User     @relation(fields: [UserId], references: [id])
+  Drug            Drug     @relation(fields: [DrugId], references: [id])
+  
+  // 複合キー (オプション: ユーザーと医薬品の組み合わせで一意にする場合)
+  @@unique([UserId, DrugId])
+}
+
+
+// 医薬品の基本情報
+model Drug {
+  id                      Int      @id @default(autoincrement()) 
+  name                    String
+  price                   Decimal      
+  yjCode                  String
+  isSelectMedical         Boolean
+  isAuthorizedGeneric     Boolean
+  packageInsertUrl        String 
+  productType             ProductType
+  
+  // 外部キー 
+  UnitId                  Int
+  GenericNameId           Int
+  ManufacturingCompanyId  Int
+  SalesCompanyId          Int
+  
+  
+  // リレーション
+  Unit                    Unit                   @relation(fields: [UnitId], references: [id])
+  GenericName             GenericName            @relation(fields: [GenericNameId], references: [id])
+  ManufacturingCompany    PharmaceuticalCompany  @relation("Manufacture", fields: [ManufacturingCompanyId], references: [id])
+  SalesCompany            PharmaceuticalCompany  @relation("Sales", fields: [SalesCompanyId], references: [id])        
+  
+  BookmarkDrugs           BookmarkDrug[]
+  PackageUnits            PackageUnit[]
+}
+
+enum ProductType {
+  ORIGINAL_PRODUCT            // 先発品
+  ASSOCIATE_ORIGINAL_PRODUCT  // 準先発品
+  GENERIC_WITH_ADD            // 後発品(加算対象)
+  GENERIC_WITHOUT_ADD         // 後発品(加算対象外)
+  OTHER                       // その他
+}
+
+
+
+// 医薬品の包装単位
+model PackageUnit {
+  id                        Int      @id @default(autoincrement()) 
+  name                      String
+  gs1Code                   String 
+  announceUrl               String?
+  currentShippingStatus     CurrentShippingStatus
+  salesTransferDate         DateTime?
+  discontinuedDate          DateTime?
+  transitionalMeasuresDate  DateTime?
+  publishStatus             PublishStatus
+
+  // 外部キー (Int に修正)
+  DrugId                    Int
+  
+  // リレーション
+  Drug                      Drug                   @relation(fields: [DrugId], references: [id])
+  AnnounceHistories         AnnounceHistory[]
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum CurrentShippingStatus {
+  NORMAL_SHIPMENT
+  LIMITED_SHIPMENT
+  SHIPMENT_SUSPENDED
+}
+
+// 包装単位ごとの出荷状況履歴
+model AnnounceHistory {
+  id                     Int      @id @default(autoincrement()) // String から Int に修正
+  announcedDate          DateTime?
+  effectiveDate          DateTime?
+  announceStatus         AnnounceStatus?
+  
+  
+  // 外部キー 
+  PackageUnitId          Int
+  
+  // リレーション
+  PackageUnit            PackageUnit @relation(fields: [PackageUnitId], references: [id])
+}
+
+enum AnnounceStatus {
+  NORMAL_SHIPMENT
+  LIMITED_SHIPMENT
+  SHIPMENT_SUSPENDED
+  DISCONTINUED_SALE
+  TRANSFER_OF_SALE
+}
+
+
+// 単位 (例: mg, mL, 錠)
+model Unit {
+  id        Int      @id @default(autoincrement()) 
+  name      String
+  
+  // リレーション
+  Drugs     Drug[]
+}
+
+
+
+// 一般名
+model GenericName {
+  id        Int      @id @default(autoincrement()) 
+  name      String
+  
+  // リレーション
+  Drugs     Drug[]
+}
+
+
+
+// 製薬会社 
+model PharmaceuticalCompany {
+  id        Int      @id @default(autoincrement()) 
+  name      String
+  
+  // リレーション
+  ManufacturedDrugs  Drug[] @relation("Manufacture") 
+  SoldDrugs          Drug[] @relation("Sales")      
+}
+
+
+
