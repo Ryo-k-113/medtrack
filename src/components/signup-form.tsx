@@ -16,13 +16,16 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+// icon
+import { Eye, EyeOff } from 'lucide-react';
 
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
- 
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -83,14 +86,29 @@ export function SignupForm({
         </Field>
         <Field>
           <FieldLabel htmlFor="password">パスワード</FieldLabel>
-          <div>
+          <div className="relative">
             <Input 
               id="password" 
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="••••••••" 
               {...register('password')} 
               disabled={isSubmitting}
             />
+            <Button
+              type='button'
+              variant='ghost'
+              size='icon'
+              className='absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:bg-transparent'
+              onClick={() => setShowPassword(prev => !prev)}
+              tabIndex={-1}
+              aria-label={
+                showPassword
+                  ? "パスワードを非表示"
+                  : "パスワードを表示"
+              }
+            >
+              {showPassword ? (<EyeOff className='w-4 h-4' />) : (<Eye className='w-4 h-4' />)}
+            </Button>
           </div>
             {errors.password && (
             <p className="text-sm text-red-500">
