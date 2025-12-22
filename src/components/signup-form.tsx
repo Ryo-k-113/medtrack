@@ -85,7 +85,14 @@ export function SignupForm({
           )}
         </Field>
         <Field>
-          <FieldLabel htmlFor="password">パスワード</FieldLabel>
+          <div className='sm:flex gap-3'>
+            <FieldLabel htmlFor="password">
+              パスワード
+            </FieldLabel>
+            <FieldDescription className='text-gray-500'>
+              ※英数記号を含む8文字以上
+            </FieldDescription>
+          </div>
           <div className="relative">
             <Input 
               id="password" 
