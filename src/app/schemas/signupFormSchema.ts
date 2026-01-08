@@ -1,6 +1,6 @@
 import { z } from "zod"; 
 
-export const signupSchema = z.object({
+export const authSchema = z.object({
   email: z 
     .string()
     .email({ message: "有効なメールアドレスを入力してください" }), 
@@ -18,4 +18,4 @@ export const signupSchema = z.object({
     }), 
 }); 
 
-export type SignupFormValues = z.infer<typeof signupSchema>;
+export type FormData = z.infer<typeof authSchema>;
