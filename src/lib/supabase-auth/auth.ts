@@ -35,6 +35,26 @@ export const signupHandler = async(formData: FormData ) => {
   return { success: true };
 }
 
+//パスワードでログイン
+export const loginHandler = async ( formData: FormData ) => {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: formData.email,
+    password: formData.password,
+  })
+  
+  if(error) {
+    return {
+      success: false,
+      message: "メールアドレスまたはパスワードが異なります",
+    };
+  }
+
+  revalidatePath('/', 'layout')
+  redirect("/")
+}
+
 
 // Googleログイン
 export const signInWithGoogle = async () => {
