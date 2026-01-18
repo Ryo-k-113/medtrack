@@ -1,12 +1,11 @@
 "use client"
 
 import { useState } from 'react';
-import Link from "next/link";
+import Link  from "next/link";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createClient } from '@/lib/supabase/client'
-import { signupSchema, SignupFormValues } from '@/app/schemas/signupFormSchema';
-import { signInWithGoogle } from "@/lib/supabase-auth/auth";
+import { FormData, authSchema } from '@/app/schemas/authSchema';
+import { signupHandler, loginHandler, signInWithGoogle } from "@/lib/supabase-auth/auth";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,12 +16,18 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { toast } from 'sonner'
 // icon
 import { Eye, EyeOff } from 'lucide-react';
 
 
-
-export function SignupForm({
+export function AuthForm({
+  formType,
+  title,
+  buttonText,
+  guideText,
+  linkHref,
+  linkText,
   className,
   ...props
 }: React.ComponentProps<"form">) {
@@ -33,8 +38,8 @@ export function SignupForm({
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
+  } = useForm<FormData>({
+    resolver: zodResolver(authSchema),
     mode: "onBlur",
     defaultValues: {
       email: "",
@@ -44,36 +49,37 @@ export function SignupForm({
 
   
   // 送信
-  const onSubmit = async (data: SignupFormValues) => {
-    const { email, password } = data;
+  const onSubmit = async (formData: FormData ) => {
+  
+    if (formType === "signup") {
+      const signupResult = await signupHandler(formData)
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `http://localhost:3000/login`,
-      },
-    })
-    if (error) {
-      alert('登録に失敗しました')
-    } else {
+      if (!signupResult.success) {
+        toast.error(signupResult.message, { position: "top-right" });
+        return;
+      }
+      toast.success("確認メールを送信しました", { position: "top-right" });
       reset();
-      alert('確認メールを送信しました。')
+
+    } else {
+      const loginResult = await loginHandler(formData)
+      if (!loginResult.success) {
+        toast.error(loginResult.message, { position: "top-right" });
+        return;
+      }
     }
   }
-
-
+  
   return (
-    <div className={cn("flex flex-col gap-6", className)} >
-      <FieldGroup>
-        <div className="flex flex-col  gap-1 text-left">
-          <h1 className="text-3xl font-bold text-blue-700">MedTrack</h1>
-          <p className="text-gray-600 text-xl text-balance font-bold">
-            新規登録
-          </p>
-        </div>
+    <div className="min-h-svh flex flex-col justify-center items-center">
+      <div className="w-full max-w-sm">
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+      <FieldGroup>
+          <div className="text-gray-600 text-xl text-left text-balance font-bold">
+            {title}
+          </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className={cn("flex flex-col gap-8",className)} {...props}>
           <Field>
             <FieldLabel htmlFor="email">メールアドレス</FieldLabel>
             <Input 
@@ -134,13 +140,14 @@ export function SignupForm({
               type="submit" 
               className="font-bold bg-blue-700 rounded-full hover:bg-blue-500"
               >
-              登録する
+              {buttonText}
             </Button>
         </Field>  
         </form>
 
         <FieldSeparator>または</FieldSeparator>   
-
+        
+        {/* Googleログイン */}
         <span className="sr-only">Googleでログイン</span>
         <form action={signInWithGoogle}>
           <Button 
@@ -160,13 +167,14 @@ export function SignupForm({
 
         <Field>
           <FieldDescription className="px-6 text-center">
-            すでにアカウントをお持ちの方は 
+            {guideText}
             <Button variant="ghost" className='p-2' asChild>
-              <Link href="#">ログイン</Link>
+              <Link href={linkHref}>{linkText}</Link>
             </Button>
           </FieldDescription>
         </Field>
       </FieldGroup>
+      </div>
     </div>
   )
 }
