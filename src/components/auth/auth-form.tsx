@@ -55,16 +55,16 @@ export function AuthForm({
       const signupResult = await signupHandler(formData)
 
       if (!signupResult.success) {
-        toast.error(signupResult.message, { position: "top-right" });
+        toast.error(signupResult.message);
         return;
       }
-      toast.success("確認メールを送信しました", { position: "top-right" });
+      toast.success("確認メールを送信しました");
       reset();
 
     } else {
       const loginResult = await loginHandler(formData)
       if (!loginResult.success) {
-        toast.error(loginResult.message, { position: "top-right" });
+        toast.error(loginResult.message);
         return;
       }
     }

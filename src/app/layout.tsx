@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${notoSansJP.variable} antialiased`}
       >
-        <Toaster richColors />
+        <Toaster richColors position="top-center"/>
         <Header />
         <main>
           {children}
