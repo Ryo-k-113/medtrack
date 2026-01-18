@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import { Header } from "@/components/layout/Header";
+ 
+const notoSansJP = Noto_Sans_JP({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-noto-sans-jp',
+  display: 'swap'
+});
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "MedTrack",
   description: "出荷情報を管理できる医薬品データベースアプリです",
 };
+
 
 export default function RootLayout({
   children,
@@ -24,12 +24,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${notoSansJP.variable} antialiased`}
       >
-        {children}
+        <Toaster richColors />
+        <Header />
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );
 }
+
