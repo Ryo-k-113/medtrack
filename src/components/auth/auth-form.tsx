@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormData, authSchema } from '@/app/schemas/authSchema';
 import { signupHandler, loginHandler, signInWithGoogle } from "@/lib/supabase-auth/auth";
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -20,17 +19,24 @@ import { toast } from 'sonner'
 // icon
 import { Eye, EyeOff } from 'lucide-react';
 
+type AuthFormProps = {
+  formType: "signup" | "login";
+  title: string;
+  buttonText: string;
+  guideText: string;
+  linkHref: string;
+  linkText: string;
+};
 
-export function AuthForm({
+export const AuthForm = ({
   formType,
   title,
   buttonText,
   guideText,
   linkHref,
   linkText,
-  className,
-  ...props
-}: React.ComponentProps<"form">) {
+}: AuthFormProps)  => {
+  
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -79,7 +85,7 @@ export function AuthForm({
             {title}
           </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className={cn("flex flex-col gap-8",className)} {...props}>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           <Field>
             <FieldLabel htmlFor="email">メールアドレス</FieldLabel>
             <Input 
