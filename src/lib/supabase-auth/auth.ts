@@ -6,15 +6,20 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from 'next/cache'
 import { FormData } from '@/app/schemas/authSchema';
 
+type AuthResult = {
+  success: boolean;
+  message: string;
+};
+
 //新規登録
-export const signupHandler = async(formData: FormData ) => { 
+export const signupHandler = async(formData: FormData ): Promise <AuthResult> => { 
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,      
       options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/login`,
+      emailRedirectTo: "http://localhost:3000/login",
       },
   })
 
@@ -32,11 +37,14 @@ export const signupHandler = async(formData: FormData ) => {
     };
   }
 
-  return { success: true };
+  return { 
+    success: true,
+    message: "確認メールを送信しました",
+  };
 }
 
 //パスワードでログイン
-export const loginHandler = async ( formData: FormData ) => {
+export const loginHandler = async ( formData: FormData ): Promise < AuthResult | void > => {
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -50,9 +58,9 @@ export const loginHandler = async ( formData: FormData ) => {
       message: "メールアドレスまたはパスワードが異なります",
     };
   }
-
   revalidatePath('/', 'layout')
   redirect("/")
+
 }
 
 

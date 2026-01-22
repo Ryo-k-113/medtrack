@@ -64,12 +64,12 @@ export const AuthForm = ({
         toast.error(signupResult.message);
         return;
       }
-      toast.success("確認メールを送信しました");
+      toast.success(signupResult.message);
       reset();
 
     } else {
       const loginResult = await loginHandler(formData)
-      if (!loginResult.success) {
+      if (loginResult?.success === false) {
         toast.error(loginResult.message);
         return;
       }
