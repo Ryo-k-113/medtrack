@@ -145,6 +145,7 @@ export const AuthForm = ({
             <Button 
               type="submit" 
               className="font-bold bg-blue-700 rounded-full hover:bg-blue-500"
+              disabled={isSubmitting} 
               >
               {buttonText}
             </Button>

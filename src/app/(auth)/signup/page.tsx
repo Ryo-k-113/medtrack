@@ -1,11 +1,11 @@
 'use client'
 
-import { AuthForm } from "@/components/auth/auth-form";
+import { AuthForm } from "@/components/auth/AuthForm";
 
 export default function SignupPage() {
   
   return (
-    
+
     <AuthForm
       formType="signup"
       title="新規登録"
