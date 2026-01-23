@@ -4,7 +4,7 @@ import 'server-only';
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from 'next/cache'
-import { FormData } from '@/app/schemas/authSchema';
+import { FormData } from '@/app/(auth)/_schemas/authSchema';
 
 type AuthResult = {
   success: boolean;
