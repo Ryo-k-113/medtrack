@@ -8,7 +8,6 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
-    seed: "tsx prisma/seed.ts", // シードデータの作成
   },
   datasource: {
     url: env('DIRECT_URL'),
