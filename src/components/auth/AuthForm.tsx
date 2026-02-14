@@ -5,7 +5,7 @@ import Link  from "next/link";
 import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormData, authSchema } from '@/app/(auth)/_schemas/authSchema';
+import { FormData, authSchema } from '@/app/(public)/(auth)/_schemas/authSchema';
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { loginHandler, signupHandler } from "@/lib/supabase-auth/authHandler";
 import { Button } from "@/components/ui/button"

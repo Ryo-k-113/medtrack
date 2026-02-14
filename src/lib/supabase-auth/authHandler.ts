@@ -2,7 +2,7 @@
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { createClient } from "@/lib/supabase/client";
-import { FormData } from "@/app/(auth)/_schemas/authSchema";
+import { FormData } from "@/app/(public)/(auth)/_schemas/authSchema";
 import { toast } from "sonner";
 
 //ログイン
