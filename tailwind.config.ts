@@ -12,6 +12,8 @@ const config: Config = {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+  			surface: 'hsl(var(--surface))',
+
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -40,6 +42,40 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+
+				status: {
+					normal: {
+						DEFAULT: 'hsl(var(--status-normal))',
+						foreground: 'hsl(var(--status-normal-foreground))',
+					},
+					limited: {
+						DEFAULT: 'hsl(var(--status-limited))',
+						foreground: 'hsl(var(--status-limited-foreground))',
+					},
+					stop: {
+						DEFAULT: 'hsl(var(--status-stop))',
+						foreground: 'hsl(var(--status-stop-foreground))',
+					},
+					discontinued: {
+						DEFAULT: 'hsl(var(--status-discontinued))',
+						foreground: 'hsl(var(--status-discontinued-foreground))',
+					},
+					transfer: {
+						DEFAULT: 'hsl(var(--status-transfer))',
+						foreground: 'hsl(var(--status-transfer-foreground))',
+					},
+				},
+				tag: {
+  				brand: {
+						DEFAULT: 'hsl(var(--brand))',
+						foreground: 'hsl(var(--brand-foreground))'
+					},
+  				generic: {
+						DEFAULT: 'hsl(var(--generic))',
+						foreground: 'hsl(var(--generic-foreground))'
+					},
+  			},
+
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
@@ -52,6 +88,7 @@ const config: Config = {
   			}
   		},
   		borderRadius: {
+
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
