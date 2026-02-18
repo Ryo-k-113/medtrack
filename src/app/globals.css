@@ -62,7 +62,7 @@
     --status-stop-foreground: 210 40% 98%;;
 
     /* 販売中止 */
-    --status-discontinued: 220 9% 46%;   
+    --status-discontinued: 220 9% 36%;   
     --status-discontinued-foreground: 210 40% 98%;;
 
     /* 販売移管 */
