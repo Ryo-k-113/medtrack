@@ -72,7 +72,7 @@ export const AuthForm = ({
       <div className="w-full max-w-sm">
 
       <FieldGroup>
-          <div className="text-gray-600 text-xl text-left text-balance font-bold">
+          <div className="text-foreground text-xl text-left text-balance font-bold">
             {title}
           </div>
 
@@ -87,7 +87,7 @@ export const AuthForm = ({
               disabled={isSubmitting} 
               />
             {errors.email && (
-              <p className="text-sm text-red-500">
+              <p className="text-sm text-destructive">
                 {errors.email.message}
               </p>
             )}
@@ -126,7 +126,7 @@ export const AuthForm = ({
               </Button>
             </div>
               {errors.password && (
-                <p className="text-sm text-red-500">
+                <p className="text-sm text-destructive">
                 {errors.password.message}
               </p>
             )}
@@ -134,8 +134,9 @@ export const AuthForm = ({
         
           <Field>
             <Button 
+              variant="default"
               type="submit" 
-              className="font-bold bg-blue-700 rounded-full hover:bg-blue-500"
+              className="font-bold rounded-full"
               disabled={isSubmitting} 
               >
               {buttonText}
@@ -152,7 +153,7 @@ export const AuthForm = ({
         <Field>
           <FieldDescription className="px-6 text-center">
             {guideText}
-            <Button variant="ghost" className='p-2' asChild>
+            <Button variant="link" className='p-2' asChild>
               <Link href={linkHref}>{linkText}</Link>
             </Button>
           </FieldDescription>

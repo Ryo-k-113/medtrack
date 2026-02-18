@@ -1,6 +1,9 @@
-export default function PublicPage() {
+"use client"
+
+export default function Home() {
   return (
     <>
+    
     </>
   );
 }

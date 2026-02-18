@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
   return (
     <header className="sticky left-0 right-0 top-0 border-b">
       <div className="flex size-full p-4 items-center justify-between">
-        <h1 className="text-3xl font-bold text-blue-700">
+        <h1 className="text-3xl font-bold text-primary">
           <Link href="/">MedTrack</Link>
         </h1>
         {!isLoading && (
@@ -44,8 +44,9 @@ export const Header: React.FC = () => {
           ) : (
             <div>
               <Button 
+              variant="default"
               type="button" 
-              className="font-bold bg-blue-700 rounded-full hover:bg-blue-500"
+              className="font-bold rounded-full" 
               >
                 <LogIn className="h-4 w-4" /> 
                 <Link href="/login">
