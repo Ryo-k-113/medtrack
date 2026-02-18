@@ -20,7 +20,7 @@ export const GoogleLoginButton = () => {
       variant="outline" 
       type="button"  
       onClick={signInWithGoogle}
-      className="rounded-full w-full"
+      className="rounded-full w-full "
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
