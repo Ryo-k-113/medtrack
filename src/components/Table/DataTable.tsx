@@ -3,8 +3,9 @@ import * as React from "react"
 import { useState } from "react"
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { TableSearchBox } from "@/components/TableSearchBox/TableSearchBox"
-import { Button } from "@/components/ui/button"
+import { TableSearchBox } from "@/components/Table/TableSearchBox"
+import { TablePagination } from "@/components/Table/TablePagination"
+
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
@@ -32,7 +33,7 @@ export const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData
         <TableSearchBox
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
-          placeholder="医薬品名で検索..."
+          placeholder="検索..."
         />
       </div>
       {/* テーブル */}
@@ -70,10 +71,7 @@ export const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
       {/* ページネーション */}
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>前へ</Button>
-        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>次へ</Button>
-      </div>
+      <TablePagination table={table} />
     </div>  
   )
 }
