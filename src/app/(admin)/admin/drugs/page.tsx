@@ -1,32 +1,23 @@
 "use client"
 import * as React from "react"
-import { useState, useEffect } from "react"
 import { DataTable } from "@/components/Table/DataTable"
 import { DrugPackageUnit } from "./_types/DrugPackageUnit"
 import { drugsColumns } from "./_components/drugsColumns"
+import { useDataFetch } from "@/hooks/useDataFetch"
 
+type DrugsApiResponse = {
+  packageUnits: DrugPackageUnit[];
+};
 
 export default function AdminDrugsPage() {
-  const [data, setData] = useState<DrugPackageUnit[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  //製品と製品包装情報を取得
+  const { data: apiResponse, isLoading, error } = useDataFetch<DrugsApiResponse>('/api/admin/drugs');
+  const data = apiResponse?.packageUnits || [] ;
+  
+  if (error) {
+    return <div className="p-4 text-destructive">エラー: {error.message}</div>; 
+  }
 
-  
-  useEffect(() => {
-    const fetchDrugs = async () => {
-      try {
-        const response = await fetch('/api/admin/drugs')
-        if (!response.ok) throw new Error("データの取得に失敗しました")
-        const result = await response.json()
-        setData(result.packageUnits)
-      } catch (error) {
-        console.error("エラー:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchDrugs()
-  }, [])
-  
   return (
     <>
       <div className="border-b-2">
@@ -40,7 +31,7 @@ export default function AdminDrugsPage() {
         ) : (
         <DataTable columns={drugsColumns} data={data} />
         )}
-        </div>
+      </div>
     </>
     
   ) 
