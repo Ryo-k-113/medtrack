@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
-import { PublishStatus } from "@prisma/client";
+import type { CreateDrugRequest } from '@/types/admin/drug';
 
 //公開済みの医薬品情報一覧を取得
 //製品名、一般名、製品区分、包装単位、YJコード、GS1コード、最新出荷ステータス、販売会社
@@ -58,7 +58,7 @@ export const POST = async (request: NextRequest) => {
   
   try {
     // リクエストのbodyを取得
-    const body = await request.json();
+    const body: CreateDrugRequest = await request.json();
 
     // bodyの中から医薬品情報を取り出す
     //-- Drug: 製品共通情報 --
