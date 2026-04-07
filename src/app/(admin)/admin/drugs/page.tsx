@@ -1,17 +1,18 @@
 "use client"
 import * as React from "react"
 import { DataTable } from "@/components/Table/DataTable"
-import { DrugPackageUnit } from "./_types/DrugPackageUnit"
+// import { DrugPackageUnit } from "./_types/DrugPackageUnit"
 import { drugsColumns } from "./_components/drugsColumns"
 import { useDataFetch } from "@/hooks/useDataFetch"
+import  {  GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
 
-type DrugsApiResponse = {
-  packageUnits: DrugPackageUnit[];
-};
+// type DrugsApiResponse = {
+//   packageUnits: DrugPackageUnit[];
+// };
 
 export default function AdminDrugsPage() {
   //製品と製品包装情報を取得
-  const { data: apiResponse, isLoading, error } = useDataFetch<DrugsApiResponse>('/api/admin/drugs');
+  const { data: apiResponse, isLoading, error } = useDataFetch<GetPublishedPackageUnitsResponse>('/api/admin/drugs');
   const data = apiResponse?.packageUnits || [] ;
   
   if (error) {

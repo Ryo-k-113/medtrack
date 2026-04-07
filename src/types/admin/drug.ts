@@ -21,6 +21,7 @@ export type PublishStatus =
 | 'PUBLISHED';
 
 
+
 //包装情報の型
 export type PackageUnit = { 
   name: string;
@@ -36,6 +37,38 @@ export type PackageUnit = {
   salesTransferDate?: string | null;
   discontinuedDate?: string | null;
   transitionalMeasuresDate?: string | null;
+};
+
+
+//公開済みの医薬品情報(包装)のGETレスポンス型
+export type PublishedPackageUnitResponse = {
+  id: number;
+  name: string;
+  gs1SalesCode: string | null; 
+  unifiedCode: string | null;  
+  currentShippingStatus: CurrentShippingStatus; 
+
+  // selectで取得するDrugの型
+  Drug: {
+    id: number;
+    name: string;
+    yjCode: string;
+    productType: ProductType | null; 
+
+    GenericName: {
+      id: number;
+      name: string;
+    }; 
+    SalesCompany: {
+      id: number;
+      name: string;
+    };
+  };
+};
+
+// APIが返す全体の型
+export type GetPublishedPackageUnitsResponse = {
+  packageUnits: PublishedPackageUnitResponse[];
 };
 
 

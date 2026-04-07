@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
-import type { CreateDrugRequest } from '@/types/admin/drug';
+import  { CreateDrugRequest, GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
+
 
 //公開済みの医薬品情報一覧を取得
 //製品名、一般名、製品区分、包装単位、YJコード、GS1コード、最新出荷ステータス、販売会社
@@ -40,7 +41,7 @@ export const GET = async () => {
       }, 
     })
 
-    return NextResponse.json({ packageUnits }, { status: 200 })
+    return NextResponse.json<GetPublishedPackageUnitsResponse>({ packageUnits }, { status: 200 })
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 })
