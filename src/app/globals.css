@@ -19,7 +19,7 @@
     --card: 0 0% 100%;                  /* #ffffff ホワイト */
     --card-foreground: 222.2 84% 4.9%;  /* #020817 ダークネイビー */
 
-    --popover: 0 0% 100%;                 /* #ffffff ホワイト */
+    --popover: 0 0% 100%;  /* #ffffff ホワイト */
     --popover-foreground: 222.2 84% 4.9%; /* #020817 ダークネイビー */
 
     --primary: 206 68% 42%;            /* #2277b4 ブルー */
@@ -29,10 +29,11 @@
     --secondary-foreground: 222.2 47.4% 11.2%; /* #0f172a ダークネイビー */
 
     --muted: 0 1% 43%;  /* #6E6C6C  グレー */
-    --muted-foreground: 215.4 16.3% 46.9%; /* #64748b グレーブルー */
+    --muted-foreground: 210 40% 98%; /* #f7fafc ほぼホワイト */
 
     --accent: 142 71% 45%;             /* #21b560 グリーン */
-    --accent-foreground: 222.2 47.4% 11.2%; /* #0f172a ダークネイビー */
+    --accent-foreground:  210 40% 98%; /* #f7fafc ほぼホワイト */
+
 
     --destructive: 0 84.2% 60.2%;      /* #f87171 レッド */
     --destructive-foreground: 210 40% 98%; /* #f7fafc ほぼホワイト */
@@ -40,7 +41,7 @@
     --border: 214.3 31.8% 91.4%;       /* #e2e8f0 ライトグレー */
     --input: 214.3 31.8% 91.4%;        /* #e2e8f0 ライトグレー */
 
-    --ring: 222.2 84% 4.9%;            /* #020817 ダークネイビー */
+    --ring: 206 68% 42%;              /* primary color */
 
     --chart-1: 12 76% 61%;             /* #e76e5b オレンジレッド */
     --chart-2: 173 58% 39%;            /* #29a383 ティール */
@@ -73,8 +74,7 @@
     --tag-brand: 210 70% 50%;
     --tag-generic: 165 55% 50%;
 
-    --radius: 0.5rem;                 
-
+    --radius: 0.5rem;             
   }
   .dark {
     --background: 222.2 84% 4.9%;
