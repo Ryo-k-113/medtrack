@@ -21,6 +21,7 @@ type FormDatePickerProps = {
   label: string;
   placeholder?: string;
   className?: string;
+  required?: boolean;
 };
 
 export function FormDatePicker({ 
@@ -28,6 +29,7 @@ export function FormDatePicker({
   label, 
   placeholder = "日付を選択" ,
   className,
+  required = false,
 }: FormDatePickerProps) {
   const { control } = useFormContext();
 
@@ -40,7 +42,10 @@ export function FormDatePicker({
           data-invalid={fieldState.invalid} 
           className={cn("flex flex-col gap-1", className)}
         >
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={name}>
+            {label}
+            {required && <span className="text-destructive">*</span>}
+          </FieldLabel>
           <Popover>
             <PopoverTrigger asChild>
               <Button
