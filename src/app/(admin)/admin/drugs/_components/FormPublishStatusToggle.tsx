@@ -22,12 +22,7 @@ export const FormPublishStatusToggle = ({
     <Controller
       control={control}
       name={name}
-      render={({ field }) => {
-        
-        // 選択されていない状態
-        const isUnselected = !field.value 
-
-        return(
+      render={({ field }) => (
         <ToggleGroup
           type="single"
           value={field.value}
@@ -46,7 +41,6 @@ export const FormPublishStatusToggle = ({
             className={cn(
               "rounded-full px-4 py-1 text-xs font-bold h-full bg-background text-foreground",
               "data-[state=on]:bg-muted/70 data-[state=on]:text-muted-foreground",
-              isUnselected && "border",
               "hover:bg-transparent hover:text-foreground"
             )}
           >
@@ -64,7 +58,7 @@ export const FormPublishStatusToggle = ({
             公開
           </ToggleGroupItem>
         </ToggleGroup>
-      )}}
+      )}
     />
   )
   
