@@ -3,6 +3,8 @@
 import * as React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { SelectOption } from "@/types/ui/select"
+
 
 import {
   Select,
@@ -21,30 +23,25 @@ import {
 
 
 
-export type Option = {
-  label: string;
-  value: string;
-};
-
-type FormSelectBoxProps = {
+type FormSelectBoxProps<T extends string> = {
   name: string;
   label: string;
-  options: Option[];
+  options: readonly SelectOption[];
   placeholder?: string;
   required?: boolean;
   description?: string;
   className?: string;
 };
 
-export const FormSelectBox = ({
+export const FormSelectBox = <T extends string> ({
   name,
   label,
-  options,
+  options = [],
   placeholder = "選択してください",
   required = false,
   description,
   className
-}: FormSelectBoxProps) => {
+}: FormSelectBoxProps<T>) => {
   const { control } = useFormContext();
 
   return (
