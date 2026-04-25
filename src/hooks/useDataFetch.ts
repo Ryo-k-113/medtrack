@@ -1,7 +1,7 @@
 "use client"
 import useSWR from 'swr'
 import { useSupabaseSession } from './useSupabaseSession';
-import { fetcher } from '@/_utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 
 /**
  * APIエンドポイントからGETメソッドでデータを取得する汎用的なカスタムフック
