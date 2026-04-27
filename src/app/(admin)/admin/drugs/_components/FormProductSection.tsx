@@ -28,7 +28,7 @@ export const FormProductSection = ({
             placeholder="例: ロキソニン錠" 
           />
           <FormInput 
-            name="genericName" 
+            name="GenericNameId" 
             label="成分名" 
             placeholder="例: ロキソプロフェン" 
           />
@@ -39,7 +39,7 @@ export const FormProductSection = ({
             placeholder="例: 10.5" 
           />
           <FormSelectBox 
-            name="unit" 
+            name="UnitId" 
             label="規格単位" 
             options={unitOptions} 
           />
@@ -56,12 +56,12 @@ export const FormProductSection = ({
             label="薬価収載コード" 
           />
           <FormSelectBox 
-            name="salesCompany" 
+            name="SalesCompanyId" 
             label="販売会社" 
             options={companyOptions} 
           />
           <FormSelectBox 
-            name="manufacturingCompany" 
+            name="ManufacturingCompanyId" 
             label="製造会社" 
             options={companyOptions} 
           />
