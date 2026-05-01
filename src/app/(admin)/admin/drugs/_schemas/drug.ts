@@ -42,12 +42,12 @@ export const packageUnitFormSchema = z.object({
   
   janCode: z.union([
     z.literal(""),
-    z.string().length(12, "12桁で入力してください"),
+    z.string().length(13, "13桁で入力してください"),
   ]).transform((val) => (val === "" ? null : val)),
 
   salesTransferDate: z.date().nullable().optional(),
   discontinuedDate: z.date().nullable().optional(),
-  transitionalDate: z.date().nullable().optional(),
+  transitionalMeasuresDate: z.date().nullable().optional(),
 });
 
 
@@ -122,7 +122,7 @@ export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
   janCode: "", 
   salesTransferDate: null,
   discontinuedDate: null,
-  transitionalDate: null, 
+  transitionalMeasuresDate: null, 
 };
 
 // フォーム全体の初期値
