@@ -129,7 +129,7 @@ export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
 export const DEFAULT_DRUG_FORM_VALUES: DrugFormInput = {
   name: "", 
   GenericNameId: "", 
-  price: null, 
+  price: "" as unknown as number, 
   UnitId: "", 
   yjCode: "",
   drugPriceListingCode: "", 
