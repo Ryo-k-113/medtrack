@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
 import  { CreateDrugRequest, GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
+import { toUTCDate } from "@/utils/date";
 
 
 //公開済みの医薬品情報一覧を取得
@@ -116,9 +117,9 @@ export const POST = async (request: NextRequest) => {
             publishStatus: pkg.publishStatus,
             
             // 日付データのDate型変換
-            salesTransferDate: pkg.salesTransferDate || null,
-            discontinuedDate: pkg.discontinuedDate|| null,
-            transitionalMeasuresDate: pkg.transitionalMeasuresDate || null,
+            salesTransferDate: toUTCDate(pkg.salesTransferDate), 
+            discontinuedDate: toUTCDate(pkg.discontinuedDate),
+            transitionalMeasuresDate:toUTCDate(pkg.transitionalMeasuresDate),
           })),
         },
       },
@@ -138,7 +139,7 @@ export const POST = async (request: NextRequest) => {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 400 })
     }
-    console.error("【APIエラー発生】:", error);
+    console.error("APIエラー発生:", error);
   }
 }
 
