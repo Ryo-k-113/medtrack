@@ -104,7 +104,7 @@ export const FormPackageUnitCard = ({
           label="販売中止日"
         />
         <FormDatePicker
-          name={`packageUnits.${index}.transitionalDate`}
+          name={`packageUnits.${index}.transitionalMeasuresDate`}
           label="経過措置期限"
         />
         <FormDatePicker
