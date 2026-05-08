@@ -61,16 +61,7 @@ export const FormPackageUnitCard = ({
           options={SHIPPING_STATUS_OPTIONS}
           required
         />
-        <FormDatePicker
-          name={`packageUnits.${index}.announcementDate`}
-          label="告示日"
-          required
-        />
-        <FormDatePicker
-          name={`packageUnits.${index}.effectiveDate`}
-          label="実施日"
-          required
-        />
+      
       </div>
 
       {/* コード情報 */}

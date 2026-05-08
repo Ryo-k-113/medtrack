@@ -12,12 +12,6 @@ export const packageUnitFormSchema = z.object({
   currentShippingStatus: z.enum(CurrentShippingStatus, {
     message: "出荷状況を選択してください" 
   }),
-  announcementDate: z.date({
-    message: "告知日を入力してください",
-  }),
-  effectiveDate: z.date({
-    message: "実施日を入力してください",
-  }),
 
   // 任意項目
   gs1DispensingCode: z.union([
@@ -113,8 +107,6 @@ export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
   publishStatus: PublishStatus.DRAFT, 
   name: "", 
   currentShippingStatus: "" as CurrentShippingStatus, 
-  announcementDate: new Date(),
-  effectiveDate: new Date(), 
   gs1DispensingCode: "", 
   gs1SalesCode: "",
   unifiedCode: "", 
