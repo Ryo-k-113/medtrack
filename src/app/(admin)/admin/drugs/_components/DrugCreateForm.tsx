@@ -12,7 +12,7 @@ import { companyOptions, unitOptions } from "../_constants/drug"
 import { drugFormSchema, type DrugFormData, type DrugFormInput, DEFAULT_DRUG_FORM_VALUES } from "../_schemas/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
-
+import { useRouter } from "next/navigation"
 
 export const DrugCreateForm = () => {
   const { token } = useSupabaseSession();
@@ -28,9 +28,11 @@ export const DrugCreateForm = () => {
     formState: { isSubmitting } 
   } = form;
 
+   const router = useRouter();
+
   const onSubmit = async (data: DrugFormData) => {
     try {
-      await fetcher({
+      const response = await fetcher({
         url: "/api/admin/drugs",
         method: "POST",
         token,
@@ -38,7 +40,8 @@ export const DrugCreateForm = () => {
       })
 
       toast.success("登録が完了しました");
-
+      router.push(`/admin/drugs/${response.data.id}`)
+      
     } catch(error) {
       console.error("登録に失敗しました", error)
       toast.error("登録に失敗しました")
