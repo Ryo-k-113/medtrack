@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { Field, FieldError, FieldLabel, FieldDescription} from "@/components/ui/field"
 import { cn } from "@/lib/utils";
 
-cn
 
 type FormInputProps ={
   name: string;
