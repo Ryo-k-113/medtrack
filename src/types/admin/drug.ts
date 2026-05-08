@@ -1,26 +1,5 @@
 
-//製品の区分
-export type ProductType = 
-  | 'ORIGINAL_PRODUCT' 
-  | 'ASSOCIATE_ORIGINAL_PRODUCT' 
-  | 'GENERIC_WITH_ADD' 
-  | 'GENERIC_WITHOUT_ADD' 
-  | 'OTHER';
-
-
-//現在の出荷状況
-export type CurrentShippingStatus = 
-  | 'NORMAL_SHIPMENT' 
-  | 'LIMITED_SHIPMENT' 
-  | 'SHIPMENT_SUSPENDED';
-
-
-//医薬品情報の公開・下書き
-export type PublishStatus = 
-| 'DRAFT' 
-| 'PUBLISHED';
-
-
+import type {  ProductType, CurrentShippingStatus, PublishStatus } from "@prisma/client"
 
 //包装情報の型
 export type PackageUnit = { 
