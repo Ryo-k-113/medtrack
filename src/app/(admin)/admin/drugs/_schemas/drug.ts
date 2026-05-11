@@ -71,14 +71,16 @@ export const drugFormSchema = z.object({
     z.enum(ProductType)
   ]).transform((val) => (val === "" ? null : val)),
   
-  price: z.coerce.number({
-    message: "正しい数値を入力してください"
-  })
-  .positive("0以上の数値を入力してください")
-  .multipleOf(0.01, "小数点2桁以内で入力してください")
-  .nullable()
-  .optional()
-  .transform((val) => val ?? null),
+  price: z.preprocess(
+    (val) => (val === "" ? null : val),
+    z.coerce.number({
+      message: "正しい数値を入力してください"
+    })
+    .positive("0以上の数値を入力してください")
+    .multipleOf(0.01, "小数点2桁以内で入力してください")
+    .nullable()
+    .optional()
+  ),
 
   isSelectMedical: z.boolean(),
   isAuthorizedGeneric: z.boolean(),
