@@ -8,7 +8,7 @@ import { Send } from "lucide-react"
 import { toast } from "sonner";
 import { FormProductSection } from "./FormProductSection"
 import { FormPackageUnitSection } from "./FormPackageUnitSection"
-import { companyOptions, unitOptions } from "../_constants/drug"
+import { companyOptions, unitOptions,genericNameOptions } from "../_constants/drug"
 import { drugFormSchema, type DrugFormData, type DrugFormInput, DEFAULT_DRUG_FORM_VALUES } from "../_schemas/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
@@ -62,6 +62,7 @@ export const DrugCreateForm = () => {
             <FormProductSection 
               companyOptions={companyOptions}
               unitOptions={unitOptions}
+              genericNameOptions={genericNameOptions}
             />
 
             {/* 包装規格エリア */}

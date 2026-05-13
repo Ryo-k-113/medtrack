@@ -3,17 +3,20 @@
 import { FormInput } from "./FormInput"
 import { FormSelectBox } from "./FormSelectBox"
 import { FormCheckbox } from "./FormCheckbox"
+import { FormCombobox } from "./FormCombobox"
 import { PRODUCT_TYPE_OPTIONS } from "../_constants/drug"
 import { SelectOption } from "@/types/ui/select"
 
 type FormProductSectionProps = {
   companyOptions: readonly SelectOption[];
   unitOptions: readonly SelectOption[];
+  genericNameOptions: readonly SelectOption[];
 };
 
 export const FormProductSection = ({
   companyOptions,
   unitOptions,
+  genericNameOptions,
 }: FormProductSectionProps) => {
   return (
     <div className="border p-6 rounded-md bg-background shadow-sm space-y-6">
@@ -27,10 +30,10 @@ export const FormProductSection = ({
             label="医薬品名" 
             placeholder="例: ロキソニン錠" 
           />
-          <FormInput 
+          <FormCombobox 
             name="GenericNameId" 
             label="成分名" 
-            placeholder="例: ロキソプロフェン" 
+            options={genericNameOptions} 
           />
           <FormInput 
             name="price" 
@@ -38,7 +41,7 @@ export const FormProductSection = ({
             type="number" 
             placeholder="例: 10.5" 
           />
-          <FormSelectBox 
+          <FormCombobox 
             name="UnitId" 
             label="規格単位" 
             options={unitOptions} 
@@ -55,12 +58,12 @@ export const FormProductSection = ({
             name="drugPriceListingCode" 
             label="薬価収載コード" 
           />
-          <FormSelectBox 
+          <FormCombobox 
             name="SalesCompanyId" 
             label="販売会社" 
             options={companyOptions} 
           />
-          <FormSelectBox 
+          <FormCombobox 
             name="ManufacturingCompanyId" 
             label="製造会社" 
             options={companyOptions} 

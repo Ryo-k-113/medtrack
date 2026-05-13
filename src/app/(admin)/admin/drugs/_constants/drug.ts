@@ -38,3 +38,10 @@ export const unitOptions = [
   { label: "g", value: "3" },
   { label: "本", value: "4" },
 ] as const
+
+//成分名
+//後々DBからfetchで取得する予定
+export const genericNameOptions = [
+  { label: "ロキソプロフェンナトリウム水和物", value: "1"},
+  { label: "アスピリン", value: "2"},
+] as const
