@@ -71,3 +71,12 @@ export type CreateDrugRequest = {
   // -- PackageUnits 各包装情報 --
   packageUnits: PackageUnit[];
 };
+
+
+// 製薬会社のGETレスポンス型
+export type CompanyResponse = {
+  companies: {
+    id: number
+    name: string
+  }[]
+}
