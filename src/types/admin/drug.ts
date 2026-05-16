@@ -88,3 +88,11 @@ export type UnitResponse = {
     name: string
   }[]
 }
+
+// 成分名のGETレスポンス型
+export type GenericNameResponse = {
+  genericNames: {
+    id: number
+    name: string
+  }[]
+}
