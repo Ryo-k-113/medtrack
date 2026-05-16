@@ -80,3 +80,11 @@ export type CompanyResponse = {
     name: string
   }[]
 }
+
+// 規格単位のGETレスポンス型
+export type UnitResponse = {
+  units: {
+    id: number
+    name: string
+  }[]
+}
