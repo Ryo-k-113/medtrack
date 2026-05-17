@@ -8,14 +8,20 @@ import { Send } from "lucide-react"
 import { toast } from "sonner";
 import { FormProductSection } from "./FormProductSection"
 import { FormPackageUnitSection } from "./FormPackageUnitSection"
-import { companyOptions, unitOptions,genericNameOptions } from "../_constants/drug"
 import { drugFormSchema, type DrugFormData, type DrugFormInput, DEFAULT_DRUG_FORM_VALUES } from "../_schemas/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useRouter } from "next/navigation"
+import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
+
 
 export const DrugCreateForm = () => {
   const { token } = useSupabaseSession();
+  const router = useRouter();
+
+  // 製薬会社、規格単位、成分名の一覧取得
+  const { companyOptions, unitOptions, genericNameOptions, isLoading } = useDrugFormOptions()
+
 
   const form = useForm<DrugFormInput, unknown, DrugFormData>({
     mode: "onBlur",
@@ -28,8 +34,6 @@ export const DrugCreateForm = () => {
     formState: { isSubmitting } 
   } = form;
 
-   const router = useRouter();
-
   const onSubmit = async (data: DrugFormData) => {
     try {
       const response = await fetcher({
@@ -38,7 +42,6 @@ export const DrugCreateForm = () => {
         token,
         body: data,
       })
-
       toast.success("登録が完了しました");
       router.push(`/admin/drugs/${response.data.id}`)
       
@@ -48,6 +51,8 @@ export const DrugCreateForm = () => {
     }
   }
   
+  if (isLoading) return <div>読み込み中...</div>
+
   return (
     <div>
       {/* 医薬品の登録フォーム */}
