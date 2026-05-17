@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
 import  { CreateDrugRequest, GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
 import { toUTCDate } from "@/utils/date";
+import { Prisma } from "@prisma/client"
 
 
 //公開済みの医薬品情報一覧を取得
@@ -136,6 +137,14 @@ export const POST = async (request: NextRequest) => {
     );
 
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { message: "同じYJコードと販売会社の組み合わせが既に登録されています" },
+          { status: 409 } 
+        )
+      }
+    }
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 400 })
     }
