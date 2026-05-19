@@ -26,7 +26,10 @@ export const fetcher = async ({
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    if (!res.ok) throw new Error("APIリクエストに失敗しました。");
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData.message)
+    }
 
     return await res.json();
   } catch (error) {
