@@ -67,8 +67,7 @@ export type GetPublishedPackageUnitsResponse = {
 };
 
 
-// 新規医薬品登録の型
-// 製品と各包装情報
+// 新規医薬品登録のリクエスト型
 export type CreateDrugRequest = { 
   name: string;
   price?: number | null; 
@@ -85,9 +84,26 @@ export type CreateDrugRequest = {
   SalesCompanyId: number;
 
   // -- PackageUnits 各包装情報 --
-  packageUnits: PackageUnit[];
+  packageUnits: CreatePackageUnitRequest[];
 };
 
+// 包装情報のリクエスト型
+export type CreatePackageUnitRequest = {
+  // 必須項目
+  name: string;
+  currentShippingStatus: CurrentShippingStatus;
+  publishStatus: PublishStatus;
+
+  // 任意項目
+  gs1SalesCode?: string | null;
+  gs1DispensingCode?: string | null;
+  hotCode?: string | null;
+  janCode?: string | null;
+  unifiedCode?: string | null;
+  salesTransferDate?: string | null;
+  discontinuedDate?: string | null;
+  transitionalMeasuresDate?: string | null;
+}
 
 // 製薬会社のGETレスポンス型
 export type CompanyResponse = {
