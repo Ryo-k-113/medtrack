@@ -105,6 +105,15 @@ export type CreatePackageUnitRequest = {
   transitionalMeasuresDate?: string | null;
 }
 
+
+// 医薬品登録のレスポンス型
+export type CreateDrugResponse = {
+  message: string
+  data: Drug & {
+    PackageUnits: PackageUnit[]
+  }
+}
+
 // 製薬会社のGETレスポンス型
 export type CompanyResponse = {
   companies: {
