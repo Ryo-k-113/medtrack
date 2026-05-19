@@ -2,21 +2,21 @@
 import type {  ProductType, CurrentShippingStatus, PublishStatus } from "@prisma/client"
 
 //包装情報の型
-export type PackageUnit = { 
+export type PackageUnit = {
+  id: number;
   name: string;
-  gs1SalesCode?: string | null;   
-  gs1DispensingCode?: string | null;
-  hotCode?: string | null;
-  janCode?: string | null;
-  unifiedCode?: string | null;
-
+  gs1SalesCode: string | null;
+  gs1DispensingCode: string | null;
+  hotCode: string | null;
+  janCode: string | null;
+  unifiedCode: string | null;
   currentShippingStatus: CurrentShippingStatus;
   publishStatus: PublishStatus;
-
-  salesTransferDate?: string | null;
-  discontinuedDate?: string | null;
-  transitionalMeasuresDate?: string | null;
-};
+  salesTransferDate: string | null;
+  discontinuedDate: string | null;
+  transitionalMeasuresDate: string | null;
+  DrugId: number;
+}
 
 // 医薬品の型
 export type Drug = {
