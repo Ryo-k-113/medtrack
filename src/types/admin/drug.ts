@@ -18,6 +18,22 @@ export type PackageUnit = {
   transitionalMeasuresDate?: string | null;
 };
 
+// 医薬品の型
+export type Drug = {
+  id: number;
+  name: string;
+  price: number | null;
+  drugPriceListingCode: string | null;
+  yjCode: string;
+  isSelectMedical: boolean | null;
+  isAuthorizedGeneric: boolean | null;
+  packageInsertUrl: string | null;
+  productType: ProductType | null;
+  UnitId: number;
+  GenericNameId: number;
+  ManufacturingCompanyId: number;
+  SalesCompanyId: number;
+}
 
 //公開済みの医薬品情報(包装)のGETレスポンス型
 export type PublishedPackageUnitResponse = {
