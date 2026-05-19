@@ -42,12 +42,15 @@ export const DrugCreateForm = () => {
         token,
         body: data,
       })
-      toast.success("登録が完了しました");
-      router.push(`/admin/drugs/${response.data.id}`)
+      if (!response) throw new Error()
       
+      toast.success(response.message);
+      router.push(`/admin/drugs/${response.data.id}`)
+
     } catch(error) {
-      console.error("登録に失敗しました", error)
-      toast.error("登録に失敗しました")
+      if (error instanceof Error) {
+        toast.error(error.message)
+      }
     }
   }
   
@@ -78,7 +81,7 @@ export const DrugCreateForm = () => {
               <Button 
                 type="submit" 
                 className="h-12 w-full md:w-80"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isMutating}
               >
                 <Send className="h-4 w-4 mr-2" />
                 登録する
