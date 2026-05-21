@@ -81,7 +81,7 @@ export const DrugCreateForm = () => {
               <Button 
                 type="submit" 
                 className="h-12 w-full md:w-80"
-                disabled={isSubmitting || isMutating}
+                disabled={isSubmitting}
               >
                 <Send className="h-4 w-4 mr-2" />
                 登録する

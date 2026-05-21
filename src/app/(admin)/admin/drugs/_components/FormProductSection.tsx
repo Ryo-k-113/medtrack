@@ -29,11 +29,13 @@ export const FormProductSection = ({
             name="name"  
             label="医薬品名" 
             placeholder="例: ロキソニン錠" 
+            required
           />
           <FormCombobox 
             name="GenericNameId" 
             label="成分名" 
             options={genericNameOptions} 
+            required
           />
           <FormInput 
             name="price" 
@@ -45,6 +47,7 @@ export const FormProductSection = ({
             name="UnitId" 
             label="規格単位" 
             options={unitOptions} 
+            required
           />
         </div>
 
@@ -53,6 +56,7 @@ export const FormProductSection = ({
           <FormInput 
             name="yjCode" 
             label="YJコード" 
+            required
           />
           <FormInput 
             name="drugPriceListingCode" 
@@ -62,11 +66,13 @@ export const FormProductSection = ({
             name="SalesCompanyId" 
             label="販売会社" 
             options={companyOptions} 
+            required
           />
           <FormCombobox 
             name="ManufacturingCompanyId" 
             label="製造会社" 
             options={companyOptions} 
+            required
           />
         </div>
 
