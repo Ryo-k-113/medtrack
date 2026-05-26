@@ -10,9 +10,10 @@ import { TablePagination } from "@/components/Table/TablePagination"
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  headerAction?: React.ReactNode 
 };
 
-export const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) => {
+export const DataTable = <TData, TValue>({ columns, data, headerAction }: DataTableProps<TData, TValue>) => {
   const [globalFilter, setGlobalFilter] = useState("")
 
   const table = useReactTable({
@@ -29,12 +30,13 @@ export const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <div>
       {/* 検索ボックス  */}
-      <div className="py-6">
+      <div className="py-10 flex justify-between">
         <TableSearchBox
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
           placeholder="検索..."
         />
+        {headerAction}
       </div>
       {/* テーブル */}
       <div className="rounded-md border overflow-hidden">
