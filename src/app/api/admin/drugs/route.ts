@@ -8,7 +8,12 @@ import { Prisma } from "@prisma/client"
 
 //公開済みの医薬品情報一覧を取得
 //製品名、一般名、製品区分、包装単位、YJコード、GS1コード、最新出荷ステータス、販売会社
-export const GET = async () => {
+export const GET = async (request: NextRequest) => {
+    // 認証チェック
+    const { isAuthorized, error, status } = await adminAuthCheck(request);
+
+    if(!isAuthorized) return NextResponse.json({ error },{ status });
+
   try {
     const packageUnits = await prisma.packageUnit.findMany({
       where: {
