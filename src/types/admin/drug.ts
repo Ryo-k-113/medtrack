@@ -1,44 +1,39 @@
 
-//製品の区分
-export type ProductType = 
-  | 'ORIGINAL_PRODUCT' 
-  | 'ASSOCIATE_ORIGINAL_PRODUCT' 
-  | 'GENERIC_WITH_ADD' 
-  | 'GENERIC_WITHOUT_ADD' 
-  | 'OTHER';
-
-
-//現在の出荷状況
-export type CurrentShippingStatus = 
-  | 'NORMAL_SHIPMENT' 
-  | 'LIMITED_SHIPMENT' 
-  | 'SHIPMENT_SUSPENDED';
-
-
-//医薬品情報の公開・下書き
-export type PublishStatus = 
-| 'DRAFT' 
-| 'PUBLISHED';
-
-
+import type {  ProductType, CurrentShippingStatus, PublishStatus } from "@prisma/client"
 
 //包装情報の型
-export type PackageUnit = { 
+export type PackageUnit = {
+  id: number;
   name: string;
-  gs1SalesCode?: string | null;   
-  gs1DispensingCode?: string | null;
-  hotCode?: string | null;
-  janCode?: string | null;
-  unifiedCode?: string | null;
-
+  gs1SalesCode: string | null;
+  gs1DispensingCode: string | null;
+  hotCode: string | null;
+  janCode: string | null;
+  unifiedCode: string | null;
   currentShippingStatus: CurrentShippingStatus;
   publishStatus: PublishStatus;
+  salesTransferDate: string | null;
+  discontinuedDate: string | null;
+  transitionalMeasuresDate: string | null;
+  DrugId: number;
+}
 
-  salesTransferDate?: string | null;
-  discontinuedDate?: string | null;
-  transitionalMeasuresDate?: string | null;
-};
-
+// 医薬品の型
+export type Drug = {
+  id: number;
+  name: string;
+  price: number | null;
+  drugPriceListingCode: string | null;
+  yjCode: string;
+  isSelectMedical: boolean | null;
+  isAuthorizedGeneric: boolean | null;
+  packageInsertUrl: string | null;
+  productType: ProductType | null;
+  UnitId: number;
+  GenericNameId: number;
+  ManufacturingCompanyId: number;
+  SalesCompanyId: number;
+}
 
 //公開済みの医薬品情報(包装)のGETレスポンス型
 export type PublishedPackageUnitResponse = {
@@ -72,8 +67,7 @@ export type GetPublishedPackageUnitsResponse = {
 };
 
 
-// 新規医薬品登録の型
-// 製品と各包装情報
+// 新規医薬品登録のリクエスト型
 export type CreateDrugRequest = { 
   name: string;
   price?: number | null; 
@@ -90,5 +84,56 @@ export type CreateDrugRequest = {
   SalesCompanyId: number;
 
   // -- PackageUnits 各包装情報 --
-  packageUnits: PackageUnit[];
+  packageUnits: CreatePackageUnitRequest[];
 };
+
+// 包装情報のリクエスト型
+export type CreatePackageUnitRequest = {
+  // 必須項目
+  name: string;
+  currentShippingStatus: CurrentShippingStatus;
+  publishStatus: PublishStatus;
+
+  // 任意項目
+  gs1SalesCode?: string | null;
+  gs1DispensingCode?: string | null;
+  hotCode?: string | null;
+  janCode?: string | null;
+  unifiedCode?: string | null;
+  salesTransferDate?: string | null;
+  discontinuedDate?: string | null;
+  transitionalMeasuresDate?: string | null;
+}
+
+
+// 医薬品登録のレスポンス型
+export type CreateDrugResponse = {
+  message: string
+  data: Drug & {
+    PackageUnits: PackageUnit[]
+  }
+}
+
+// 製薬会社のGETレスポンス型
+export type CompanyResponse = {
+  companies: {
+    id: number
+    name: string
+  }[]
+}
+
+// 規格単位のGETレスポンス型
+export type UnitResponse = {
+  units: {
+    id: number
+    name: string
+  }[]
+}
+
+// 成分名のGETレスポンス型
+export type GenericNameResponse = {
+  genericNames: {
+    id: number
+    name: string
+  }[]
+}
