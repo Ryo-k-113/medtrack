@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
-import  { CreateDrugRequest, GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
+import  { CreateDrugRequest, CreateDrugResponse,GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
 import { toUTCDate } from "@/utils/date";
 import { Prisma } from "@prisma/client"
 
@@ -126,12 +126,21 @@ export const POST = async (request: NextRequest) => {
       },
       include: { PackageUnits: true }, // 登録結果に子データも含めて返す
     });
-
+    const responseData = {
+      ...newDrug,
+      price: newDrug.price ? Number(newDrug.price) : null,
+      PackageUnits: newDrug.PackageUnits.map((pkg) => ({
+        ...pkg,
+        salesTransferDate: pkg.salesTransferDate?.toISOString() ?? null,
+        discontinuedDate: pkg.discontinuedDate?.toISOString() ?? null,
+        transitionalMeasuresDate: pkg.transitionalMeasuresDate?.toISOString() ?? null,
+      }))
+    }
     
-    return NextResponse.json(
+    return NextResponse.json<CreateDrugResponse>(
       { 
         message: "登録が完了しました",
-        data: newDrug
+        data: responseData
       }, 
       { status: 201 }
     );
