@@ -131,6 +131,34 @@ export const PUT = async (
 }
 
 
+// 製品の削除(包装情報もカスケードで削除)
+export const DELETE = async (
+  request: NextRequest,
+  { params }: { params: { drugId: string } }
+) => {
+  // 認証チェック
+  const { isAuthorized, error, status } = await adminAuthCheck(request)
+  if (!isAuthorized) return NextResponse.json({ error }, { status })
+   
+  const { drugId } = params;
+
+  try {
+    await prisma.drug.delete({
+      where: { 
+        id: parseInt(drugId),
+      }
+    })
+    return NextResponse.json(
+      { message: "製品を削除しました" },
+      { status: 200 }
+    )
+
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ message: error.message }, { status: 400 })
+    }
+  }
+}
 
 // 製品に新規包装を追加
 export const POST = async (
