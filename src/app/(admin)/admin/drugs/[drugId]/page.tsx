@@ -22,7 +22,7 @@ export default function AdminDrugEditPage() {
           一覧に戻る
         </Button>
       </div>
-      
+
     </div> 
   ) 
 
