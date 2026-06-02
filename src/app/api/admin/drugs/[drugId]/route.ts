@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client"
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
 import { toUTCDate } from "@/utils/date";
 
@@ -55,6 +56,81 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
       return NextResponse.json({ message: error.message }, { status: 400 })
   }
 }
+
+
+// 製品情報の更新
+export const PUT = async (
+  request: NextRequest,
+  { params }: { params: { drugId: string } }
+) => {
+  // 認証チェック
+  const { isAuthorized, error, status } = await adminAuthCheck(request)
+  if (!isAuthorized) return NextResponse.json({ error }, { status })
+   
+  const { drugId } = params;
+
+  try {
+    const body = await request.json()
+
+    const {
+      name,
+      price,
+      drugPriceListingCode,
+      yjCode,
+      isSelectMedical,
+      isAuthorizedGeneric,
+      packageInsertUrl,
+      productType,
+      GenericNameId,
+      UnitId,
+      ManufacturingCompanyId,
+      SalesCompanyId,
+    } = body
+
+    const updatedDrug = await prisma.drug.update({
+      where: { 
+        id: parseInt(drugId), 
+      },
+      data: {
+        name,
+        price,
+        drugPriceListingCode,
+        yjCode,
+        isSelectMedical,
+        isAuthorizedGeneric,
+        packageInsertUrl,
+        productType,
+        GenericNameId,
+        UnitId,
+        ManufacturingCompanyId,
+        SalesCompanyId,
+      }
+    })
+
+    return NextResponse.json(
+      { 
+        message: "更新しました", 
+        data: updatedDrug 
+      },
+      { status: 200 }
+    )
+
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { message: "同じYJコードと販売会社の組み合わせが既に登録されています" },
+          { status: 409 }
+        )
+      }
+    }
+    if (error instanceof Error) {
+      return NextResponse.json({ message: error.message }, { status: 400 })
+    }
+  }
+}
+
+
 
 // 製品に新規包装を追加
 export const POST = async (
