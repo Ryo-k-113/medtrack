@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
+import { toUTCDate } from "@/utils/date";
 
 
 // 製品情報と包装情報一覧を取得
@@ -55,3 +56,62 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
   }
 }
 
+// 製品に新規包装を追加
+export const POST = async (
+  request: NextRequest,
+  { params }: { params: { drugId: string } }
+) => {
+  // 認証チェック
+  const { isAuthorized, error, status } = await adminAuthCheck(request)
+  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  
+  const { drugId } = params;
+
+  try {
+    const body = await request.json()
+
+    const {
+      name,
+      gs1SalesCode,
+      gs1DispensingCode,
+      hotCode,
+      janCode,
+      unifiedCode,
+      currentShippingStatus,
+      publishStatus,
+      salesTransferDate,
+      discontinuedDate,
+      transitionalMeasuresDate,
+    } = body
+
+    const newPackageUnit = await prisma.packageUnit.create({
+      data: {
+        name,
+        gs1SalesCode: gs1SalesCode || null,
+        gs1DispensingCode: gs1DispensingCode || null,
+        hotCode: hotCode || null,
+        janCode: janCode || null,
+        unifiedCode: unifiedCode || null,
+        currentShippingStatus,
+        publishStatus,
+        salesTransferDate: toUTCDate(salesTransferDate),
+        discontinuedDate: toUTCDate(discontinuedDate),
+        transitionalMeasuresDate: toUTCDate(transitionalMeasuresDate),
+        DrugId: parseInt(drugId),
+      }
+    })
+
+    return NextResponse.json(
+      { 
+        message: "包装を追加しました", 
+        data: newPackageUnit 
+      },
+      { status: 201 }
+    )
+
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ message: error.message }, { status: 400 })
+    }
+  }
+}
