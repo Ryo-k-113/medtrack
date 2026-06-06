@@ -56,7 +56,7 @@ export const FormCombobox = ({
           </FieldLabel>
           <Combobox
             items={options}
-            defaultValue={options.find((opt) => opt.value === field.value)}
+            value={options.find((opt) => opt.value === field.value) ?? null}
             onValueChange={(item) => field.onChange(item?.value ?? "")}
           >
             <ComboboxInput
