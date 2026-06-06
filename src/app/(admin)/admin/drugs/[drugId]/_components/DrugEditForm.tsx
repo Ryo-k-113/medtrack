@@ -74,6 +74,7 @@ export const DrugEditForm = () => {
             companyOptions={companyOptions}
             unitOptions={unitOptions}
             genericNameOptions={genericNameOptions}
+            editActions={<DrugEditActions />}
           />
         </div>
 
