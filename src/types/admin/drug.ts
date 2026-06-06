@@ -146,7 +146,7 @@ export type CreateDrugResponse = {
 //-------------------------------------
 // 製品編集ページ GETレスポンス型
 //-------------------------------------
-type DrugEditPackageUnitCard = Pick<PackageUnit,
+export type DrugEditPackageUnitCard = Pick<PackageUnit,
   "id" |
   "name" |
   "gs1SalesCode" |
