@@ -33,7 +33,7 @@ export const DrugEditForm = () => {
 
   //製品と包装データの取得
   const drugId = params.drugId as string
-  const { data: drugData, isLoading:isDrugLoading } = useDataFetch(
+  const { data: drugData, isLoading:isDrugLoading, mutate} = useDataFetch(
     `/api/admin/drugs/${drugId}`
   )
   const drug = drugData?.data
@@ -64,14 +64,31 @@ export const DrugEditForm = () => {
     handleSubmit, 
     formState: { isSubmitting, isDirty } 
   } = form
-  
 
+
+  // 製品の変更を保存
+  const onSubmit = async ( data: DrugEditFormData ) => {
+    try {
+      const res = await fetcher({
+        url: `/api/admin/drugs/${drugId}`,
+        method: "PUT",
+        body: data,
+        token,
+      })
+      toast.success(res.message)
+      await mutate()
+      
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message)
+    }
+  }
+  
   if (isLoading) return <div>読み込み中...</div>
   if (!drug) return <div>データが見つかりません</div>
 
   return (
     <FormProvider {...form}>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
 
         {/* 製品情報 */}
         <div className="py-10">
