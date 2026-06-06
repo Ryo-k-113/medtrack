@@ -3,8 +3,8 @@ import * as React from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider} from "react-hook-form" 
-import { useRouter } from "next/navigation"
-import { useParams } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
+import { useState } from 'react';
 import { toast } from "sonner";
 import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormProductSection"
 import { DrugEditActions } from "./DrugEditActions"
@@ -26,6 +26,8 @@ export const DrugEditForm = () => {
   const { token } = useSupabaseSession();
   const params = useParams()
   const router = useRouter()
+
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // 製薬会社、規格単位、成分名の一覧取得
   const { companyOptions, unitOptions, genericNameOptions, isLoading:isOptionsLoading } = useDrugFormOptions()
@@ -77,9 +79,29 @@ export const DrugEditForm = () => {
       })
       toast.success(res.message)
       await mutate()
-      
+
     } catch (error) {
       if (error instanceof Error) toast.error(error.message)
+    }
+  }
+
+  // 製品の削除(包装もカスケード削除)
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const res = await fetcher({
+        url: `/api/admin/drugs/${drugId}`,
+        method: "DELETE",
+        token,
+      })
+
+      toast.success(res.message)
+      router.replace("/admin/drugs")
+
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message)
+    } finally {
+      setIsDeleting(false)
     }
   }
   
@@ -96,7 +118,12 @@ export const DrugEditForm = () => {
             companyOptions={companyOptions}
             unitOptions={unitOptions}
             genericNameOptions={genericNameOptions}
-            editActions={<DrugEditActions />}
+            editActions={
+              <DrugEditActions 
+                onDelete={handleDelete} 
+                sDeleting={isDeleting}
+              />
+            }
           />
         </div>
 
