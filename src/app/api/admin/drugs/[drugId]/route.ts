@@ -19,18 +19,6 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
         id: parseInt(drugId), 
       },
       include: {
-        GenericName: { 
-          select: { id: true, name: true } 
-        },
-        Unit: { 
-          select: { id: true, name: true } 
-        },
-        ManufacturingCompany: { 
-          select: { id: true, name: true } 
-        },
-        SalesCompany: { 
-          select: { id: true, name: true } 
-        },
         // 包装情報の表示項目
         PackageUnits: {
           select: {
@@ -50,7 +38,7 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
         { status: 404 }
       )
     }
-    return NextResponse.json({ drug }, { status: 200 })
+    return NextResponse.json({ data: drug }, { status: 200 })
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 })
