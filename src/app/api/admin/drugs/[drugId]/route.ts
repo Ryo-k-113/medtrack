@@ -55,9 +55,8 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
 
     return NextResponse.json<DrugEditResponse>({ data: responseData }, { status: 200 })
   } catch (error) {
-    if (error instanceof Error)
-      return NextResponse.json({ message: error.message }, { status: 400 })
-  }
+    return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
+}
 }
 
 
@@ -132,9 +131,7 @@ export const PUT = async (
         )
       }
     }
-    if (error instanceof Error) {
-      return NextResponse.json({ message: error.message }, { status: 400 })
-    }
+    return NextResponse.json({ message: "データの処理中にエラーが発生しました。"}, { status: 500 })
   }
 }
 
@@ -162,10 +159,8 @@ export const DELETE = async (
     )
 
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ message: error.message }, { status: 400 })
-    }
-  }
+    return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
+}
 }
 
 // 製品に新規包装を追加
@@ -230,8 +225,6 @@ export const POST = async (
     )
 
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ message: error.message }, { status: 400 })
-    }
+    return NextResponse.json({ message: "データの処理中にエラーが発生しました。"}, { status: 500 })
   }
 }
