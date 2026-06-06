@@ -3,6 +3,7 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { DrugEditForm } from "./_components/DrugEditForm"
 
 export default function AdminDrugEditPage() {
   const router = useRouter();
@@ -23,6 +24,8 @@ export default function AdminDrugEditPage() {
         </Button>
       </div>
 
+      {/* 医薬品の編集フォーム */}
+      <DrugEditForm />
     </div> 
   ) 
 
