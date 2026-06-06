@@ -46,7 +46,14 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
         { status: 404 }
       )
     }
-    return NextResponse.json<DrugEditResponse>({ data: drug }, { status: 200 })
+
+    // priceをnumberに変換
+    const responseData = {
+      ...drug,
+      price: drug.price ? Number(drug.price) : null,
+    }
+
+    return NextResponse.json<DrugEditResponse>({ data: responseData }, { status: 200 })
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 })
@@ -102,11 +109,16 @@ export const PUT = async (
         SalesCompanyId,
       }
     })
+     // priceをnumberに変換
+     const responseData = {
+      ...updatedDrug,
+      price: updatedDrug.price ? Number(updatedDrug.price) : null,
+    }
 
     return NextResponse.json<UpdateDrugResponse>(
       { 
         message: "更新しました", 
-        data: updatedDrug 
+        data: responseData 
       },
       { status: 200 }
     )
@@ -201,10 +213,18 @@ export const POST = async (
       }
     })
 
+    // Date型をstring型に変換
+    const responseData = {
+      ...newPackageUnit,
+      salesTransferDate: newPackageUnit.salesTransferDate?.toISOString() ?? null,
+      discontinuedDate: newPackageUnit.discontinuedDate?.toISOString() ?? null,
+      transitionalMeasuresDate: newPackageUnit.transitionalMeasuresDate?.toISOString() ?? null,
+    }
+
     return NextResponse.json<AddPackageUnitResponse>(
       { 
         message: "包装を追加しました", 
-        data: newPackageUnit 
+        data: responseData 
       },
       { status: 201 }
     )
