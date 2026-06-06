@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider} from "react-hook-form" 
 import { useRouter } from "next/navigation"
 import { useParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { toast } from "sonner";
 import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormProductSection"
 import { DrugEditActions } from "./DrugEditActions"
@@ -15,6 +14,11 @@ import { useDataFetch } from "@/hooks/useDataFetch"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
 import { ShippingStatusBadge } from "../../_components/ShipingStatusBadge"
 import { PublishStatusBadge } from "../../_components/PublishStatusBadge"
+import {
+  drugEditFormSchema,
+  type DrugEditFormData,
+  type DrugEditFormInput,
+} from "@/app/(admin)/admin/drugs/_schemas/drug"
 import { ChevronRight, Plus } from "lucide-react"
 
 
@@ -37,8 +41,9 @@ export const DrugEditForm = () => {
 
   const isLoading = isDrugLoading || isOptionsLoading
 
-  const form = useForm({
+  const form = useForm<DrugEditFormInput, unknown, DrugEditFormData>({
     mode: "onBlur",
+    resolver: zodResolver(drugEditFormSchema),
     values: {
       name: drug?.name ?? "",
       yjCode: drug?.yjCode ?? "",
