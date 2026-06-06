@@ -35,7 +35,34 @@ export type Drug = {
   SalesCompanyId: number;
 }
 
-//公開済みの医薬品情報(包装)のGETレスポンス型
+// 製薬会社のGETレスポンス型
+export type CompanyResponse = {
+  companies: {
+    id: number
+    name: string
+  }[]
+}
+
+// 規格単位のGETレスポンス型
+export type UnitResponse = {
+  units: {
+    id: number
+    name: string
+  }[]
+}
+
+// 成分名のGETレスポンス型
+export type GenericNameResponse = {
+  genericNames: {
+    id: number
+    name: string
+  }[]
+}
+
+
+//-------------------------------------
+// 医薬品一覧ページ GETレスポンス型
+//-------------------------------------
 export type PublishedPackageUnitResponse = {
   id: number;
   name: string;
@@ -67,7 +94,9 @@ export type GetPublishedPackageUnitsResponse = {
 };
 
 
-// 新規医薬品登録のリクエスト型
+//-------------------------------------
+// 新規医薬品登録のPOSTリクエスト型・レスポンス型
+//-------------------------------------
 export type CreateDrugRequest = { 
   name: string;
   price?: number | null; 
@@ -114,26 +143,64 @@ export type CreateDrugResponse = {
   }
 }
 
-// 製薬会社のGETレスポンス型
-export type CompanyResponse = {
-  companies: {
-    id: number
-    name: string
-  }[]
+//-------------------------------------
+// 製品編集ページ GETレスポンス型
+//-------------------------------------
+type DrugEditPackageUnitCard = Pick<PackageUnit,
+  "id" |
+  "name" |
+  "gs1SalesCode" |
+  "unifiedCode" |
+  "currentShippingStatus" |
+  "publishStatus"
+>
+
+export type DrugEditResponse = {
+  data: Drug & {
+    PackageUnits: DrugEditPackageUnitCard[]
+  }
 }
 
-// 規格単位のGETレスポンス型
-export type UnitResponse = {
-  units: {
-    id: number
-    name: string
-  }[]
+// -------------------------------------
+// 製品編集  PUTリクエスト・レスポンス型
+// -------------------------------------
+export type UpdateDrugRequest = {
+  // 必須項目
+  name: string
+  yjCode: string
+  GenericNameId: number
+  UnitId: number
+  ManufacturingCompanyId: number
+  SalesCompanyId: number
+  // 任意項目
+  price?: number | null
+  drugPriceListingCode?: string | null
+  isSelectMedical?: boolean | null
+  isAuthorizedGeneric?: boolean | null
+  packageInsertUrl?: string | null
+  productType?: ProductType | null
 }
 
-// 成分名のGETレスポンス型
-export type GenericNameResponse = {
-  genericNames: {
-    id: number
-    name: string
-  }[]
+export type UpdateDrugResponse = {
+  message: string
+  data: Drug
+}
+
+
+//-------------------------------------
+// 製品削除 DELETEレスポンス型
+//-------------------------------------
+export type DeleteDrugResponse = {
+  message: string
+}
+
+
+//-------------------------------------
+// 製品に包装追加 POSTリクエスト・レスポンス型
+//-------------------------------------
+export type AddPackageUnitRequest = CreatePackageUnitRequest
+
+export type AddPackageUnitResponse = {
+  message: string
+  data: PackageUnit
 }

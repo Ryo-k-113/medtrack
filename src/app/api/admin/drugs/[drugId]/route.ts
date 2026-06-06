@@ -3,6 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client"
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
 import { toUTCDate } from "@/utils/date";
+import type {
+  DrugEditResponse,
+  UpdateDrugRequest,
+  UpdateDrugResponse,
+  DeleteDrugResponse,
+  AddPackageUnitRequest,
+  AddPackageUnitResponse,
+} from "@/types/admin/drug"
 
 
 // 製品情報と包装情報一覧を取得
@@ -38,7 +46,7 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
         { status: 404 }
       )
     }
-    return NextResponse.json({ data: drug }, { status: 200 })
+    return NextResponse.json<DrugEditResponse>({ data: drug }, { status: 200 })
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 })
@@ -58,7 +66,7 @@ export const PUT = async (
   const { drugId } = params;
 
   try {
-    const body = await request.json()
+    const body: UpdateDrugRequest = await request.json()
 
     const {
       name,
@@ -95,7 +103,7 @@ export const PUT = async (
       }
     })
 
-    return NextResponse.json(
+    return NextResponse.json<UpdateDrugResponse>(
       { 
         message: "更新しました", 
         data: updatedDrug 
@@ -136,7 +144,7 @@ export const DELETE = async (
         id: parseInt(drugId),
       }
     })
-    return NextResponse.json(
+    return NextResponse.json<DeleteDrugResponse>(
       { message: "製品を削除しました" },
       { status: 200 }
     )
@@ -160,7 +168,7 @@ export const POST = async (
   const { drugId } = params;
 
   try {
-    const body = await request.json()
+    const body: AddPackageUnitRequest = await request.json()
 
     const {
       name,
@@ -193,7 +201,7 @@ export const POST = async (
       }
     })
 
-    return NextResponse.json(
+    return NextResponse.json<AddPackageUnitResponse>(
       { 
         message: "包装を追加しました", 
         data: newPackageUnit 
