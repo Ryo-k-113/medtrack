@@ -1,28 +1,25 @@
 "use client"
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
+import { useParams } from "next/navigation"
+import { useDataFetch } from "@/hooks/useDataFetch"
 import { DrugEditForm } from "./_components/DrugEditForm"
+import { AdminPageTitle } from "../../_components/AdminPageTitle"
 
 export default function AdminDrugEditPage() {
-  const router = useRouter();
+  const params = useParams()
+  const drugId = params.drugId as string
+
+  const { data: drugData, isLoading } = useDataFetch(`/api/admin/drugs/${drugId}`)
+  const drugName = drugData?.data?.name
 
   return (
     <div>
       {/* タイトルと戻るボタン */}
-      <div className="flex justify-between items-center pb-4  border-b">
-        <h2 className="text-lg font-bold">
-          医薬品名を編集
-        </h2>
-        <Button
-          variant="outline"
-          onClick={() => router.push("/admin/drugs")}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          一覧に戻る
-        </Button>
-      </div>
+      <AdminPageTitle 
+        title={isLoading ? "読み込み中..." : `${drugName} を編集`}
+        backTo="/admin/drugs"
+        backButtonText="一覧へ戻る"
+      />
 
       {/* 医薬品の編集フォーム */}
       <DrugEditForm />
