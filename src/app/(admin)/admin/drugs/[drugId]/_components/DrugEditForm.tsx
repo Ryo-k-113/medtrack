@@ -1,9 +1,8 @@
 "use client"
 import * as React from "react"
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider} from "react-hook-form" 
-import { useRouter, useParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from 'react';
 import { toast } from "sonner";
 import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormProductSection"
@@ -11,19 +10,14 @@ import { PackageUnitListSection } from "./PackageUnitListSection"
 import { DrugEditActions } from "./DrugEditActions"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
-import { useDataFetch } from "@/hooks/useDataFetch"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
-import {
-  drugEditFormSchema,
-  type DrugEditFormData,
-  type DrugEditFormInput,
-} from "@/app/(admin)/admin/drugs/_schemas/drug"
+import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/app/(admin)/admin/drugs/_schemas/drug"
+import { useAdminDrug } from "../_hooks/useAdminDrug"
 
 
 
 export const DrugEditForm = () => {
   const { token } = useSupabaseSession();
-  const params = useParams()
   const router = useRouter()
 
   const [isDeleting, setIsDeleting] = useState(false)
@@ -33,12 +27,7 @@ export const DrugEditForm = () => {
 
 
   //製品と包装データの取得
-  const drugId = params.drugId as string
-  const { data: drugData, isLoading:isDrugLoading, mutate} = useDataFetch(
-    `/api/admin/drugs/${drugId}`
-  )
-  const drug = drugData?.data
-  const packageUnits = drugData?.data?.PackageUnits ?? []
+  const { drugId, drug, isDrugLoading, mutate } = useAdminDrug()
 
   const isLoading = isDrugLoading || isOptionsLoading
 
@@ -61,11 +50,7 @@ export const DrugEditForm = () => {
     } 
   })
 
-  const { 
-    handleSubmit, 
-    formState: { isSubmitting, isDirty } 
-  } = form
-
+  const { handleSubmit } = form
 
   // 製品の変更を保存
   const onSubmit = async ( data: DrugEditFormData ) => {
@@ -128,12 +113,9 @@ export const DrugEditForm = () => {
           </div>
         </form>
       </FormProvider>
-      
+
       {/* 包装一覧 */}
-      <PackageUnitListSection
-        packageUnits={packageUnits}
-        drugId={drugId}
-      />
+      <PackageUnitListSection />
     </div>
   )
 }

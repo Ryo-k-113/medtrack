@@ -1,16 +1,15 @@
 "use client"
 import * as React from "react"
-import { useParams } from "next/navigation"
-import { useDataFetch } from "@/hooks/useDataFetch"
 import { DrugEditForm } from "./_components/DrugEditForm"
 import { AdminPageTitle } from "../../_components/AdminPageTitle"
+import { useAdminDrug } from "./_hooks/useAdminDrug"
+
 
 export default function AdminDrugEditPage() {
-  const params = useParams()
-  const drugId = params.drugId as string
-
-  const { data: drugData, isLoading } = useDataFetch(`/api/admin/drugs/${drugId}`)
-  const drugName = drugData?.data?.name
+  
+  // 製品情報を取得
+  const { drug, isDrugLoading:isLoading } = useAdminDrug()
+  const drugName = drug?.name
 
   return (
     <div>

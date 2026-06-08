@@ -1,17 +1,14 @@
 "use client"
+import { useAdminDrug } from "../_hooks/useAdminDrug"
 import { PackageUnitAddDialog } from "./PackageUnitAddDialog"
 import { PackageUnitCard } from "./PackageUnitCard"
-import type { DrugEditPackageUnitCard  } from "@/types/admin/drug"
 
-type PackageUnitSectionProps = {
-  packageUnits: DrugEditPackageUnitCard[]
-  drugId: string
-}
 
-export const PackageUnitListSection = ({
-  packageUnits,
-  drugId,
-}: PackageUnitSectionProps) => {
+export const PackageUnitListSection = () => {
+
+  // 製品idと包装を取得
+  const {drugId, packageUnits } = useAdminDrug()
+
   return (
     <div className="border p-6 rounded-md bg-background shadow-sm">
       <div className="flex justify-between items-center border-b pb-4 mb-4">
@@ -28,7 +25,7 @@ export const PackageUnitListSection = ({
       ))}
 
       {/* 包装追加ボタンと新規包装登録のモーダル */}
-      <PackageUnitAddDialog drugId={drugId} />
+      <PackageUnitAddDialog  />
     </div>
   )
 }

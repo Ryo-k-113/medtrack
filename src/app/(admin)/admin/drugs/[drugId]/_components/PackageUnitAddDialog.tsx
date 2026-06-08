@@ -12,18 +12,16 @@ import { SHIPPING_STATUS_OPTIONS} from "../../_constants/drug"
 import { packageUnitFormSchema, type PackageUnitFormData, type PackageUnitFormInput, DEFAULT_PACKAGE_UNIT } from "@/app/(admin)/admin/drugs/_schemas/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
-import { useDataFetch } from "@/hooks/useDataFetch"
+import { useAdminDrug } from "../_hooks/useAdminDrug"
 import { FormPublishStatusToggle } from "../../_components/FormPublishStatusToggle"
 import { FormDatePicker } from "../../_components/FormDatePicker"
 
-type PackageUnitAddDialogProps = {
-  drugId: string
-}
 
-export const PackageUnitAddDialog = ({ drugId }: PackageUnitAddDialogProps) => {
+export const PackageUnitAddDialog = () => {
   const { token } = useSupabaseSession()
-  const { mutate } = useDataFetch(`/api/admin/drugs/${drugId}`)
   
+  const { drugId, mutate } = useAdminDrug()
+
   // モーダルの開閉
   const [isOpen, setIsOpen] = useState(false)
 
