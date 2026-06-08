@@ -14,7 +14,7 @@ const PUBLISH_STATUS_MAP: Record<PublishStatus, { label: string; className: stri
   },
   DRAFT: {
     label: "下書き",
-    className: "bg-slate-200 text-foreground hover:bg-slate-200",
+    className: "bg-muted/70 text-muted-foreground hover:bg-muted/70",
   },
 }
 
