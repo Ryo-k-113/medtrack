@@ -108,30 +108,32 @@ export const DrugEditForm = () => {
   if (!drug) return <div>データが見つかりません</div>
 
   return (
-    <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div>
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
-        {/* 製品情報 */}
-        <div className="py-10">
-          <FormProductSection
-            companyOptions={companyOptions}
-            unitOptions={unitOptions}
-            genericNameOptions={genericNameOptions}
-            editActions={
-              <DrugEditActions 
+          {/* 製品情報 */}
+          <div className="py-10">
+            <FormProductSection
+              companyOptions={companyOptions}
+              unitOptions={unitOptions}
+              genericNameOptions={genericNameOptions}
+              editActions={
+                <DrugEditActions 
                 onDelete={handleDelete} 
                 isDeleting={isDeleting}
+                />
+              }
               />
-            }
-          />
-        </div>
-        
-        {/* 包装一覧 */}
-        <PackageUnitListSection
-          packageUnits={packageUnits}
-          drugId={drugId}
-        />
-      </form>
-    </FormProvider>
+          </div>
+        </form>
+      </FormProvider>
+      
+      {/* 包装一覧 */}
+      <PackageUnitListSection
+        packageUnits={packageUnits}
+        drugId={drugId}
+      />
+    </div>
   )
 }

@@ -1,7 +1,7 @@
+"use client"
+import { PackageUnitAddDialog } from "./PackageUnitAddDialog"
 import { PackageUnitCard } from "./PackageUnitCard"
 import type { DrugEditPackageUnitCard  } from "@/types/admin/drug"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
 
 type PackageUnitSectionProps = {
   packageUnits: DrugEditPackageUnitCard[]
@@ -27,14 +27,8 @@ export const PackageUnitListSection = ({
         />
       ))}
 
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full border-dashed border-2 py-4"
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        包装を追加する
-      </Button>
+      {/* 包装追加ボタンと新規包装登録のモーダル */}
+      <PackageUnitAddDialog drugId={drugId} />
     </div>
   )
 }
