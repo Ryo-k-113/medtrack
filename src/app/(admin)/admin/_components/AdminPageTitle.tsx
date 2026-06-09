@@ -16,7 +16,7 @@ export const AdminPageTitle = ({
   backButtonText = "戻る",
 }: AdminPageTitleProps) => {
   return (
-    <div className="flex justify-between items-center pb-4 border-b mb-6">
+    <div className="flex justify-between items-center pb-4 border-b">
       <div>
         <h2 className="text-lg font-bold text-foreground">{title}</h2>
       </div>
