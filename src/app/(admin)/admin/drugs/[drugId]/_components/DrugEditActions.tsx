@@ -65,7 +65,7 @@ export const DrugEditActions = ({
               <AlertDialogFooter>
                 <AlertDialogCancel 
                   disabled={isSubmitting || isDeleting}
-                  className="hover:bg-muted"
+                  className="hover:bg-muted/70"
                   >
                   キャンセル
                 </AlertDialogCancel>
@@ -89,7 +89,7 @@ export const DrugEditActions = ({
           disabled={isSubmitting}
         >
           <Save className="h-4 w-4" />
-          保存する
+          {isSubmitting ? "保存中..." : "保存する"}
         </Button>
       </div>
     </div>
