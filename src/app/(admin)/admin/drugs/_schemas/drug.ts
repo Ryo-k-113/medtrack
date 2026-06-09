@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { CurrentShippingStatus, PublishStatus, ProductType } from "@prisma/client"
 
-
+//----------------------------
+//  新規登録用スキーマ (製品と包装)
+//----------------------------
 // 包装情報のスキーマ
 export const packageUnitFormSchema = z.object({
   // 必須項目
@@ -135,3 +137,16 @@ export const DEFAULT_DRUG_FORM_VALUES: DrugFormInput = {
   isAuthorizedGeneric: false, 
   packageUnits: [DEFAULT_PACKAGE_UNIT],
 };
+
+
+//-------------------------
+//  製品情報編集用スキーマ
+//-------------------------
+// packageUnitsを除く
+export const drugEditFormSchema = drugFormSchema.omit({
+  packageUnits: true,
+})
+
+// 型定義
+export type DrugEditFormData = z.infer<typeof drugEditFormSchema>
+export type DrugEditFormInput = z.input<typeof drugEditFormSchema>

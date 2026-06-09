@@ -11,17 +11,22 @@ type FormProductSectionProps = {
   companyOptions: readonly SelectOption[];
   unitOptions: readonly SelectOption[];
   genericNameOptions: readonly SelectOption[];
+  editActions?: React.ReactNode
 };
 
 export const FormProductSection = ({
   companyOptions,
   unitOptions,
   genericNameOptions,
+  editActions,
 }: FormProductSectionProps) => {
   return (
-    <div className="border p-6 rounded-md bg-background shadow-sm space-y-6">
-      <h3 className="text-xl font-bold border-b pb-2">製品情報</h3>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="border rounded-md bg-background shadow-sm">
+      <div className="flex justify-between items-center border-b px-6 py-4">
+        <h3 className="text-xl font-bold">製品情報</h3>
+        {editActions}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
 
         {/* 基本情報 */}
         <div className="flex flex-col gap-4 bg-surface border p-4 rounded-md">

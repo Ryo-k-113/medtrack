@@ -5,7 +5,7 @@ import { useFormContext, Controller } from "react-hook-form";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
-
+import { useState } from "react" 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
@@ -32,6 +32,7 @@ export function FormDatePicker({
   required = false,
 }: FormDatePickerProps) {
   const { control } = useFormContext();
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <Controller
@@ -46,7 +47,7 @@ export function FormDatePicker({
             {label}
             {required && <span className="text-destructive">*</span>}
           </FieldLabel>
-          <Popover>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <Button
                 id={name}
@@ -57,7 +58,7 @@ export function FormDatePicker({
                   fieldState.invalid && "border-destructive text-destructive"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
+                <CalendarIcon className="h-4 w-4" />
                 {field.value ? (
                   format(field.value, "PPP", { locale: ja })
                 ) : (
@@ -69,7 +70,11 @@ export function FormDatePicker({
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange} 
+                onSelect={(date) => {
+                  field.onChange(date)
+                  setIsOpen(false)
+                  }
+                } 
                 disabled={(date) => date < new Date("1900-01-01")}
                 locale={ja}
               />

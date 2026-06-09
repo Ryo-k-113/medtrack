@@ -113,7 +113,7 @@ model PackageUnit {
   DrugId                    Int
   
   // リレーション
-  Drug                      Drug                   @relation(fields: [DrugId], references: [id])
+  Drug                      Drug                   @relation(fields: [DrugId], references: [id], onDelete: Cascade )
   AnnounceHistories         AnnounceHistory[]
 }
 
@@ -140,7 +140,7 @@ model AnnounceHistory {
   PackageUnitId          Int
   
   // リレーション
-  PackageUnit            PackageUnit @relation(fields: [PackageUnitId], references: [id])
+  PackageUnit            PackageUnit @relation(fields: [PackageUnitId], references: [id], onDelete: Cascade)
 }
 
 enum AnnounceType {
