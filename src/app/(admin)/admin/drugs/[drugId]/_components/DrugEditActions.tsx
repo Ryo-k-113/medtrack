@@ -86,7 +86,7 @@ export const DrugEditActions = ({
         <Button 
           type="submit"
           variant="accent"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isDeleting || !isDirty}
         >
           <Save className="h-4 w-4" />
           {isSubmitting ? "保存中..." : "保存する"}
