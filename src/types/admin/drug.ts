@@ -247,3 +247,11 @@ export type UpdatePackageUnitResponse = {
   message: string
   data: PackageUnit
 }
+
+
+//-------------------------------------
+// 包装の削除 DELETEレスポンス型
+//-------------------------------------
+export type DeletePackageUnitResponse = {
+  message: string
+}

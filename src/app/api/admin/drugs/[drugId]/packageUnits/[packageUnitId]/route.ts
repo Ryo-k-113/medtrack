@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { Prisma } from "@prisma/client"
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
 import type { PackageUnitDetailResponse, UpdatePackageUnitRequest,
-  UpdatePackageUnitResponse } from "@/types/admin/drug"
+  UpdatePackageUnitResponse, DeletePackageUnitResponse } from "@/types/admin/drug"
 import { toUTCDate } from "@/utils/date";
 
 
@@ -126,3 +126,28 @@ export const PUT = async (
   }
 }
 
+// 包装の削除（AnnounceHistoryもカスケード削除）
+export const DELETE = async (
+  request: NextRequest,
+  { params }: { params: { drugId: string; packageUnitId: string } }
+) => {
+  // 認証チェック
+  const { isAuthorized, error, status } = await adminAuthCheck(request)
+  if (!isAuthorized) return NextResponse.json({ error }, { status })
+
+  const { packageUnitId } = params;
+
+  try {
+    await prisma.packageUnit.delete({
+      where: { id: parseInt(packageUnitId), }
+    })
+
+    return NextResponse.json<DeletePackageUnitResponse>(
+      { message: "削除しました" },
+      { status: 200 }
+    )
+
+  } catch (error) {
+    return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
+  }
+}
