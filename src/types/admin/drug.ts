@@ -229,3 +229,21 @@ export type PackageUnitDetailResponse = {
     }
   }
 }
+
+//-------------------------------------
+// 包装情報の編集 PUTリクエスト・レスポンス型
+//-------------------------------------
+export type UpdatePackageUnitRequest = {
+  name: string
+  publishStatus: PublishStatus
+  gs1SalesCode?: string | null
+  gs1DispensingCode?: string | null
+  hotCode?: string | null
+  janCode?: string | null
+  unifiedCode?: string | null
+}
+
+export type UpdatePackageUnitResponse = {
+  message: string
+  data: PackageUnit
+}
