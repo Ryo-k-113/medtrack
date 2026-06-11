@@ -231,7 +231,7 @@ export type PackageUnitDetailResponse = {
 }
 
 //-------------------------------------
-// 包装情報の編集 PUTリクエスト・レスポンス型
+// 包装情報の編集 PATCHリクエスト・レスポンス型
 //-------------------------------------
 export type UpdatePackageUnitRequest = {
   name: string

@@ -71,8 +71,8 @@ export const GET = async (
 
 
 
-// 包装情報の更新
-export const PUT = async (
+// 包装情報の更新(現在の出荷ステータスは除外)
+export const PATCH = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string } }
 ) => {
