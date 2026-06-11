@@ -255,3 +255,18 @@ export type UpdatePackageUnitResponse = {
 export type DeletePackageUnitResponse = {
   message: string
 }
+
+
+//-------------------------------------
+// 出荷情報履歴の作成 POSTリクエスト・レスポンス型
+//-------------------------------------
+export type CreateAnnounceRequest = {
+  announceType: AnnounceType
+  announcedDate: string
+  effectiveDate: string
+}
+
+export type CreateAnnounceResponse = {
+  message: string
+  data: AnnounceHistory
+}
