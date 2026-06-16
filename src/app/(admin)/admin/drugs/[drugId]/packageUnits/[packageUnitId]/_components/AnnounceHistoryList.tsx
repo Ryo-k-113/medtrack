@@ -19,7 +19,7 @@ export const AnnounceHistoryList = () => {
           告示履歴がありません
         </p>
       ) : (
-        <div className="pt-4">
+        <div className="pt-4 max-h-[800px] overflow-y-auto pr-1">
 
           <table className="w-full border-collapse text-left">
             {/* ヘッダー */}
@@ -36,7 +36,7 @@ export const AnnounceHistoryList = () => {
               {announceHistories.map((history) => (
                 <tr
                   key={history.id}
-                  className="grid grid-cols-4 gap-2 p-4 border-b last:border-b-0 items-center"
+                  className="grid grid-cols-4 gap-2 p-4 border-b  items-center"
                 > 
                   {/*  告示日 */}
                   <td className="text-sm">
