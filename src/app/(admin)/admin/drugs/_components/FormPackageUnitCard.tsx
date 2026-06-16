@@ -6,7 +6,7 @@ import { FormSelectBox } from "./FormSelectBox"
 import { FormDatePicker } from "./FormDatePicker"
 import { Trash2 } from "lucide-react"
 import { FormPublishStatusToggle } from "./FormPublishStatusToggle"
-import { SHIPPING_STATUS_OPTIONS } from "../_constants/drug"
+import { SHIPPING_STATUS_OPTIONS } from "@/app/(admin)/admin/_constants/drug"
 
 type FormPackageUnitCardProps = {
   index: number;
