@@ -1,5 +1,5 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+"use client"
+import { InfoCard } from "@/components/Card/InfoCard";
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit";
 import { PublishStatusBadge } from "@/app/(admin)/admin/drugs/_components/PublishStatusBadge";
 import { ShippingStatusBadge } from "@/app/(admin)/admin/drugs/_components/ShippingStatusBadge";
@@ -7,13 +7,10 @@ import { formatDate } from "@/utils/format";
 
 
 export const PackageUnitInfo = () => {
-
   const { packageUnit, isLoading } = useAdminPackageUnit()
 
   if(isLoading) return <div>読み込み中...</div>
-
-  if (!packageUnit) return null;
-
+  if (!packageUnit) return <div>包装情報が見つかりません</div>;
 
   const packageInfoItems = [
     { label: "公開ステータス", value: <PublishStatusBadge status={packageUnit.publishStatus} className="rounded-md"/>},
@@ -39,36 +36,6 @@ export const PackageUnitInfo = () => {
 
 
   return (
-    <Card className="w-full max-w-xl shadow-sm border">
-
-      {/* ヘッダー */}
-      <CardHeader className="p-6">
-        <div className="flex flex-row items-center justify-between pb-4 border-b">
-          <CardTitle className="text-md font-bold">包装情報</CardTitle>
-        </div>     
-      </CardHeader>
-
-      {/* コンテンツ */}
-      <CardContent className="text-sm">
-        {packageInfoItems.map((item) => {
-          return (
-            <div key={item.label} className="w-full">
-              {item.isDivider ? (
-                // 区切り線の場合
-                <div className="my-3 border-b" />
-              ) : (
-                // データの場合
-                <div className="grid grid-cols-3 py-4 items-center border-b">
-                  <dt>{item.label}</dt>
-                  <dd className={`col-span-2 text-end ${item.value ? "" : "text-slate-400"}`}>
-                    {item.value ?? "—"}
-                  </dd>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </CardContent>
-    </Card>
+    <InfoCard title="包装情報" items={packageInfoItems} />
   )
 }
