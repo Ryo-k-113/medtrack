@@ -4,6 +4,7 @@ import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit";
 import { PublishStatusBadge } from "@/app/(admin)/admin/drugs/_components/PublishStatusBadge";
 import { ShippingStatusBadge } from "@/app/(admin)/admin/drugs/_components/ShippingStatusBadge";
 import { formatDate } from "@/utils/format";
+import { PackageUnitEditDialog } from "./PackageUnitEditDialog";
 
 
 export const PackageUnitInfo = () => {
@@ -36,6 +37,10 @@ export const PackageUnitInfo = () => {
 
 
   return (
-    <InfoCard title="包装情報" items={packageInfoItems} />
+    <InfoCard 
+      title="包装情報" 
+      items={packageInfoItems}
+      headerAction={<PackageUnitEditDialog />} 
+    />
   )
 }
