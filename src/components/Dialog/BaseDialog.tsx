@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
@@ -12,8 +13,9 @@ import { cn } from "@/lib/utils"
 
 type BaseDialogProps = {
   isOpen: boolean
-  onClose: () => void
+  onClose: () => void 
   title: string
+  description?: string
   children: React.ReactNode
   actions?: React.ReactNode  
   className?: string
@@ -23,6 +25,7 @@ export const BaseDialog = ({
   isOpen,
   onClose,
   title,
+  description,
   children,
   actions,
   className,
@@ -46,6 +49,9 @@ export const BaseDialog = ({
         <DialogContent className={cn("z-50", className)}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>
+              {description ?? ""}
+            </DialogDescription>
           </DialogHeader>
 
           {children}
