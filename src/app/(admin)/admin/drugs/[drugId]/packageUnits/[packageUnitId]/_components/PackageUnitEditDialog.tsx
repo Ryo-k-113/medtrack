@@ -26,18 +26,20 @@ export const PackageUnitEditDialog = () => {
   // ダイアログ開閉の状態管理
   const [isOpen, setIsOpen] = useState(false)
 
+  if(!packageUnit) return null
+
   const form = useForm<PackageUnitEditFormInput, unknown, PackageUnitEditFormData>({
     mode: "onBlur",
     resolver: zodResolver(packageUnitEditFormSchema),
-    values: packageUnit ? {
-      name: packageUnit.name ?? "",
+    values: {
+      name: packageUnit.name,
       publishStatus: packageUnit.publishStatus,
-      gs1SalesCode: packageUnit.gs1SalesCode ?? "",
-      gs1DispensingCode: packageUnit.gs1DispensingCode ?? "",
-      unifiedCode: packageUnit.unifiedCode ?? "",
-      hotCode: packageUnit.hotCode ?? "",
-      janCode: packageUnit.janCode ?? "",
-    } : undefined,
+      gs1SalesCode: packageUnit?.gs1SalesCode ?? "",
+      gs1DispensingCode: packageUnit?.gs1DispensingCode ?? "",
+      unifiedCode: packageUnit?.unifiedCode ?? "",
+      hotCode: packageUnit?.hotCode ?? "",
+      janCode: packageUnit?.janCode ?? "",
+    } 
   })
 
   const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
