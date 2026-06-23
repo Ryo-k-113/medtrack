@@ -22,9 +22,9 @@ export const AnnounceForm = () => {
     mode: "onBlur",
     resolver: zodResolver(announceFormSchema),
     defaultValues: {
-      announcedDate: undefined,
-      effectiveDate: undefined,
-      announceType: undefined,
+      announcedDate: null,
+      effectiveDate: null,
+      announceType: null,
     }
   })
 
