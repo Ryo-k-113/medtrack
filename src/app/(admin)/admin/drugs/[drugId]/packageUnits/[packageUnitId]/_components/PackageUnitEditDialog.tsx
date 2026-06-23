@@ -51,7 +51,6 @@ export const PackageUnitEditDialog = () => {
 
   // 送信処理
   const onSubmit = async (data: PackageUnitEditFormData) => {
-    console.log("onSubmit発火", data)
     try {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}/packageUnits/${packageUnitId}`,
