@@ -9,8 +9,9 @@ import { PackageUnitDeleteDialog } from "./PackageUnitDeleteDialog";
 
 
 export const PackageUnitInfo = () => {
-  const { packageUnit } = useAdminPackageUnit()
+  const { packageUnit, isLoading } = useAdminPackageUnit()
 
+  if(isLoading) return <div>読み込み中...</div>
   if (!packageUnit) return <div>包装情報が見つかりません</div>;
 
   const packageInfoItems = [
