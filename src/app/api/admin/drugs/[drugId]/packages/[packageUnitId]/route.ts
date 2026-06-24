@@ -16,12 +16,13 @@ export const GET = async (
   const { isAuthorized, error, status } = await adminAuthCheck(request)
   if (!isAuthorized) return NextResponse.json({ error }, { status })
 
-  const { packageUnitId } = params;
+  const { packageUnitId, drugId } = params;
 
   try {
     const packageUnit = await prisma.packageUnit.findUnique({
       where: { 
-        id: parseInt(packageUnitId),  
+        id: parseInt(packageUnitId),
+        DrugId: parseInt(drugId),  
       },
       include: {
         AnnounceHistories: {
