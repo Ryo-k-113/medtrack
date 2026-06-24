@@ -4,7 +4,7 @@ import { FormInput } from "./FormInput"
 import { FormSelectBox } from "./FormSelectBox"
 import { FormCheckbox } from "./FormCheckbox"
 import { FormCombobox } from "./FormCombobox"
-import { PRODUCT_TYPE_OPTIONS } from "../_constants/drug"
+import { PRODUCT_TYPE_OPTIONS } from "@/app/(admin)/admin/_constants/drug"
 import { SelectOption } from "@/types/ui/select"
 
 type FormProductSectionProps = {

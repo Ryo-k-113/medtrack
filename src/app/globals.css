@@ -51,24 +51,24 @@
 
     /* 出荷ステータス */
     /* 通常出荷 */
-    --status-normal: 142 71% 45%;           
-    --status-normal-foreground: 210 40% 98%;;
+    --status-normal: 142 55% 72%;
+    --status-normal-foreground: 142 40% 28%;
 
-    /* 限定出荷 */  
-    --status-limited: 52 85% 63%;        
-    --status-limited-foreground: 210 40% 98%;;
+    /* 限定出荷 */
+    --status-limited: 52 95% 88%;
+    --status-limited-foreground: 38 80% 22%;
 
-     /* 出荷停止 */
-    --status-stop: 348 72% 60%;          
-    --status-stop-foreground: 210 40% 98%;;
+    /* 出荷停止 */
+    --status-stop: 0 75% 78%;
+    --status-stop-foreground: 0 70% 25%;
 
     /* 販売中止 */
-    --status-discontinued: 220 9% 36%;   
-    --status-discontinued-foreground: 210 40% 98%;;
+    --status-discontinued: 220 8% 38%;
+    --status-discontinued-foreground: 0 0% 96%;
 
     /* 販売移管 */
-    --status-transfer: 221 83% 53%;      
-    --status-transfer-foreground: 210 40% 98%;
+    --status-transfer: 210 85% 88%;
+    --status-transfer-foreground: 212 80% 25%;
 
     /* 医薬品区分タグ  */
     --tag-brand: 210 70% 50%;

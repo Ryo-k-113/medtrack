@@ -1,5 +1,5 @@
 
-import type {  ProductType, CurrentShippingStatus, PublishStatus } from "@prisma/client"
+import type {  ProductType, CurrentShippingStatus, PublishStatus,AnnounceType } from "@prisma/client"
 
 //包装情報の型
 export type PackageUnit = {
@@ -34,6 +34,16 @@ export type Drug = {
   ManufacturingCompanyId: number;
   SalesCompanyId: number;
 }
+
+// 告示履歴の型
+export type AnnounceHistory = {
+  id: number
+  announcedDate: string | null
+  effectiveDate: string | null
+  announceType: AnnounceType | null
+  PackageUnitId: number
+}
+
 
 // 製薬会社のGETレスポンス型
 export type CompanyResponse = {
@@ -203,4 +213,60 @@ export type AddPackageUnitRequest = CreatePackageUnitRequest
 export type AddPackageUnitResponse = {
   message: string
   data: PackageUnit
+}
+
+
+//-------------------------------------
+// 包装編集ページ GETレスポンス型
+//-------------------------------------
+export type PackageUnitDetailResponse = {
+  data: PackageUnit & {
+    AnnounceHistories: AnnounceHistory[]
+    Drug: Pick<Drug, "id" | "name" | "yjCode"> & {
+      GenericName: { id: number, name: string }
+      SalesCompany: {id: number, name: string }
+      ManufacturingCompany: {id: number, name: string }
+    }
+  }
+}
+
+//-------------------------------------
+// 包装情報の編集 PATCHリクエスト・レスポンス型
+//-------------------------------------
+export type UpdatePackageUnitRequest = {
+  name: string
+  publishStatus: PublishStatus
+  gs1SalesCode?: string | null
+  gs1DispensingCode?: string | null
+  hotCode?: string | null
+  janCode?: string | null
+  unifiedCode?: string | null
+}
+
+export type UpdatePackageUnitResponse = {
+  message: string
+  data: PackageUnit
+}
+
+
+//-------------------------------------
+// 包装の削除 DELETEレスポンス型
+//-------------------------------------
+export type DeletePackageUnitResponse = {
+  message: string
+}
+
+
+//-------------------------------------
+// 出荷情報履歴の作成 POSTリクエスト・レスポンス型
+//-------------------------------------
+export type CreateAnnounceRequest = {
+  announceType: AnnounceType
+  announcedDate: string
+  effectiveDate: string
+}
+
+export type CreateAnnounceResponse = {
+  message: string
+  data: AnnounceHistory
 }

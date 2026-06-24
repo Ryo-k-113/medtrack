@@ -11,7 +11,7 @@ type PackageUnitCardProps = {
 
 export const PackageUnitCard = ({ pkg, drugId }: PackageUnitCardProps) => {
   return (
-    <Link href={`/admin/drugs/${drugId}/packageUnits/${pkg.id}`}>
+    <Link href={`/admin/drugs/${drugId}/packages/${pkg.id}`}>
       <div className="flex items-center justify-between border rounded-md mb-3 hover:bg-surface cursor-pointer group overflow-hidden">
         <div className="flex items-center gap-2 flex-1 p-4">
           <div className="flex-1">
