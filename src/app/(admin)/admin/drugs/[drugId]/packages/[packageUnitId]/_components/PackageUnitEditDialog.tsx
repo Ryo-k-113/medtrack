@@ -26,14 +26,12 @@ export const PackageUnitEditDialog = () => {
   // ダイアログ開閉の状態管理
   const [isOpen, setIsOpen] = useState(false)
 
-  if(!packageUnit) return null
-
   const form = useForm<PackageUnitEditFormInput, unknown, PackageUnitEditFormData>({
     mode: "onBlur",
     resolver: zodResolver(packageUnitEditFormSchema),
     values: {
-      name: packageUnit.name,
-      publishStatus: packageUnit.publishStatus,
+      name: packageUnit?.name ?? "",
+      publishStatus: packageUnit?.publishStatus ?? "DRAFT",
       gs1SalesCode: packageUnit?.gs1SalesCode ?? "",
       gs1DispensingCode: packageUnit?.gs1DispensingCode ?? "",
       unifiedCode: packageUnit?.unifiedCode ?? "",
@@ -67,6 +65,8 @@ export const PackageUnitEditDialog = () => {
       if (error instanceof Error) toast.error(error.message)
     }
   }
+  
+  if (!packageUnit) return null
 
   return (
     <FormProvider {...form}>
