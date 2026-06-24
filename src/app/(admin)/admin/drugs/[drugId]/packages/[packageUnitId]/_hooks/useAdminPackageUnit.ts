@@ -18,7 +18,7 @@ export const useAdminPackageUnit = () => {
     isLoading,
     mutate,
   } = useDataFetch<PackageUnitDetailResponse>(
-    `/api/admin/drugs/${drugId}/packageUnits/${packageUnitId}`
+    `/api/admin/drugs/${drugId}/packages/${packageUnitId}`
   )
 
   const packageUnit = data?.data

@@ -25,7 +25,7 @@ export const PackageUnitDeleteDialog = () => {
     setIsDeleting(true)
     try {
       const res = await fetcher({
-        url: `/api/admin/drugs/${drugId}/packageUnits/${packageUnitId}`,
+        url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}`,
         method: "DELETE",
         token,
       })

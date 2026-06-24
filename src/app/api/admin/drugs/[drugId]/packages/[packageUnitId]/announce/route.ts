@@ -1,4 +1,4 @@
-// api/admin/drugs/[drugId]/packageUnits/[packageUnitId]/announce/route.ts
+
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"

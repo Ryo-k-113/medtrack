@@ -33,7 +33,7 @@ export const AnnounceForm = () => {
   const onSubmit = async ( data: AnnounceFormData ) => {
     try {
       const res = await fetcher({
-        url: `/api/admin/drugs/${drugId}/packageUnits/${packageUnitId}/announce`,
+        url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce`,
         method: "POST",
         body: data,
         token,

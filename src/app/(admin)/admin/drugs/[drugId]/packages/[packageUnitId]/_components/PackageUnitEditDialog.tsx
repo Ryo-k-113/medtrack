@@ -55,7 +55,7 @@ export const PackageUnitEditDialog = () => {
   const onSubmit = async (data: PackageUnitEditFormData) => {
     try {
       const res = await fetcher({
-        url: `/api/admin/drugs/${drugId}/packageUnits/${packageUnitId}`,
+        url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}`,
         method: "PUT",
         body: data,
         token,
