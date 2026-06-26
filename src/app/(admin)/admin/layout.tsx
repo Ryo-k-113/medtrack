@@ -2,61 +2,94 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { AdminSidebarHeader } from './_components/AdminSidebarHeader';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger
+} from "@/components/ui/sidebar"
 
-//icon
-import { Upload } from 'lucide-react';
-import { Pill } from 'lucide-react';
-import { File } from 'lucide-react';
+import { Upload, Pill, File, Menu } from 'lucide-react';
+
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const pathname = usePathname()
-  const isSelected = (href: string) => {
-    return pathname.includes(href)
-  }
+  const pathname = usePathname() 
+  
+  // 現在のページ選択の判定
+  const isSelected = (href: string) => pathname.includes(href)
+
+  // ナビゲーションメニューアイテム
+  const navItems = [
+    { href: "/admin/drugs", label: "医薬品一覧", icon: Pill },
+    // { href: "/admin/upload", label: "データアップロード", icon: Upload }, 
+    // { href: "/admin/draft", label: "下書き一覧", icon: File },
+  ]
 
   return (
-    <div className='flex h-screen'>
-      {/* サイドバー */}
-      <aside className="bg-surface w-70 shrink-0">
-        <h1 className="text-3xl font-bold text-primary text-center px-4 pt-4 pb-6">MedTrack</h1>
-          <Link
-            href="/admin/drug-list"
-            className={`flex p-4 items-center gap-1 font-bold text-foreground hover:bg-primary hover:text-primary-foreground ${
-              isSelected('/admin/drug-list') && 'bg-primary text-primary-foreground'
-            }`}
-          >
-            <Pill className="w-4 h-4" strokeWidth={2.5} />
-            医薬品一覧
-          </Link>
-          <Link
-            href="/admin/drug-list"
-            className={`flex p-4 items-center gap-1 font-bold text-foreground hover:bg-primary hover:text-primary-foreground ${
-              isSelected('/admin/drug-list') && 'bg-primary text-primary-foreground'
-            }`}
-          >
-            <Upload className="w-4 h-4" strokeWidth={2.5} />
-            データアップロード
-          </Link>
-          <Link
-            href="/admin/draft"
-            className={`flex p-4 items-center gap-1 font-bold text-foreground hover:bg-primary hover:text-primary-foreground ${
-              isSelected('/admin/draft') && 'bg-primary text-primary-foreground'
-            }`}
-          >
-            <File className="w-4 h-4" strokeWidth={2.5} />
-            下書き一覧
-          </Link>
 
-      </aside>
+    <SidebarProvider defaultOpen={true}>
+      <div className="flex h-screen w-full overflow-hidden bg-background">
+        
+        {/* サイドバー  */}
+        <Sidebar collapsible="icon" className="border-r border bg-surface">
 
-      {/* メインエリア */}
-      <div className="flex-1 overflow-x-auto p-6">
-        {children}
+          {/* サイドバーヘッダー */}
+          <AdminSidebarHeader />
+
+          {/* コンテンツ */}
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {navItems.map((item) => {
+                    const active = isSelected(item.href)
+                    return (
+                      <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={active}
+                          tooltip={item.label} 
+                          className="w-full p-5 transition-colors"
+                        >
+                          <Link href={item.href} className="flex items-center gap-3">
+                            <item.icon className="w-5 h-5 shrink-0" />
+                            <span>{item.label}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+        </Sidebar>
+        
+        <div className="flex flex-col flex-1 h-full overflow-hidden">
+
+          {/* モバイルのみ */}
+          <header className="flex justify-between h-14 items-center gap-4 border-b border-border px-4 bg-background md:hidden shrink-0">
+              <h1 className="font-bold text-xl text-primary">MedTrack</h1>
+              <SidebarTrigger />
+          </header>
+
+          {/* メインエリア */}
+          <main className="flex-1 overflow-x-auto overflow-y-auto p-6 bg-background">
+            {children}
+          </main>
+        </div>
+        
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
