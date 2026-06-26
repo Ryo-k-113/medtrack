@@ -42,38 +42,37 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
-
-				status: {
-					normal: {
-						DEFAULT: 'hsl(var(--status-normal))',
-						foreground: 'hsl(var(--status-normal-foreground))',
-					},
-					limited: {
-						DEFAULT: 'hsl(var(--status-limited))',
-						foreground: 'hsl(var(--status-limited-foreground))',
-					},
-					stop: {
-						DEFAULT: 'hsl(var(--status-stop))',
-						foreground: 'hsl(var(--status-stop-foreground))',
-					},
-					discontinued: {
-						DEFAULT: 'hsl(var(--status-discontinued))',
-						foreground: 'hsl(var(--status-discontinued-foreground))',
-					},
-					transfer: {
-						DEFAULT: 'hsl(var(--status-transfer))',
-						foreground: 'hsl(var(--status-transfer-foreground))',
-					},
-				},
-				tag: {
+  			status: {
+  				normal: {
+  					DEFAULT: 'hsl(var(--status-normal))',
+  					foreground: 'hsl(var(--status-normal-foreground))'
+  				},
+  				limited: {
+  					DEFAULT: 'hsl(var(--status-limited))',
+  					foreground: 'hsl(var(--status-limited-foreground))'
+  				},
+  				stop: {
+  					DEFAULT: 'hsl(var(--status-stop))',
+  					foreground: 'hsl(var(--status-stop-foreground))'
+  				},
+  				discontinued: {
+  					DEFAULT: 'hsl(var(--status-discontinued))',
+  					foreground: 'hsl(var(--status-discontinued-foreground))'
+  				},
+  				transfer: {
+  					DEFAULT: 'hsl(var(--status-transfer))',
+  					foreground: 'hsl(var(--status-transfer-foreground))'
+  				}
+  			},
+  			tag: {
   				brand: {
-						DEFAULT: 'hsl(var(--brand))',
-						foreground: 'hsl(var(--brand-foreground))'
-					},
+  					DEFAULT: 'hsl(var(--brand))',
+  					foreground: 'hsl(var(--brand-foreground))'
+  				},
   				generic: {
-						DEFAULT: 'hsl(var(--generic))',
-						foreground: 'hsl(var(--generic-foreground))'
-					},
+  					DEFAULT: 'hsl(var(--generic))',
+  					foreground: 'hsl(var(--generic-foreground))'
+  				}
   			},
 
   			border: 'hsl(var(--border))',
@@ -85,10 +84,19 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		borderRadius: {
-
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
