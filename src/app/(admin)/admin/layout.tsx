@@ -15,7 +15,7 @@ import {
   SidebarTrigger
 } from "@/components/ui/sidebar"
 
-import { Upload, Pill, File, Menu } from 'lucide-react';
+import { Pill } from 'lucide-react';
 
 
 export default function AdminLayout({
@@ -31,8 +31,6 @@ export default function AdminLayout({
   // ナビゲーションメニューアイテム
   const navItems = [
     { href: "/admin/drugs", label: "医薬品一覧", icon: Pill },
-    // { href: "/admin/upload", label: "データアップロード", icon: Upload }, 
-    // { href: "/admin/draft", label: "下書き一覧", icon: File },
   ]
 
   return (
