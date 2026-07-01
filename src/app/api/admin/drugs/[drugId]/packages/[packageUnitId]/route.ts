@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { Prisma } from "@prisma/client"
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
 import type { PackageUnitDetailResponse, UpdatePackageUnitRequest,
   UpdatePackageUnitResponse, DeletePackageUnitResponse } from "@/types/admin/drug"
-import { toUTCDate } from "@/utils/date";
 
 
 // 包装情報・告示履歴・製品情報を取得
@@ -65,7 +63,7 @@ export const GET = async (
       { status: 200 }
     )
 
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "データの処理中にエラーが発生しました"}, { status: 500 })
   }
 }
@@ -148,7 +146,7 @@ export const DELETE = async (
       { status: 200 }
     )
 
-  } catch (error) {
+  } catch  {
     return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
   }
 }

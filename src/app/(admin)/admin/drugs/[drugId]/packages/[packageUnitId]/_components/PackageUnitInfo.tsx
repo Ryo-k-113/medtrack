@@ -2,7 +2,7 @@
 import { InfoCard } from "@/components/Card/InfoCard";
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit";
 import { PublishStatusBadge } from "@/app/(admin)/admin/drugs/_components/PublishStatusBadge";
-import { ShippingStatusBadge } from "@/app/(admin)/admin/drugs/_components/ShippingStatusBadge";
+import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge";
 import { formatDate } from "@/utils/format";
 import { PackageUnitEditDialog } from "./PackageUnitEditDialog";
 import { PackageUnitDeleteDialog } from "./PackageUnitDeleteDialog";

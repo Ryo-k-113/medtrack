@@ -2,7 +2,7 @@
 
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { formatDate } from "@/utils/format"
-import { AnnounceTypeBadge } from "@/app/(admin)/admin/_components/AnnounceTypeBadge"
+import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
 
 
 export const AnnounceHistoryList = () => {

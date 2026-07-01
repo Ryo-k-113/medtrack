@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
-import { ShippingStatusBadge } from "../../_components/ShippingStatusBadge"
-import { PublishStatusBadge } from "../../_components/PublishStatusBadge"
+import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge"
+import { PublishStatusBadge } from "@/app/(admin)/admin/drugs/_components/PublishStatusBadge"
 import type { DrugEditPackageUnitCard  } from "@/types/admin/drug"
 
 type PackageUnitCardProps = {

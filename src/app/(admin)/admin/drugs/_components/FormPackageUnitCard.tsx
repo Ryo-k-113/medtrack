@@ -1,12 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { FormInput } from "./FormInput"
-import { FormSelectBox } from "./FormSelectBox"
-import { FormDatePicker } from "./FormDatePicker"
-import { Trash2 } from "lucide-react"
+import { FormInput } from "@/components/Form/FormInput"
+import { FormSelectBox } from "@/components/Form/FormSelectBox"
+import { FormDatePicker } from "@/components/Form/FormDatePicker"
 import { FormPublishStatusToggle } from "./FormPublishStatusToggle"
-import { SHIPPING_STATUS_OPTIONS } from "@/app/(admin)/admin/_constants/drug"
+import { SHIPPING_STATUS_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
+import { Trash2 } from "lucide-react"
 
 type FormPackageUnitCardProps = {
   index: number;

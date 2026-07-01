@@ -26,7 +26,7 @@ import {
 type FormSelectBoxProps<T extends string> = {
   name: string;
   label: string;
-  options: readonly SelectOption[];
+  options: readonly SelectOption<T>[];
   placeholder?: string;
   required?: boolean;
   description?: string;
