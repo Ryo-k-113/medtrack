@@ -63,7 +63,7 @@ export const GET = async (
       { status: 200 }
     )
 
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "データの処理中にエラーが発生しました"}, { status: 500 })
   }
 }
@@ -146,7 +146,7 @@ export const DELETE = async (
       { status: 200 }
     )
 
-  } catch (error) {
+  } catch  {
     return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
   }
 }
