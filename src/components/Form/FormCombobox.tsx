@@ -11,15 +11,10 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-  ComboboxTrigger
 } from "@/components/ui/combobox";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { SelectOption } from "@/types/ui/select";
 
-// export type Option = {
-//   label: string;
-//   value: string;
-// };
 
 type FormComboboxProps = {
   name: string;
