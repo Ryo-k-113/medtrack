@@ -1,10 +1,9 @@
-"use client"
 
-import { FormInput } from "./FormInput"
-import { FormSelectBox } from "./FormSelectBox"
-import { FormCheckbox } from "./FormCheckbox"
-import { FormCombobox } from "./FormCombobox"
-import { PRODUCT_TYPE_OPTIONS } from "@/app/(admin)/admin/_constants/drug"
+import { FormInput } from "@/components/Form/FormInput"
+import { FormSelectBox } from "@/components/Form/FormSelectBox"
+import { FormCheckbox } from "@/components/Form/FormCheckbox"
+import { FormCombobox } from "@/components/Form/FormCombobox"
+import { PRODUCT_TYPE_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { SelectOption } from "@/types/ui/select"
 
 type FormProductSectionProps = {
