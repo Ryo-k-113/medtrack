@@ -54,7 +54,7 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
     }
 
     return NextResponse.json<DrugEditResponse>({ data: responseData }, { status: 200 })
-  } catch (error) {
+  } catch  {
     return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
 }
 }
