@@ -8,7 +8,7 @@ import { Pencil, Save } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
-import { PackageUnitFormFields } from "@/app/(admin)/admin/_components/PackageUnitFormFields"
+import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
 
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
@@ -65,7 +65,7 @@ export const PackageUnitEditDialog = () => {
       if (error instanceof Error) toast.error(error.message)
     }
   }
-  
+
   if (!packageUnit) return null
 
   return (
