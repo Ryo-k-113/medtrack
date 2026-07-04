@@ -40,13 +40,18 @@ export const DataTable = <TData, TValue>({ columns, data, headerAction }: DataTa
       </div>
       {/* テーブル */}
       <div className="rounded-md border overflow-hidden">
-        <Table>
+        <Table className="w-full table-fixed">
           <TableHeader className="bg-primary hover:bg-primary  sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} 
               >
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan} className="bg-primary text-primary-foreground font-bold">
+                  <TableHead 
+                    key={header.id} 
+                    colSpan={header.colSpan}
+                    style={{ width: header.getSize() }}
+                    className="bg-primary text-primary-foreground font-bold"
+                  >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
@@ -58,7 +63,10 @@ export const DataTable = <TData, TValue>({ columns, data, headerAction }: DataTa
               table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell 
+                    key={cell.id}
+                    style={{ width: cell.column.getSize() }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
               ))}
