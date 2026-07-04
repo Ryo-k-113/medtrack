@@ -22,3 +22,19 @@ export type CreateCompanyResponse = {
   data: Company
 }
 
+
+// --------------------------
+//  PUT: 製薬会社の更新
+//---------------------------
+
+/** 製薬会社更新のリクエストbody型 */
+export type UpdateCompanyRequest = {
+  name: string
+}
+
+/** 製薬会社更新のAPIレスポンス型 */
+export type UpdateCompanyResponse = {
+  message: string
+  data: Company
+}
+
