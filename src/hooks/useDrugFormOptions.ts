@@ -1,5 +1,6 @@
 import { useDataFetch } from "@/hooks/useDataFetch"
-import type { CompanyResponse, UnitResponse, GenericNameResponse } from "@/types/admin/drug"
+import type { GetCompaniesResponse } from "@/types/admin/company"
+import type { UnitResponse, GenericNameResponse } from "@/types/admin/drug"
 import { SelectOption } from "@/types/ui/select"
 
 /**
@@ -24,7 +25,7 @@ type FormOptions = {
 
 export const useDrugFormOptions = (): FormOptions => {
   const { data: companyData, isLoading: isCompaniesLoading } =
-    useDataFetch<CompanyResponse>("/api/admin/companies")
+    useDataFetch<GetCompaniesResponse>("/api/admin/companies")
   
   const { data: unitData, isLoading: isUnitsLoading } =
     useDataFetch<UnitResponse>("/api/admin/units")
