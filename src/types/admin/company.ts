@@ -7,5 +7,18 @@ export type Company = {
 }
 
 
+// --------------------------
+//  POST: 製薬会社の新規作成
+//---------------------------
 
+/** 製薬会社作成のリクエストbody型 */
+export type CreateCompanyRequest = {
+  name: string
+}
+
+/** 製薬会社作成のAPIレスポンス型 */
+export type CreateCompanyResponse = {
+  message: string
+  data: Company
+}
 
