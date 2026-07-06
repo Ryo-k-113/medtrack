@@ -9,6 +9,7 @@ import { DataTable } from "@/components/Table/DataTable"
 import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
 import type { Company } from "@/types/admin/company"
+import { CompanyCreateDialog } from "./CompanyCreateDialog"
 
 
 const columns: ColumnDef<Company>[] = [
@@ -48,6 +49,9 @@ const columns: ColumnDef<Company>[] = [
 ]
 
 export const CompanyList = () => {
+  
+  // 新規登録のダイアログの開閉状態
+  const [isCreateOpen, setIsCreateOpen] = useState(false)   
 
   const { companies, isLoading, error } = useAdminCompanies()
  
@@ -61,11 +65,17 @@ export const CompanyList = () => {
         columns={columns}
         data={companies}
         headerAction={
-          <Button>
+          <Button
+            onClick={() => setIsCreateOpen(true)}
+          >
             <Plus className="h-4 w-4" />
             新規追加
           </Button>
         }
+      />
+      <CompanyCreateDialog 
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
       />
     </div>
   )
