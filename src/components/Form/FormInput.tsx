@@ -34,11 +34,11 @@ export const FormInput = ({
       render={({ field, fieldState }) => (
         <Field 
           data-invalid={fieldState.invalid}
-          className={cn("gap-1", className)}
+          className={cn("gap-2", className)}
         >
           <FieldLabel htmlFor={name}>
             {label}
-            {required && <span className="text-destructive ml-1">*</span>}
+            {required && <span className="text-destructive ">*</span>}
           </FieldLabel>
           <Input 
             {...field} 
