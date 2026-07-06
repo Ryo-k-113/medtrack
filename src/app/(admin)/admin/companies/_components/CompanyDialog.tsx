@@ -11,27 +11,32 @@ import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
 import { fetcher } from "@/utils/fetcher"
 import {type CompanyFormData, companyFormSchema } from "../_schemas/company"
-
+import type { Company } from "@/types/admin/company"
 
 type Props = {
   isOpen: boolean
   onClose: () => void
+  company?: Company 
 }
 
-export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
+export const CompanyDialog = ({ isOpen, onClose, company }: Props) => {
   const { token } = useSupabaseSession()
   const { mutate } = useAdminCompanies()
 
+   // companyがある場合は編集・ない場合は新規作成の分岐
+  const isEdit = !!company
+
   const form = useForm<CompanyFormData>({
     resolver: zodResolver(companyFormSchema),
-    defaultValues:{
-      name: "",
-    }
+    ...(isEdit
+      ? { values: { name: company.name } }
+      : { defaultValues: { name: "" } }
+    ),
   })
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
     reset,
   } = form
 
@@ -46,8 +51,10 @@ export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
   const onSubmit = async (data: CompanyFormData) => {
     try {
       const res = await fetcher({
-        url: "/api/admin/companies",
-        method: "POST",
+        url: isEdit
+        ? `/api/admin/companies/${company.id}` // 編集
+        : "/api/admin/companies",              //  新規作成
+        method: isEdit ? "PUT" : "POST",
         body: data,
         token,
       })
@@ -65,7 +72,7 @@ export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
       <BaseDialog
         isOpen={isOpen}
         onClose={handleClose}
-        title="製薬会社を追加する"
+        title={isEdit ? "製薬会社を編集する" : "製薬会社を追加する"}
         className="max-w-md"
         actions={
           <div className="flex justify-end gap-4">
@@ -80,8 +87,8 @@ export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
             </Button>
             <Button
               type="submit"
-              form="companyCreateForm"
-              disabled={isSubmitting}
+              form="companyForm"
+              disabled={isSubmitting || (isEdit && !isDirty) }
               className="w-24"
               >
               {isSubmitting ? "登録中..." : "登録する"}
@@ -91,16 +98,16 @@ export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
       > 
         {/* フォーム */}
         <form
-          id="companyCreateForm"
+          id="companyForm"
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4 py-2"
-          >
-          <div className="space-y-2">
+        >
+          <div>
             <FormInput
               name="name"
               label="会社名"
               required
-              />
+            />
           </div>
         </form>
 

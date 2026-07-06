@@ -9,49 +9,16 @@ import { DataTable } from "@/components/Table/DataTable"
 import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
 import type { Company } from "@/types/admin/company"
-import { CompanyCreateDialog } from "./CompanyCreateDialog"
+import { CompanyDialog } from "./CompanyDialog"
 
-
-const columns: ColumnDef<Company>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-    size: 40,
-    cell: ({ row }) => (
-      <span className="text-sm">
-        {row.original.id}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "name",
-    header: "会社名",
-    cell: ({ row }) => (
-      <span className="text-sm">{row.original.name}</span>
-    ),
-  },
-  {
-    id: "actions",
-    header: "",
-    size: 100,
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button
-          variant="outline"
-          className="h-8 w-8 md:h-9 md:w-auto md:p-4"
-        >
-          <Edit className="h-4 w-4" />
-          <span className="hidden md:inline ml-2 text-sm">編集する</span>
-        </Button>
-      </div>
-    ),
-  },
-]
 
 export const CompanyList = () => {
   
   // 新規登録のダイアログの開閉状態
-  const [isCreateOpen, setIsCreateOpen] = useState(false)   
+  const [isCreateOpen, setIsCreateOpen] = useState(false)  
+
+   // 編集ダイアログの対象
+   const [editTarget, setEditTarget] = useState<Company | null>(null) 
 
   const { companies, isLoading, error } = useAdminCompanies()
  
@@ -59,8 +26,49 @@ export const CompanyList = () => {
   if (isLoading) return <DataTableSkeleton />
   if (error)  return <div>エラーが発生しました</div>
 
+
+  // 一覧のテーブルカラム
+  const columns: ColumnDef<Company>[] = [
+    {
+      accessorKey: "id",
+      header: "ID",
+      size: 40,
+      cell: ({ row }) => (
+        <span className="text-sm">
+          {row.original.id}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "name",
+      header: "会社名",
+      cell: ({ row }) => (
+        <span className="text-sm">{row.original.name}</span>
+      ),
+    },
+    {
+      id: "actions",
+      header: "",
+      size: 100,
+      cell: ({ row }) => (
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            className="h-8 w-8 md:h-9 md:w-auto md:p-4"
+            onClick={() => setEditTarget(row.original)} 
+          >
+            <Edit className="h-4 w-4" />
+            <span className="hidden md:inline ml-2 text-sm">編集する</span>
+          </Button>
+        </div>
+      ),
+    },
+  ]
+
   return (
     <div>
+
+      {/* 製薬会社一覧のテーブル */}
       <DataTable
         columns={columns}
         data={companies}
@@ -73,10 +81,22 @@ export const CompanyList = () => {
           </Button>
         }
       />
-      <CompanyCreateDialog 
+
+      {/* 新規作成ダイアログ */}
+      <CompanyDialog 
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
       />
+
+      {/* 編集ダイアログ */}
+      {editTarget && (
+        <CompanyDialog
+          isOpen={!!editTarget}
+          onClose={() => setEditTarget(null)}
+          company={editTarget}
+        />
+      )}
+
     </div>
   )
 }
