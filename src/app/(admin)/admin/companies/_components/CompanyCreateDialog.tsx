@@ -10,7 +10,7 @@ import { FormInput } from "@/components/Form/FormInput"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
 import { fetcher } from "@/utils/fetcher"
-import {type CompanyCreateFormData, companyCreateFormSchema } from "../_schemas/company"
+import {type CompanyFormData, companyFormSchema } from "../_schemas/company"
 
 
 type Props = {
@@ -22,8 +22,8 @@ export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
   const { token } = useSupabaseSession()
   const { mutate } = useAdminCompanies()
 
-  const form = useForm<CompanyCreateFormData>({
-    resolver: zodResolver(companyCreateFormSchema),
+  const form = useForm<CompanyFormData>({
+    resolver: zodResolver(companyFormSchema),
     defaultValues:{
       name: "",
     }
@@ -43,7 +43,7 @@ export const CompanyCreateDialog = ({ isOpen, onClose }: Props) => {
   }
 
   // フォームを送信
-  const onSubmit = async (data: CompanyCreateFormData) => {
+  const onSubmit = async (data: CompanyFormData) => {
     try {
       const res = await fetcher({
         url: "/api/admin/companies",
