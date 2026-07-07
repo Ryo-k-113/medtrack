@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/Table/DataTable"
 import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
-import type { Company } from "@/types/admin/company"
+import type { Company, CompanyFormData } from "@/types/admin/company"
 import { CompanyDialog } from "./CompanyDialog"
 import { fetcher } from "@/utils/fetcher"
-import {type CompanyFormData } from "../_schemas/company"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { toast } from "sonner"
+
 
 export const CompanyList = () => {
   const { token } = useSupabaseSession()

@@ -6,10 +6,7 @@ import { Button } from "@/components/ui/button"
 
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { FormInput } from "@/components/Form/FormInput"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
-import { useAdminCompanies } from "../_hooks/useAdminCompanies"
-import {type CompanyFormData, companyFormSchema } from "../_schemas/company"
-import type { Company } from "@/types/admin/company"
+import { type Company, type CompanyFormData, companyFormSchema } from "@/types/admin/company"
 
 type Props = {
   isOpen: boolean

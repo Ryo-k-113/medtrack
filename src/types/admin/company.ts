@@ -1,10 +1,9 @@
+import { PharmaceuticalCompany } from "@prisma/client";
+import { z } from "zod"
 
 
 /** 製薬会社の型 */
-export type Company = {
-  id: number
-  name: string
-}
+export type Company = PharmaceuticalCompany
 
 
 // --------------------------
@@ -21,10 +20,17 @@ export type GetCompaniesResponse = {
 //  POST: 製薬会社の新規作成
 //---------------------------
 
-/** 製薬会社作成のリクエストbody型 */
-export type CreateCompanyRequest = {
-  name: string
-}
+//** 製薬会社フォーム(新規・編集共通)のスキーマ */
+export const companyFormSchema = z.object({
+  name: z.string().min(1, "会社名は必須です"),
+})
+
+/** zodスキーマから変換した型 */
+export type CompanyFormData = z.infer<typeof companyFormSchema>
+
+
+/** 製薬会社作成のAPIリクエスト型 */
+export type CreateCompanyRequest = CompanyFormData
 
 /** 製薬会社作成のAPIレスポンス型 */
 export type CreateCompanyResponse = {
@@ -37,10 +43,8 @@ export type CreateCompanyResponse = {
 //  PUT: 製薬会社の更新
 //---------------------------
 
-/** 製薬会社更新のリクエストbody型 */
-export type UpdateCompanyRequest = {
-  name: string
-}
+/** 製薬会社作成のAPIリクエスト型 */
+export type UpdateCompanyRequest = CompanyFormData
 
 /** 製薬会社更新のAPIレスポンス型 */
 export type UpdateCompanyResponse = {
