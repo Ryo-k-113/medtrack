@@ -10,9 +10,13 @@ import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
 import type { Company } from "@/types/admin/company"
 import { CompanyDialog } from "./CompanyDialog"
-
+import { fetcher } from "@/utils/fetcher"
+import {type CompanyFormData } from "../_schemas/company"
+import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { toast } from "sonner"
 
 export const CompanyList = () => {
+  const { token } = useSupabaseSession()
   
   // 新規登録のダイアログの開閉状態
   const [isCreateOpen, setIsCreateOpen] = useState(false)  
@@ -20,8 +24,43 @@ export const CompanyList = () => {
    // 編集ダイアログの対象
    const [editTarget, setEditTarget] = useState<Company | null>(null) 
 
-  const { companies, isLoading, error } = useAdminCompanies()
- 
+
+  const { companies, isLoading, error, mutate } = useAdminCompanies()
+
+
+   // 新規作成
+   const handleCreate = async (data: CompanyFormData) => {
+    try {
+      const res = await fetcher({
+        url: "/api/admin/companies",
+        method: "POST",
+        body: data,
+        token,
+      })
+      toast.success(res.message)
+      await mutate()
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message)
+    }
+  }
+
+  // 編集
+  const handleEdit = async (data: CompanyFormData) => {
+    if (!editTarget) return
+    try {
+      const res = await fetcher({
+        url: `/api/admin/companies/${editTarget.id}`,
+        method: "PUT",
+        body: data,
+        token,
+      })
+      toast.success(res.message)
+      await mutate()
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message)
+    }
+  }
+
   // 早期リターン
   if (isLoading) return <DataTableSkeleton />
   if (error)  return <div>エラーが発生しました</div>
@@ -86,6 +125,7 @@ export const CompanyList = () => {
       <CompanyDialog 
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
+        onSubmit={handleCreate}
       />
 
       {/* 編集ダイアログ */}
@@ -94,6 +134,7 @@ export const CompanyList = () => {
           isOpen={!!editTarget}
           onClose={() => setEditTarget(null)}
           company={editTarget}
+          onSubmit={handleEdit}
         />
       )}
 

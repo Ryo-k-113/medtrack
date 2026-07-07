@@ -2,14 +2,12 @@
 
 import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { FormInput } from "@/components/Form/FormInput"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminCompanies } from "../_hooks/useAdminCompanies"
-import { fetcher } from "@/utils/fetcher"
 import {type CompanyFormData, companyFormSchema } from "../_schemas/company"
 import type { Company } from "@/types/admin/company"
 
@@ -17,13 +15,12 @@ type Props = {
   isOpen: boolean
   onClose: () => void
   company?: Company 
+  onSubmit: (data: CompanyFormData) => Promise<void>
 }
 
-export const CompanyDialog = ({ isOpen, onClose, company }: Props) => {
-  const { token } = useSupabaseSession()
-  const { mutate } = useAdminCompanies()
+export const CompanyDialog = ({ isOpen, onClose, company,onSubmit }: Props) => {
 
-   // companyがある場合は編集・ない場合は新規作成の分岐
+  // companyがある場合は編集・ない場合は新規作成の分岐
   const isEdit = !!company
 
   const form = useForm<CompanyFormData>({
@@ -48,24 +45,11 @@ export const CompanyDialog = ({ isOpen, onClose, company }: Props) => {
   }
 
   // フォームを送信
-  const onSubmit = async (data: CompanyFormData) => {
-    try {
-      const res = await fetcher({
-        url: isEdit
-        ? `/api/admin/companies/${company.id}` // 編集
-        : "/api/admin/companies",              //  新規作成
-        method: isEdit ? "PUT" : "POST",
-        body: data,
-        token,
-      })
-      toast.success(res.message)
-      await mutate()
-      handleClose()
-
-    } catch (error) {
-      if (error instanceof Error) toast.error(error.message)
-    }
+  const handleSubmitForm = async (data: CompanyFormData) => {
+    await onSubmit(data) 
+    handleClose()
   }
+    
 
   return (
     <FormProvider {...form}>
@@ -99,7 +83,7 @@ export const CompanyDialog = ({ isOpen, onClose, company }: Props) => {
         {/* フォーム */}
         <form
           id="companyForm"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(handleSubmitForm)}
           className="space-y-4 py-2"
         >
           <div>
