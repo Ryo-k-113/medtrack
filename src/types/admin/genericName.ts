@@ -1,4 +1,8 @@
-import { GenericName } from "@prisma/client";
+import { type GenericName as PrismaGenericName } from "@prisma/client"
+
+
+/** 成分名の基本型 */
+export type GenericName = PrismaGenericName
 
 
 // --------------------------
