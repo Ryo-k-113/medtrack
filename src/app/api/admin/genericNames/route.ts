@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest) => {
         id: true,
         name: true,
       },
-      orderBy: { name: "asc" },
+      orderBy: { id: "asc" },
     })
 
     return NextResponse.json<GetGenericNamesResponse>({ genericNames }, { status: 200 })
