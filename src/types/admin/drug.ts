@@ -45,13 +45,6 @@ export type AnnounceHistory = {
 }
 
 
-// 製薬会社のGETレスポンス型
-export type CompanyResponse = {
-  companies: {
-    id: number
-    name: string
-  }[]
-}
 
 // 規格単位のGETレスポンス型
 export type UnitResponse = {
