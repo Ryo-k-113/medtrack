@@ -1,6 +1,7 @@
 import { useDataFetch } from "@/hooks/useDataFetch"
 import type { GetCompaniesResponse } from "@/types/admin/company"
-import type { UnitResponse, GenericNameResponse } from "@/types/admin/drug"
+import type { GetGenericNamesResponse } from "@/types/admin/genericName"
+import type { UnitResponse } from "@/types/admin/drug"
 import { SelectOption } from "@/types/ui/select"
 
 /**
@@ -31,7 +32,7 @@ export const useDrugFormOptions = (): FormOptions => {
     useDataFetch<UnitResponse>("/api/admin/units")
   
   const { data: genericNameData, isLoading: isGenericNamesLoading } =
-    useDataFetch<GenericNameResponse>("/api/admin/genericNames")
+    useDataFetch<GetGenericNamesResponse>("/api/admin/genericNames")
 
   // フォームitemに合う形に変換
   const companyOptions = toSelectOptions(companyData?.companies ?? [])
