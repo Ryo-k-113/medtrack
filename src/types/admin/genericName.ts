@@ -1,4 +1,5 @@
 import { type GenericName as PrismaGenericName } from "@prisma/client"
+import { z } from "zod"
 
 
 /** 成分名の基本型 */
@@ -19,10 +20,18 @@ export type GetGenericNamesResponse = {
 //  POST: 成分名の新規作成
 //---------------------------
 
+//** 成分名フォーム(新規・編集共通)のスキーマ */
+export const genericNameFormSchema = z.object({
+  name: z.string().min(1, "会社名は必須です"),
+})
+
+/** zodスキーマから変換した型 */
+export type GenericNameFormData = z.infer<typeof genericNameFormSchema>
+
+
 /** 成分名作成のAPIリクエスト型 */
-export type CreateGenericNameRequest = {
-  name: string
-}
+export type CreateGenericNameRequest = GenericNameFormData
+
 
 /** 成分名作成のAPIレスポンス型 */
 export type CreateGenericNameResponse = {
@@ -36,9 +45,8 @@ export type CreateGenericNameResponse = {
 //---------------------------
 
 /** 成分名更新のAPIリクエスト型 */
-export type UpdateGenericNameRequest = {
-  name: string
-}
+export type UpdateGenericNameRequest = GenericNameFormData
+
 
 /** 成分名更新のAPIレスポンス型 */
 export type UpdateGenericNameResponse = {
