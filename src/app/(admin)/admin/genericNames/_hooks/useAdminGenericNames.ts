@@ -8,7 +8,7 @@ import type { GetGenericNamesResponse } from "@/types/admin/genericName"
 
 export const useAdminGenericNames = () => {
   const { data, isLoading, mutate, error } = useDataFetch<GetGenericNamesResponse>(
-    "/api/admin/companies"
+    "/api/admin/genericNames"
   )
 
   return { 
