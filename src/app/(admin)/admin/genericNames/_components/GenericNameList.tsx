@@ -12,6 +12,7 @@ import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminGenericNames } from "../_hooks/useAdminGenericNames"
 import type { GenericName, GenericNameFormData } from "@/types/admin/genericName"
+import { GenericNameDialog } from "./GenericNameDialog"
 
 
 export const GenericNameList = () => {
@@ -26,13 +27,13 @@ export const GenericNameList = () => {
   
   // 成分名一覧の取得
   const { genericNames, isLoading, error, mutate } = useAdminGenericNames()
-
+  
 
   // 新規作成
   const handleCreate = async (data: GenericNameFormData) => {
     try {
       const res = await fetcher({
-        url: "/api/admin/companies",
+        url: "/api/admin/genericNames",
         method: "POST",
         body: data,
         token,
@@ -49,7 +50,7 @@ export const GenericNameList = () => {
     if (!editTarget) return
     try {
       const res = await fetcher({
-        url: `/api/admin/companies/${editTarget.id}`,
+        url: `/api/admin/genericNames/${editTarget.id}`,
         method: "PUT",
         body: data,
         token,
@@ -121,6 +122,23 @@ export const GenericNameList = () => {
           </Button>
         }
       />
+
+       {/* 新規作成ダイアログ */}
+       <GenericNameDialog 
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        onSubmit={handleCreate}
+      />
+
+      {/* 編集ダイアログ */}
+      {editTarget && (
+        <GenericNameDialog
+          isOpen={!!editTarget}
+          onClose={() => setEditTarget(null)}
+          genericName ={editTarget}
+          onSubmit={handleEdit}
+        />
+      )}
 
     </div>
   )
