@@ -15,7 +15,7 @@ import {
   SidebarTrigger
 } from "@/components/ui/sidebar"
 
-import { Pill, Building, FlaskConical } from 'lucide-react';
+import { Pill, Building, FlaskConical, Ruler } from 'lucide-react';
 
 
 export default function AdminLayout({
@@ -33,6 +33,7 @@ export default function AdminLayout({
     { href: "/admin/drugs", label: "医薬品一覧", icon: Pill },
     { href: "/admin/companies", label: "製薬会社一覧", icon: Building },
     { href: "/admin/genericNames", label: "成分名一覧", icon: FlaskConical },
+    { href: "/admin/units", label: "規格単位一覧", icon: Ruler },
   ]
 
   return (

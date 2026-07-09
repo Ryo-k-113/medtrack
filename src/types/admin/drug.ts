@@ -46,16 +46,6 @@ export type AnnounceHistory = {
 
 
 
-// 規格単位のGETレスポンス型
-export type UnitResponse = {
-  units: {
-    id: number
-    name: string
-  }[]
-}
-
-
-
 //-------------------------------------
 // 医薬品一覧ページ GETレスポンス型
 //-------------------------------------
