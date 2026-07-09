@@ -48,5 +48,4 @@ export type UpdateUnitRequest = UnitFormData
 /** 規格単位更新のAPIレスポンス型 */
 export type UpdateUnitResponse = {
   message: string
-  data: Unit
 }

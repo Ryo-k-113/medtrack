@@ -23,14 +23,14 @@ export const PUT = async (
     const { name } = body
 
     // DBの規格単位を更新
-    const unit = await prisma.unit.update({
+    await prisma.unit.update({
       where: { id: parseInt(unitId) },
       data: { name },
     })
 
     // 成功レスポンスを返す
     return NextResponse.json<UpdateUnitResponse>(
-      { message: "更新しました", data: unit },
+      { message: "更新しました"},
       { status: 200 }
     )
   } catch {
