@@ -1,6 +1,6 @@
 type FetcherProps = {
   url: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: Record<string, unknown>;
   token?: string | null;
 };
