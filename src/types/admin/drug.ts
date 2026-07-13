@@ -1,39 +1,8 @@
-
+import type { Drug, PackageUnit} from "@/types/drug"
 import type {  ProductType, CurrentShippingStatus, PublishStatus,AnnounceType } from "@prisma/client"
 
-//包装情報の型
-export type PackageUnit = {
-  id: number;
-  name: string;
-  gs1SalesCode: string | null;
-  gs1DispensingCode: string | null;
-  hotCode: string | null;
-  janCode: string | null;
-  unifiedCode: string | null;
-  currentShippingStatus: CurrentShippingStatus;
-  publishStatus: PublishStatus;
-  salesTransferDate: string | null;
-  discontinuedDate: string | null;
-  transitionalMeasuresDate: string | null;
-  DrugId: number;
-}
 
-// 医薬品の型
-export type Drug = {
-  id: number;
-  name: string;
-  price: number | null;
-  drugPriceListingCode: string | null;
-  yjCode: string;
-  isSelectMedical: boolean | null;
-  isAuthorizedGeneric: boolean | null;
-  packageInsertUrl: string | null;
-  productType: ProductType | null;
-  UnitId: number;
-  GenericNameId: number;
-  ManufacturingCompanyId: number;
-  SalesCompanyId: number;
-}
+
 
 // 告示履歴の型
 export type AnnounceHistory = {
