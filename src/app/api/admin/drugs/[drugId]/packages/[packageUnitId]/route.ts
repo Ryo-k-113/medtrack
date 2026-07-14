@@ -70,7 +70,7 @@ export const GET = async (
 
 
 
-// 包装情報の更新
+//* 包装情報の更新 */
 export const PUT = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string } }
@@ -79,9 +79,11 @@ export const PUT = async (
   const { isAuthorized, error, status } = await adminAuthCheck(request)
   if (!isAuthorized) return NextResponse.json({ error }, { status })
   
-    const { packageUnitId } = params;
+  // 製品IDと包装IDを取得
+  const { packageUnitId, drugId } = params;
   
   try {
+    // リクエストbodyの取得
     const body: UpdatePackageUnitRequest = await request.json()
 
     const {
@@ -93,9 +95,13 @@ export const PUT = async (
       janCode,
       unifiedCode,
     } = body
-
+    
+    // DBの包装情報を更新
     const updated = await prisma.packageUnit.update({
-      where: { id: parseInt(packageUnitId), },
+      where: { 
+        id: parseInt(packageUnitId), 
+        DrugId: parseInt(drugId), 
+      },
       data: {
         name,
         publishStatus,
@@ -119,9 +125,8 @@ export const PUT = async (
       { status: 200 }
     )
 
-  } catch (error) {
-    if (error instanceof Error)
-      return NextResponse.json({ message: error.message }, { status: 400 })
+  } catch {
+    return NextResponse.json({ message: "更新中にエラーが発生しました"}, { status: 400 })
   }
 }
 
