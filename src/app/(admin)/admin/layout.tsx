@@ -7,6 +7,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
@@ -15,7 +16,7 @@ import {
   SidebarTrigger
 } from "@/components/ui/sidebar"
 
-import { Pill, Building, FlaskConical, Ruler } from 'lucide-react';
+import { Pill, Building, FlaskConical, Ruler, Package } from 'lucide-react';
 
 
 export default function AdminLayout({
@@ -29,12 +30,24 @@ export default function AdminLayout({
   const isSelected = (href: string) => pathname.includes(href)
 
   // ナビゲーションメニューアイテム
-  const navItems = [
-    { href: "/admin/drugs", label: "医薬品一覧", icon: Pill },
-    { href: "/admin/companies", label: "製薬会社一覧", icon: Building },
-    { href: "/admin/genericNames", label: "成分名一覧", icon: FlaskConical },
-    { href: "/admin/units", label: "規格単位一覧", icon: Ruler },
+  const navGroups = [
+    {
+      label: null,
+      items: [
+        { href: "/admin/drugs", label: "医薬品一覧", icon: Pill },
+        { href: "/admin/companies", label: "製薬会社一覧", icon: Building },
+        { href: "/admin/genericNames", label: "成分名一覧", icon: FlaskConical },
+        { href: "/admin/units", label: "規格単位一覧", icon: Ruler },
+      ],
+    },
+    {
+      label: "下書き",
+      items: [
+        { href: "/admin/drafts/packages", label: "包装情報", icon: Package },
+      ],
+    },
   ]
+  
 
   return (
 
@@ -49,30 +62,43 @@ export default function AdminLayout({
 
           {/* コンテンツ */}
           <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {navItems.map((item) => {
-                    const active = isSelected(item.href)
-                    return (
-                      <SidebarMenuItem key={item.href}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={active}
-                          tooltip={item.label} 
-                          className="w-full p-5 transition-colors"
-                        >
-                          <Link href={item.href} className="flex items-center gap-3">
-                            <item.icon className="w-5 h-5 shrink-0" />
-                            <span>{item.label}</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    )
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
+            {navGroups.map((group, index) => (
+              <SidebarGroup key={index}>
+
+                {/* グループラベル */}
+                {group.label && (
+                  <SidebarGroupLabel>
+                    {group.label}
+                  </SidebarGroupLabel>
+                )}
+
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {group.items.map((item) => {
+                      const active = isSelected(item.href)
+                      return (
+                        <SidebarMenuItem key={item.href}>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={active}
+                            tooltip={item.label}
+                            className="w-full p-5 transition-colors"
+                          >
+                            <Link
+                              href={item.href}
+                              className="flex items-center gap-3"
+                            >
+                              <item.icon className="w-5 h-5 shrink-0" />
+                              <span>{item.label}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      )
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
           </SidebarContent>
         </Sidebar>
         
