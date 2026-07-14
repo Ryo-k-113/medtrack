@@ -1,7 +1,7 @@
+import { z } from "zod"
 import type { Drug, PackageUnit} from "@/types/drug"
 import type {  ProductType, CurrentShippingStatus, PublishStatus,AnnounceType } from "@prisma/client"
-
-
+import { packageUnitFormSchema } from "@/app/(admin)/admin/drugs/_schemas/drug"
 
 
 // 告示履歴の型
@@ -176,18 +176,32 @@ export type PackageUnitDetailResponse = {
 }
 
 //-------------------------------------
-// 包装情報の編集 PATCHリクエスト・レスポンス型
+// PUT: 包装情報の更新
 //-------------------------------------
-export type UpdatePackageUnitRequest = {
-  name: string
-  publishStatus: PublishStatus
-  gs1SalesCode?: string | null
-  gs1DispensingCode?: string | null
-  hotCode?: string | null
-  janCode?: string | null
-  unifiedCode?: string | null
-}
 
+// * 包装編集フォームのスキーマ */
+export const packageUnitEditFormSchema = packageUnitFormSchema.pick({
+  name: true,
+  publishStatus: true,
+  gs1SalesCode: true,
+  gs1DispensingCode: true,
+  unifiedCode: true,
+  hotCode: true,
+  janCode: true,
+})
+
+
+/** zodスキーマから変換した型(バリデーション後) */
+export type PackageUnitEditFormData = z.infer<typeof packageUnitEditFormSchema>
+
+/** zodスキーマから変換した型 (入力時の型) */
+export type PackageUnitEditFormInput = z.input<typeof packageUnitEditFormSchema>
+
+
+/** 包装情報更新のAPIリクエスト型 */
+export type UpdatePackageUnitRequest = PackageUnitEditFormData
+
+/** 包装情報更新のAPIレスポンス型 */
 export type UpdatePackageUnitResponse = {
   message: string
   data: PackageUnit
