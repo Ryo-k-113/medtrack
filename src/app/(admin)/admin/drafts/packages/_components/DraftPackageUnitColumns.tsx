@@ -2,16 +2,11 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/utils/format"
 import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge"
+import { BaseDropdown } from "@/components/Dropdown/BaseDropdown"
 import type { DraftPackageUnit } from "@/types/admin/draft"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
 import { Ellipsis, Edit, Send } from 'lucide-react';
+import { cn } from "@/lib/utils"
+
 
 type ColumnsProps = {
   onEdit: (packageUnit: DraftPackageUnit) => void
@@ -128,14 +123,14 @@ export const DraftPackageUnitColumns = ({
     header: "",
     size: 60,
     cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <BaseDropdown 
+        trigger={
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
             disabled={isPublishing}
             className={cn(
-              "h-8 w-8 border bg-white",
+              "h-8 w-8 bg-white",
               "opacity-0 group-hover/row:opacity-100", 
               "data-[state=open]:opacity-100", 
               "transition-opacity duration-150",
@@ -143,25 +138,20 @@ export const DraftPackageUnitColumns = ({
           >
             <Ellipsis className="h-4 w-4" />
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem 
-            onClick={() => onEdit(row.original)}
-            className="focus:bg-surface focus:text-foreground"
-            >
-            <Edit className="h-4 w-4" />
-            編集する
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onPublish(row.original.id)}
-            className="hover:bg-accent"
-          >
-            <Send className="h-4 w-4" />
-            公開する
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
-    
+        }
+        items={[
+          {
+            label: "編集する",
+            icon: <Edit className="h-4 w-4" />,
+            onClick: () => onEdit(row.original),
+          },
+          {
+            label: "公開する",
+            icon: <Send className="h-4 w-4" />,
+            onClick: () => onPublish(row.original.id),
+          },
+        ]}
+      />
+    )
   },
 ]
