@@ -21,10 +21,13 @@ export const DraftPackageUnitList = () => {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<DraftPackageUnit | null>(null)
 
-
+  // 公開処理の状態管理
+  const [isPublishing, setIsPublishing] = useState(false)
   
   // 公開処理
   const handlePublish = async (id: number) => {
+    if (isPublishing) return
+    setIsPublishing(true)
     try {
       const res = await fetcher({
         url: `/api/admin/drafts/packages/${id}`,
@@ -41,7 +44,9 @@ export const DraftPackageUnitList = () => {
       await mutate()
     } catch {
       toast.error(error.message)
-    } 
+    } finally {
+      setIsPublishing(false)
+    }
   }
 
   // テーブルのカラム
@@ -51,6 +56,7 @@ export const DraftPackageUnitList = () => {
       setIsEditOpen(true)
     },
     onPublish: (packageUnitId) => handlePublish(packageUnitId),
+    isPublishing,
   })
 
   // ローディング表示

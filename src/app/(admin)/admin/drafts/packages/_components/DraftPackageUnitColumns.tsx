@@ -16,11 +16,13 @@ import { Ellipsis, Edit, Send } from 'lucide-react';
 type ColumnsProps = {
   onEdit: (packageUnit: DraftPackageUnit) => void
   onPublish: (id: number) => void
+  isPublishing: boolean
 }
 
 export const DraftPackageUnitColumns = ({
   onEdit,
   onPublish,
+  isPublishing,
 }: ColumnsProps): ColumnDef<DraftPackageUnit>[] => [
   {
     accessorKey: "name",
@@ -131,6 +133,7 @@ export const DraftPackageUnitColumns = ({
           <Button
             variant="ghost"
             size="icon"
+            disabled={isPublishing}
             className={cn(
               "h-8 w-8 border bg-white",
               "opacity-0 group-hover/row:opacity-100", 
