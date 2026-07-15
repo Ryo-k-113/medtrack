@@ -3,8 +3,15 @@ import { Button } from "@/components/ui/button"
 import { formatDate } from "@/utils/format"
 import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge"
 import type { DraftPackageUnit } from "@/types/admin/draft"
-
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
+import { Ellipsis, Edit, Send } from 'lucide-react';
 
 type ColumnsProps = {
   onEdit: (packageUnit: DraftPackageUnit) => void
@@ -117,25 +124,40 @@ export const DraftPackageUnitColumns = ({
   {
     id: "actions",
     header: "",
-    size: 140,
+    size: 60,
     cell: ({ row }) => (
-      <div className="flex gap-2 justify-end">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onEdit(row.original)}
-        >
-          編集
-        </Button>
-        <Button
-          size="sm"
-          variant="accent"
-          onClick={() => onPublish(row.original.id)}
-          className="font-bold"
-        >
-          公開
-        </Button>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "h-8 w-8 border bg-white",
+              "opacity-0 group-hover/row:opacity-100", 
+              "data-[state=open]:opacity-100", 
+              "transition-opacity duration-150",
+            )}
+          >
+            <Ellipsis className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem 
+            onClick={() => onEdit(row.original)}
+            className="focus:bg-surface focus:text-foreground"
+            >
+            <Edit className="h-4 w-4" />
+            編集する
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => onPublish(row.original.id)}
+            className="hover:bg-accent"
+          >
+            <Send className="h-4 w-4" />
+            公開する
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     ),
     
   },
