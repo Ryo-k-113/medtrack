@@ -69,6 +69,10 @@ export const DraftPackageUnitList = () => {
       <DataTable
         columns={columns}
         data={draftPackageUnits}
+        pinnedColumns={{
+          left: ["name"],  // 包装名を左端に固定  
+          right: ["actions"], // actionsカラムを右端に固定
+        }}
       />
 
       {/* 編集ダイアログ */}
