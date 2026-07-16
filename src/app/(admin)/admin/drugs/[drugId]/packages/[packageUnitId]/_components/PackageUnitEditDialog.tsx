@@ -14,7 +14,7 @@ import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { fetcher } from "@/utils/fetcher"
 
-import { packageUnitEditFormSchema, type PackageUnitEditFormData, type PackageUnitEditFormInput, } from "../_schemas/drug"
+import { packageUnitEditFormSchema, type PackageUnitEditFormData, type PackageUnitEditFormInput, } from "@/types/admin/drug"
 
 
 export const PackageUnitEditDialog = () => {
