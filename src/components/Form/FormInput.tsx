@@ -25,7 +25,7 @@ export const FormInput = ({
   required = false,
   className,
 }: FormInputProps) => {
-  const { control } = useFormContext();
+  const { control, formState: { isSubmitting } } = useFormContext();
 
   return(
     <Controller
@@ -45,8 +45,13 @@ export const FormInput = ({
             id={name} 
             type={type || "text"} 
             placeholder={placeholder} 
+            disabled={isSubmitting}
           />
+          
+          {/* 説明文の表示 */}
           {description && <FieldDescription>{description}</FieldDescription>}
+
+          {/* エラー表示 */}
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
       )}
