@@ -10,7 +10,7 @@ type AdminCheckRoleResponse = {
 export const GET = async (request: NextRequest) => {
 
   const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
 
   return NextResponse.json<AdminCheckRoleResponse>({ status: "OK" }, { status: 200 })
 }
