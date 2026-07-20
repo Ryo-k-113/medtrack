@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AdminSidebarHeader } from './_components/AdminSidebarHeader';
+import { AdminSidebarFooter } from './_components/AdminSidebarFooter';
 import {
   Sidebar,
   SidebarContent,
@@ -100,6 +101,9 @@ export default function AdminLayout({
               </SidebarGroup>
             ))}
           </SidebarContent>
+          
+          {/* サイドバーフッター */}
+          <AdminSidebarFooter />
         </Sidebar>
         
         <div className="flex flex-col flex-1 h-full overflow-hidden">
