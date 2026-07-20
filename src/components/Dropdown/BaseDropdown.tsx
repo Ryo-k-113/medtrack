@@ -24,6 +24,7 @@ type BaseDropdownProps = {
   trigger: React.ReactNode  
   disabled?: boolean
   align?: "start" | "center" | "end"
+  side?: "top" | "bottom" | "left" | "right" 
   className?: string 
 }
 
@@ -31,6 +32,8 @@ export const BaseDropdown = ({
   items,
   trigger,
   align = "end",
+  side,
+  className,
 }: BaseDropdownProps) => {
   return (
     <DropdownMenu>
@@ -39,12 +42,16 @@ export const BaseDropdown = ({
         {trigger}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align={align}>
+      <DropdownMenuContent 
+        align={align}
+        side={side}
+        className={className}
+      >
         {items.map((item, index) => (
           <React.Fragment key={index}>
             {/* セパレーターがあれば表示 */}
             {item.separator && <DropdownMenuSeparator />}
-            
+
             {/* メニューアイテム */}
             <DropdownMenuItem
               onClick={item.onClick}
