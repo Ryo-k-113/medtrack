@@ -75,17 +75,17 @@ model Drug {
   
   
   // リレーション
-  Unit                    Unit  @relation(fields: [UnitId], references: [id])
-  GenericName             GenericName  @relation(fields: [GenericNameId], references: [id])
+  Unit                    Unit  @relation(fields: [unitId], references: [id])
+  GenericName             GenericName  @relation(fields: [genericNameId], references: [id])
 
   //製造販売元。開発上の便宜として manufacturing と命名。
-  ManufacturingCompany    PharmaceuticalCompany  @relation("Manufacture", fields: [ManufacturingCompanyId], references: [id])
+  ManufacturingCompany    PharmaceuticalCompany  @relation("Manufacture", fields: [manufacturingCompanyId], references: [id])
 
   //販売元。開発上の便宜として sales と命名
-  SalesCompany            PharmaceuticalCompany  @relation("Sales", fields: [SalesCompanyId], references: [id])   
+  SalesCompany            PharmaceuticalCompany  @relation("Sales", fields: [salesCompanyId], references: [id])   
 
   //複合キー：YJコードとメーカーの組み合わせで一意に
-  @@unique([yjCode, SalesCompanyId])
+  @@unique([yjCode, salesCompanyId])
   @@map("drugs")     
   
   BookmarkDrugs           BookmarkDrug[]
@@ -125,7 +125,7 @@ model PackageUnit {
   drugId                Int  @map("drug_id")
   
   // リレーション
-  Drug                  Drug @relation(fields: [DrugId], references: [id], onDelete: Cascade )
+  Drug                  Drug @relation(fields: [drugId], references: [id], onDelete: Cascade )
   AnnounceHistories         AnnounceHistory[]
 
   @@map("package_units")
@@ -165,7 +165,7 @@ model AnnounceHistory {
   packageUnitId Int @map("package_unit_id")
   
   // リレーション
-  PackageUnit            PackageUnit @relation(fields: [PackageUnitId], references: [id], onDelete: Cascade)
+  PackageUnit            PackageUnit @relation(fields: [packageUnitId], references: [id], onDelete: Cascade)
 
   // インデックス（定期実行用）
   @@index([effectiveDate, processStatus, publishStatus])
