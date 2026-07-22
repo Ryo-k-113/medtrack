@@ -17,8 +17,12 @@ const SHIPPING_STATUS_MAP: Record<CurrentShippingStatus, { label: string; classN
     className: "bg-status-limited text-status-limited-foreground hover:bg-status-limited",
   },
   SHIPMENT_SUSPENDED: {
-    label: "出荷停止",
+    label: "供給停止",
     className: "bg-status-stop text-status-stop-foreground hover:bg-status-stop",
+  },
+  DISCONTINUED_SALE: {
+    label: "販売中止",
+    className: "bg-status-discontinued text-status-discontinued-foreground hover:bg-status-discontinued",
   },
 }
 
