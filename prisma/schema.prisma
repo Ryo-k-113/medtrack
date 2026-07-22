@@ -222,3 +222,26 @@ model PharmaceuticalCompany {
 }
 
 
+// 定期実行の処理履歴
+model BatchProcessingLog {
+  id             Int            @id @default(autoincrement())
+  jobType        BatchJobType
+  status         BatchJobStatus
+  startedAt      DateTime       @default(now())
+  completedAt    DateTime?
+  failedAt       DateTime?
+  errorMessage   String?
+  processedCount Int            @default(0)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+enum BatchJobType {
+  UPDATE_SHIPPING_STATUS
+}
+
+enum BatchJobStatus {
+  RUNNING   // 実行中
+  COMPLETED // 完了
+  FAILED    // 失敗（全体中断）
+}
