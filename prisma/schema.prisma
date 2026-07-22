@@ -19,6 +19,8 @@ model User {
   supabaseUserId  String   @unique
   email           String   @unique
   role            Role   @default(USER) 
+  createdAt       DateTime @default(now()) 
+  updatedAt       DateTime @updatedAt
 
   // リレーション
   BookmarkDrugs   BookmarkDrug[]
@@ -32,7 +34,8 @@ enum Role {
 // ユーザーがブックマークした医薬品
 model BookmarkDrug {
   id              Int      @id @default(autoincrement())
-  createAt        DateTime @default(now())
+  createdAt       DateTime @default(now()) 
+  updatedAt       DateTime @updatedAt
   
   // 外部キー (Int に修正)
   UserId          Int
@@ -49,15 +52,18 @@ model BookmarkDrug {
 
 // 医薬品の基本情報
 model Drug {
-  id                      Int      @id @default(autoincrement()) 
-  name                    String
-  price                   Decimal? 
-  drugPriceListingCode    String?   //薬価収載コード
-  yjCode                  String    //YJコード
-  isSelectMedical         Boolean?
-  isAuthorizedGeneric     Boolean?
-  packageInsertUrl        String?
-  productType             ProductType?
+  id                        Int      @id @default(autoincrement()) 
+  name                      String        // 製品名
+  price                     Decimal?      // 薬価
+  drugPriceListingCode      String?       // 薬価収載コード
+  yjCode                    String        // YJコード
+  isSelectMedical           Boolean?      // 選定療養制度の対象
+  isAuthorizedGeneric       Boolean?      // オーソライズドジェネリック 
+  packageInsertUrl          String?       // 添付文書URL
+  productType               ProductType   // 製品区分
+  transitionalMeasuresDate  DateTime?     //経過措置日
+  createdAt                 DateTime @default(now()) 
+  updatedAt                 DateTime @updatedAt
   
   // 外部キー 
   UnitId                  Int
@@ -84,11 +90,10 @@ model Drug {
 }
 
 enum ProductType {
-  ORIGINAL_PRODUCT            // 先発品
-  ASSOCIATE_ORIGINAL_PRODUCT  // 準先発品
-  GENERIC_WITH_ADD            // 後発品(加算対象)
-  GENERIC_WITHOUT_ADD         // 後発品(加算対象外)
-  OTHER                       // その他
+  BRAND_NAME            // 先発品
+  QUASI_BRAND_NAME      // 準先発品
+  GENERIC               // 後発品
+  OTHER                 // その他
 }
 
 
@@ -97,19 +102,20 @@ enum ProductType {
 model PackageUnit {
   id                        Int      @id @default(autoincrement()) 
   name                      String
-  gs1SalesCode              String?       // 販売包装単位GS1 (箱のバーコード)
-  gs1DispensingCode         String?       // 調剤包装単位GS1 (シートのバーコード)
-  hotCode                   String?       // HOTコード (基準番号)
-  janCode                   String?       // JANコード
-  unifiedCode               String?       // 統一商品コード
+  gs1SalesCode              String?  @unique   // 販売包装単位GS1コード
+  gs1DispensingCode         String?  @unique   // 調剤包装単位GS1コード
+  hotCode                   String?  @unique   // HOTコード (基準番号)
+  janCode                   String?  @unique   // JANコード
+  unifiedCode               String   @unique   // 統一商品コード
 
-  currentShippingStatus     CurrentShippingStatus
-  salesTransferDate         DateTime?
-  discontinuedDate          DateTime?
-  transitionalMeasuresDate  DateTime?
-  publishStatus             PublishStatus
+  currentShippingStatus     CurrentShippingStatus 
+  salesTransferDate         DateTime?          // 販売移管日
+  discontinuedDate          DateTime?          // 販売中止日
+  publishStatus             PublishStatus  
+  createdAt                 DateTime @default(now()) 
+  updatedAt                 DateTime @updatedAt    
 
-  // 外部キー (Int に修正)
+  // 外部キー 
   DrugId                    Int
   
   // リレーション
@@ -117,23 +123,31 @@ model PackageUnit {
   AnnounceHistories         AnnounceHistory[]
 }
 
+// 公開ステータス
 enum PublishStatus {
   DRAFT
   PUBLISHED
 }
 
+// 現在の出荷状況
 enum CurrentShippingStatus {
-  NORMAL_SHIPMENT
-  LIMITED_SHIPMENT
-  SHIPMENT_SUSPENDED
+  NORMAL_SHIPMENT    // 通常出荷
+  LIMITED_SHIPMENT   // 限定出荷
+  SHIPMENT_SUSPENDED // 供給停止
+  DISCONTINUED_SALE  // 販売中止
 }
 
-// 包装単位ごとの出荷状況履歴
+
+// 各包装の出荷状況履歴
 model AnnounceHistory {
-  id                     Int      @id @default(autoincrement()) // String から Int に修正
-  announcedDate          DateTime?
-  effectiveDate          DateTime?
-  announceType           AnnounceType?
+  id                Int      @id @default(autoincrement()) 
+  announcedDate     DateTime?      // 告示日
+  effectiveDate     DateTime?      // 適用日
+  announceType      AnnounceType?    
+  publishStatus     AnnouncePublishStatus @default(PUBLISHED)
+  processStatus     ProcessStatus @default(PENDING) 
+  createdAt         DateTime @default(now()) 
+  updatedAt         DateTime @updatedAt
   
   
   // 外部キー 
@@ -141,21 +155,40 @@ model AnnounceHistory {
   
   // リレーション
   PackageUnit            PackageUnit @relation(fields: [PackageUnitId], references: [id], onDelete: Cascade)
+
+  // インデックス（定期実行用）
+  @@index([effectiveDate, processStatus, publishStatus])
 }
 
+// 告示情報の公開ステータス
+enum AnnouncePublishStatus {
+  DRAFT      // 下書き
+  PUBLISHED  // 公開
+  INACTIVE   // 非表示
+}
+
+// 告示タイプ
 enum AnnounceType {
-  NORMAL_SHIPMENT
-  LIMITED_SHIPMENT
-  SHIPMENT_SUSPENDED
-  DISCONTINUED_SALE
-  TRANSFER_OF_SALE
+  NORMAL_SHIPMENT    // 通常出荷
+  LIMITED_SHIPMENT   // 限定出荷
+  SHIPMENT_SUSPENDED // 供給停止
+  DISCONTINUED_SALE  // 販売中止
+  TRANSFER_OF_SALE   // 販売移管
+}
+
+// 定期実行ステータス
+enum ProcessStatus {
+  PENDING     // 適用待ち（デフォルト）
+  COMPLETED   // 適用完了
 }
 
 
-// 単位 (例: mg, mL, 錠)
+// 規格単位
 model Unit {
-  id        Int      @id @default(autoincrement()) 
-  name      String
+  id          Int      @id @default(autoincrement()) 
+  name        String
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
   
   // リレーション
   Drugs     Drug[]
@@ -163,10 +196,12 @@ model Unit {
 
 
 
-// 一般名
+// 成分名
 model GenericName {
-  id        Int      @id @default(autoincrement()) 
-  name      String
+  id          Int      @id @default(autoincrement()) 
+  name        String
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
   
   // リレーション
   Drugs     Drug[]
@@ -176,13 +211,14 @@ model GenericName {
 
 // 製薬会社 
 model PharmaceuticalCompany {
-  id        Int      @id @default(autoincrement()) 
-  name      String
+  id          Int      @id @default(autoincrement()) 
+  name        String
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
   
   // リレーション
   ManufacturedDrugs  Drug[] @relation("Manufacture") 
   SoldDrugs          Drug[] @relation("Sales")      
 }
-
 
 
