@@ -4,16 +4,21 @@ import type { PackageUnit as PrismaPackageUnit, Drug as PrismaDrug } from "@pris
 /** 包装の基本型 */
 export type PackageUnit = Omit<
   PrismaPackageUnit,
-  "salesTransferDate" | "discontinuedDate" | "transitionalMeasuresDate"
+  "salesTransferDate" | "discontinuedDate"| "createdAt" | "updatedAt" 
 > & {
   // Date型をstringへ変更
   salesTransferDate: string | null
   discontinuedDate: string | null
-  transitionalMeasuresDate: string | null
+  createdAt: string
+  updatedAt: string
 }
 
-/** 包装の基本型 */
-export type Drug = Omit<PrismaDrug, "price"> & {
-  // Decimal型を numberへ変更
-  price: number | null;
+/** 医薬品の基本型 */
+export type Drug = Omit<PrismaDrug, "price" | "transitionalMeasuresDate" | "createdAt" | "updatedAt"> & {
+  price: number | null; // Decimal型を numberへ変更
+
+  // Date型をstringへ変更
+  transitionalMeasuresDate: string | null; 
+  createdAt: string
+  updatedAt: string
 }

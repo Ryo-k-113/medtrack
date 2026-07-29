@@ -1,6 +1,7 @@
 "use client"
 import { InfoCard } from "@/components/Card/InfoCard"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
+import { formatDate } from "@/utils/format"
 
 export const DrugInfo = () => {
   const { drug , isLoading } = useAdminPackageUnit()
@@ -14,6 +15,7 @@ export const DrugInfo = () => {
     { label: "成分名", value: drug.GenericName.name },
     { label: "販売会社", value: drug.SalesCompany.name  },
     { label: "製造会社", value: drug.ManufacturingCompany.name },
+    { label: "経過措置期限", value: formatDate(drug.transitionalMeasuresDate) },
   ];
 
   return (

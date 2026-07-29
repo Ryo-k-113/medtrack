@@ -53,9 +53,9 @@ export const PackageUnitFormFields = ({
 
       {/* コード情報 */}
       <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4", codeClassName)}>
+        <FormInput name="unifiedCode" label="統一商品コード" required />
         <FormInput name="gs1SalesCode" label="販売GS1コード" />
         <FormInput name="gs1DispensingCode" label="調剤GS1コード" />
-        <FormInput name="unifiedCode" label="統一商品コード" />
         <FormInput name="hotCode" label="HOTコード" />
         <FormInput name="janCode" label="JANコード" />
       </div>

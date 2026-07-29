@@ -5,6 +5,8 @@ import { FormCheckbox } from "@/components/Form/FormCheckbox"
 import { FormCombobox } from "@/components/Form/FormCombobox"
 import { PRODUCT_TYPE_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { SelectOption } from "@/types/ui/select"
+import { FormDatePicker } from "@/components/Form/FormDatePicker"
+
 
 type FormProductSectionProps = {
   companyOptions: readonly SelectOption[];
@@ -36,7 +38,7 @@ export const FormProductSection = ({
             required
           />
           <FormCombobox 
-            name="GenericNameId" 
+            name="genericNameId" 
             label="成分名" 
             options={genericNameOptions} 
             required
@@ -48,7 +50,7 @@ export const FormProductSection = ({
             placeholder="例: 10.5" 
           />
           <FormCombobox 
-            name="UnitId" 
+            name="unitId" 
             label="規格単位" 
             options={unitOptions} 
             required
@@ -67,13 +69,13 @@ export const FormProductSection = ({
             label="薬価収載コード" 
           />
           <FormCombobox 
-            name="SalesCompanyId" 
+            name="salesCompanyId" 
             label="販売会社" 
             options={companyOptions} 
             required
           />
           <FormCombobox 
-            name="ManufacturingCompanyId" 
+            name="manufacturingCompanyId" 
             label="製造会社" 
             options={companyOptions} 
             required
@@ -86,12 +88,18 @@ export const FormProductSection = ({
             name="productType" 
             label="区分" 
             options={PRODUCT_TYPE_OPTIONS} 
+            required
           />
 
           <FormInput 
             name="packageInsertUrl" 
             label="医薬品情報URL" 
             placeholder="https://www.pmda.go.jp/" 
+          />
+
+          <FormDatePicker 
+            name="transitionalMeasuresDate"
+            label="経過措置日"
           />
         </div>
 

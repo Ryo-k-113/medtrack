@@ -61,11 +61,15 @@ export const FormPackageUnitCard = ({
           options={SHIPPING_STATUS_OPTIONS}
           required
         />
-      
       </div>
 
       {/* コード情報 */}
       <div className="p-4 grid grid-cols-1 md:grid-cols-5 gap-4">
+        <FormInput
+          name={`packageUnits.${index}.unifiedCode`}
+          label="統一商品コード"
+          required
+        />
         <FormInput
           name={`packageUnits.${index}.gs1SalesCode`}
           label="販売GS1コード"
@@ -73,10 +77,6 @@ export const FormPackageUnitCard = ({
         <FormInput
           name={`packageUnits.${index}.gs1DispensingCode`}
           label="調剤GS1コード"
-        />
-        <FormInput
-          name={`packageUnits.${index}.unifiedCode`}
-          label="統一商品コード"
         />
         <FormInput
           name={`packageUnits.${index}.hotCode`}
@@ -93,10 +93,6 @@ export const FormPackageUnitCard = ({
         <FormDatePicker
           name={`packageUnits.${index}.discontinuedDate`}
           label="販売中止日"
-        />
-        <FormDatePicker
-          name={`packageUnits.${index}.transitionalMeasuresDate`}
-          label="経過措置期限"
         />
         <FormDatePicker
           name={`packageUnits.${index}.salesTransferDate`}

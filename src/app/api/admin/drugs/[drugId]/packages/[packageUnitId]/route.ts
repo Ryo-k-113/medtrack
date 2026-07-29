@@ -5,7 +5,7 @@ import type { PackageUnitDetailResponse, UpdatePackageUnitRequest,
   UpdatePackageUnitResponse, DeletePackageUnitResponse } from "@/types/admin/drug"
 
 
-// 包装情報・告示履歴・製品情報を取得
+/** 包装情報・告示履歴・製品情報を取得 */
 export const GET = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string } }
@@ -20,7 +20,7 @@ export const GET = async (
     const packageUnit = await prisma.packageUnit.findUnique({
       where: { 
         id: parseInt(packageUnitId),
-        DrugId: parseInt(drugId),  
+        drugId: parseInt(drugId),  
       },
       include: {
         AnnounceHistories: {
@@ -31,6 +31,7 @@ export const GET = async (
             id: true,
             name: true,
             yjCode: true,
+            transitionalMeasuresDate: true,
             GenericName: { select: { id: true, name: true } },
             SalesCompany: { select: { id: true, name: true } },
             ManufacturingCompany: { select: { id: true, name: true } },
@@ -50,7 +51,12 @@ export const GET = async (
       ...packageUnit,
       salesTransferDate: packageUnit.salesTransferDate?.toISOString() ?? null,
       discontinuedDate: packageUnit.discontinuedDate?.toISOString() ?? null,
-      transitionalMeasuresDate: packageUnit.transitionalMeasuresDate?.toISOString() ?? null,
+      createdAt: packageUnit.createdAt.toISOString(),
+      updatedAt: packageUnit.updatedAt.toISOString(),
+      Drug: {
+        ...packageUnit.Drug,
+        transitionalMeasuresDate: packageUnit.Drug.transitionalMeasuresDate?.toISOString() ?? null,
+      },
       AnnounceHistories: packageUnit.AnnounceHistories.map((h) => ({
         ...h,
         announcedDate: h.announcedDate?.toISOString() ?? null,
@@ -77,7 +83,7 @@ export const PUT = async (
 ) => {
   // 認証チェック
   const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
   
   // 製品IDと包装IDを取得
   const { packageUnitId, drugId } = params;
@@ -97,10 +103,10 @@ export const PUT = async (
     } = body
     
     // DBの包装情報を更新
-    const updated = await prisma.packageUnit.update({
+    await prisma.packageUnit.update({
       where: { 
         id: parseInt(packageUnitId), 
-        DrugId: parseInt(drugId), 
+        drugId: parseInt(drugId), 
       },
       data: {
         name,
@@ -109,19 +115,13 @@ export const PUT = async (
         gs1DispensingCode: gs1DispensingCode || null,
         hotCode: hotCode || null,
         janCode: janCode || null,
-        unifiedCode: unifiedCode || null,
+        unifiedCode: unifiedCode,
       }
     })
 
-    const responseData = {
-      ...updated,
-      salesTransferDate: updated.salesTransferDate?.toISOString() ?? null,
-      discontinuedDate: updated.discontinuedDate?.toISOString() ?? null,
-      transitionalMeasuresDate: updated.transitionalMeasuresDate?.toISOString() ?? null,
-    }
 
     return NextResponse.json<UpdatePackageUnitResponse>(
-      { message: "更新しました", data: responseData },
+      { message: "更新しました"},
       { status: 200 }
     )
 

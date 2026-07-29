@@ -1,6 +1,7 @@
 import { z } from "zod"
 import type { Drug, PackageUnit} from "@/types/drug"
-import type {  ProductType, CurrentShippingStatus, PublishStatus,AnnounceType } from "@prisma/client"
+import type {AnnounceType ,GenericName,
+  PharmaceuticalCompany } from "@prisma/client"
 import { packageUnitFormSchema } from "@/app/(admin)/admin/drugs/_schemas/drug"
 
 
@@ -10,97 +11,64 @@ export type AnnounceHistory = {
   announcedDate: string | null
   effectiveDate: string | null
   announceType: AnnounceType | null
-  PackageUnitId: number
+  packageUnitId: number
 }
 
 
 
 //-------------------------------------
-// 医薬品一覧ページ GETレスポンス型
+// GET: 医薬品一覧
 //-------------------------------------
-export type PublishedPackageUnitResponse = {
-  id: number;
-  name: string;
-  gs1SalesCode: string | null; 
-  unifiedCode: string | null;  
-  currentShippingStatus: CurrentShippingStatus; 
 
-  // selectで取得するDrugの型
-  Drug: {
-    id: number;
-    name: string;
-    yjCode: string;
-    productType: ProductType | null; 
-
-    GenericName: {
-      id: number;
-      name: string;
-    }; 
-    SalesCompany: {
-      id: number;
-      name: string;
-    };
-  };
+/** 公開済み医薬品(包装_製品)の一覧の基本型 */
+export type PublishedPackageUnitResponse = Pick<PackageUnit,
+  | "id"
+  | "name"
+  | "gs1SalesCode"
+  | "unifiedCode"
+  | "currentShippingStatus"
+> & {
+  Drug: Pick<Drug,
+    | "id"
+    | "name"
+    | "yjCode"
+    | "productType"
+  > & {
+      GenericName: GenericName  
+      SalesCompany: PharmaceuticalCompany
+    }
 };
 
-// APIが返す全体の型
+/** 公開済み医薬品一覧取得のレスポンス型 */
 export type GetPublishedPackageUnitsResponse = {
   packageUnits: PublishedPackageUnitResponse[];
 };
 
 
 //-------------------------------------
-// 新規医薬品登録のPOSTリクエスト型・レスポンス型
+// POST: 新規医薬品登録
 //-------------------------------------
-export type CreateDrugRequest = { 
-  name: string;
-  price?: number | null; 
-  drugPriceListingCode?: string | null;
-  yjCode: string; 
-  isSelectMedical?: boolean | null;
-  isAuthorizedGeneric?: boolean | null;
-  packageInsertUrl?: string | null;
-  productType?: ProductType | null;
 
-  GenericNameId: number;
-  UnitId: number;
-  ManufacturingCompanyId: number;
-  SalesCompanyId: number;
-
-  // -- PackageUnits 各包装情報 --
+/** 医薬品新規登録のリクエスト型(製品と複数包装) */
+export type CreateDrugRequest = Omit<Drug, "id" | "transitionalMeasuresDate"> & {
   packageUnits: CreatePackageUnitRequest[];
-};
-
-// 包装情報のリクエスト型
-export type CreatePackageUnitRequest = {
-  // 必須項目
-  name: string;
-  currentShippingStatus: CurrentShippingStatus;
-  publishStatus: PublishStatus;
-
-  // 任意項目
-  gs1SalesCode?: string | null;
-  gs1DispensingCode?: string | null;
-  hotCode?: string | null;
-  janCode?: string | null;
-  unifiedCode?: string | null;
-  salesTransferDate?: string | null;
-  discontinuedDate?: string | null;
-  transitionalMeasuresDate?: string | null;
 }
 
+/** 包装登録のリクエスト型 */
+export type CreatePackageUnitRequest = Omit<PackageUnit,"id">
 
-// 医薬品登録のレスポンス型
+
+/** 新規医薬品登録のレスポンス型 */
 export type CreateDrugResponse = {
   message: string
-  data: Drug & {
-    PackageUnits: PackageUnit[]
-  }
+  data: Pick<Drug,"id">
 }
 
 //-------------------------------------
-// 製品編集ページ GETレスポンス型
+// GET: 医薬品編集
 //-------------------------------------
+
+/** 医薬品編集ページの包装カードの型 */
 export type DrugEditPackageUnitCard = Pick<PackageUnit,
   "id" |
   "name" |
@@ -110,64 +78,58 @@ export type DrugEditPackageUnitCard = Pick<PackageUnit,
   "publishStatus"
 >
 
-export type DrugEditResponse = {
+/** 医薬品情報と包装取得のレスポンス型 */
+export type GetDrugEditResponse = {
   data: Drug & {
     PackageUnits: DrugEditPackageUnitCard[]
   }
 }
 
 // -------------------------------------
-// 製品編集  PUTリクエスト・レスポンス型
+// PUT: 医薬品編集
 // -------------------------------------
-export type UpdateDrugRequest = {
-  // 必須項目
-  name: string
-  yjCode: string
-  GenericNameId: number
-  UnitId: number
-  ManufacturingCompanyId: number
-  SalesCompanyId: number
-  // 任意項目
-  price?: number | null
-  drugPriceListingCode?: string | null
-  isSelectMedical?: boolean | null
-  isAuthorizedGeneric?: boolean | null
-  packageInsertUrl?: string | null
-  productType?: ProductType | null
-}
 
+/** 医薬品の更新のリクエスト型 */
+export type UpdateDrugRequest = Drug
+
+/** 医薬品の更新のレスポンス型 */
 export type UpdateDrugResponse = {
   message: string
-  data: Drug
 }
 
 
 //-------------------------------------
-// 製品削除 DELETEレスポンス型
+// DELETE: 医薬品編集
 //-------------------------------------
+
+/** 医薬品の削除のレスポンス型 */
 export type DeleteDrugResponse = {
   message: string
 }
 
 
 //-------------------------------------
-// 製品に包装追加 POSTリクエスト・レスポンス型
+//  POST: 医薬品編集 
 //-------------------------------------
+
+/** 包装追加のリクエスト型 */
 export type AddPackageUnitRequest = CreatePackageUnitRequest
 
+/** 包装追加のレスポンス型 */
 export type AddPackageUnitResponse = {
   message: string
-  data: PackageUnit
 }
 
 
 //-------------------------------------
-// 包装編集ページ GETレスポンス型
+//  GET: 包装編集
 //-------------------------------------
+
+/** 包装情報と告示履歴、医薬品情報取得のレスポンス型 */
 export type PackageUnitDetailResponse = {
   data: PackageUnit & {
     AnnounceHistories: AnnounceHistory[]
-    Drug: Pick<Drug, "id" | "name" | "yjCode"> & {
+    Drug: Pick<Drug, "id" | "name" | "yjCode" | "transitionalMeasuresDate"> & {
       GenericName: { id: number, name: string }
       SalesCompany: {id: number, name: string }
       ManufacturingCompany: {id: number, name: string }
@@ -179,7 +141,7 @@ export type PackageUnitDetailResponse = {
 // PUT: 包装情報の更新
 //-------------------------------------
 
-// * 包装編集フォームのスキーマ */
+//* 包装編集フォームのスキーマ */
 export const packageUnitEditFormSchema = packageUnitFormSchema.pick({
   name: true,
   publishStatus: true,
@@ -204,28 +166,31 @@ export type UpdatePackageUnitRequest = PackageUnitEditFormData
 /** 包装情報更新のAPIレスポンス型 */
 export type UpdatePackageUnitResponse = {
   message: string
-  data: PackageUnit
 }
 
 
 //-------------------------------------
-// 包装の削除 DELETEレスポンス型
+// DELETE: 包装の削除 
 //-------------------------------------
+
+/** 包装削除のレスポンス型 */
 export type DeletePackageUnitResponse = {
   message: string
 }
 
 
 //-------------------------------------
-// 出荷情報履歴の作成 POSTリクエスト・レスポンス型
+// POST: 告示情報の登録
 //-------------------------------------
+
+/** 告示情報登録のリクエスト型 */
 export type CreateAnnounceRequest = {
   announceType: AnnounceType
   announcedDate: string
   effectiveDate: string
 }
 
+/** 告示情報登録のレスポンス型 */
 export type CreateAnnounceResponse = {
   message: string
-  data: AnnounceHistory
 }

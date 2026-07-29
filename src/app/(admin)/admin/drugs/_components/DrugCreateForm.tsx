@@ -31,10 +31,11 @@ export const DrugCreateForm = () => {
 
   const { 
     handleSubmit,
-    formState: { isSubmitting } 
+    formState: { isSubmitting ,errors} 
   } = form;
-
+  console.log(errors)
   const onSubmit = async (data: DrugFormData) => {
+    console.log(data)
     try {
       const response = await fetcher({
         url: "/api/admin/drugs",
@@ -79,7 +80,7 @@ export const DrugCreateForm = () => {
             {/*  フォーム送信ボタン */}
             <div className="flex gap-4 pt-4 justify-end">
               <Button 
-                type="submit" 
+                type="submit"       
                 className="h-12 w-full md:w-80"
                 disabled={isSubmitting}
               >

@@ -14,6 +14,10 @@ export const packageUnitFormSchema = z.object({
   currentShippingStatus: z.enum(CurrentShippingStatus, {
     message: "出荷状況を選択してください" 
   }),
+  unifiedCode: z
+  .string()
+  .min(1, "統一コードを入力してください") 
+  .length(9, "9桁で入力してください"),
 
   // 任意項目
   gs1DispensingCode: z.union([
@@ -26,11 +30,6 @@ export const packageUnitFormSchema = z.object({
     z.string().length(14, "14桁で入力してください"),
   ]).transform((val) => (val === "" ? null : val)),
   
-  unifiedCode: z.union([
-    z.literal(""),
-    z.string().length(9, "9桁で入力してください"),
-  ]).transform((val) => (val === "" ? null : val)),
-  
   hotCode: z.union([
     z.literal(""),
     z.string().length(13, "13桁で入力してください"),
@@ -41,9 +40,8 @@ export const packageUnitFormSchema = z.object({
     z.string().length(13, "13桁で入力してください"),
   ]).transform((val) => (val === "" ? null : val)),
 
-  salesTransferDate: z.date().nullable().optional(),
   discontinuedDate: z.date().nullable().optional(),
-  transitionalMeasuresDate: z.date().nullable().optional(),
+  salesTransferDate: z.date().nullable().optional(),
 });
 
 
@@ -51,27 +49,44 @@ export const packageUnitFormSchema = z.object({
 export const drugFormSchema = z.object({
   //  必須項目
   name: z.string().min(1, "医薬品名は必須です"),
+
   yjCode: z.string()
     .min(1, "YJコードは必須です")
     .length(12, "12桁で入力してください"),
 
-  //  任意項目
-  GenericNameId: z.string().transform((val) => (val === "" ? null : Number(val))),
-  UnitId: z.string().transform((val) => (val === "" ? null : Number(val))),
-  packageInsertUrl: z.string().transform((val) => (val === "" ? null : val)),
-  SalesCompanyId: z.string().transform((val) => (val === "" ? null : Number(val))),
-  ManufacturingCompanyId: z.string().transform((val) => (val === "" ? null : Number(val))),
+  genericNameId: z
+    .string()
+    .min(1, "一般名を選択してください")
+    .transform((val) => Number(val)),
 
+  unitId: z
+    .string()
+    .min(1, "単位を選択してください")
+    .transform((val) => Number(val)),
+
+
+  salesCompanyId: z
+    .string()
+    .min(1, "販売元を選択してください")
+    .transform((val) => Number(val)),
+
+  manufacturingCompanyId: z
+    .string()
+    .min(1, "製造販売元を選択してください")
+    .transform((val) => Number(val)),
+
+  productType: z.enum(
+    ProductType, { message: "製品区分を選択してください"}
+  ),
+
+  //  任意項目
+  packageInsertUrl: z.string().transform((val) => (val === "" ? null : val)),
+ 
   drugPriceListingCode: z.union([
     z.literal(""),
     z.string().length(12, "12桁で入力してください"),
   ]).transform((val) => (val === "" ? null : val)),
   
-  
-  productType: z.union([
-    z.literal(""),
-    z.enum(ProductType)
-  ]).transform((val) => (val === "" ? null : val)),
   
   price: z.preprocess(
     (val) => (val === "" ? null : val),
@@ -86,6 +101,8 @@ export const drugFormSchema = z.object({
 
   isSelectMedical: z.boolean(),
   isAuthorizedGeneric: z.boolean(),
+
+  transitionalMeasuresDate: z.date().nullable().optional(),
 
   // 包装情報
   packageUnits: z
@@ -118,23 +135,23 @@ export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
   janCode: "", 
   salesTransferDate: null,
   discontinuedDate: null,
-  transitionalMeasuresDate: null, 
 };
 
 // フォーム全体の初期値
 export const DEFAULT_DRUG_FORM_VALUES: DrugFormInput = {
   name: "", 
-  GenericNameId: "", 
+  genericNameId: "", 
   price: "" as unknown as number, 
-  UnitId: "", 
+  unitId: "", 
   yjCode: "",
   drugPriceListingCode: "", 
   packageInsertUrl: "",
-  productType: "",
-  SalesCompanyId: "",
-  ManufacturingCompanyId: "",
+  productType: "" as ProductType,
+  salesCompanyId: "",
+  manufacturingCompanyId: "",
   isSelectMedical: false,
   isAuthorizedGeneric: false, 
+  transitionalMeasuresDate: null, 
   packageUnits: [DEFAULT_PACKAGE_UNIT],
 };
 
