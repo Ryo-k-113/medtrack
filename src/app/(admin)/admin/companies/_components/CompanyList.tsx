@@ -26,7 +26,7 @@ export const CompanyList = () => {
 
 
   const { companies, isLoading, error, mutate } = useAdminCompanies()
-
+  console.log(companies)
 
    // 新規作成
    const handleCreate = async (data: CompanyFormData) => {

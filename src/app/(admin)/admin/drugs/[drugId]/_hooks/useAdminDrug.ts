@@ -1,7 +1,7 @@
 // hooks/useDrugEdit.ts
 import { useParams } from "next/navigation"
 import { useDataFetch } from "@/hooks/useDataFetch"
-import type { DrugEditResponse } from "@/types/admin/drug"
+import type { GetDrugEditResponse } from "@/types/admin/drug"
 
 /**
  *  idから製品と関連する包装を取得するカスタムフック
@@ -17,7 +17,7 @@ export const useAdminDrug = () => {
     data: drugData,
     isLoading: isDrugLoading,
     mutate,
-  } = useDataFetch<DrugEditResponse>(`/api/admin/drugs/${drugId}`)
+  } = useDataFetch<GetDrugEditResponse>(`/api/admin/drugs/${drugId}`)
 
   const drug = drugData?.data
   const packageUnits = drugData?.data?.PackageUnits ?? []

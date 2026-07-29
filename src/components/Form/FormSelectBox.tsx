@@ -61,7 +61,6 @@ export const FormSelectBox = <T extends string> ({
             key={field.value} 
             onValueChange={field.onChange} 
             value={field.value}
-            defaultValue={field.value}
           >
             <SelectTrigger 
               id={name}

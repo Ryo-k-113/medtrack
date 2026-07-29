@@ -10,7 +10,7 @@ export const useAdminCompanies = () => {
   const { data, isLoading, mutate, error } = useDataFetch<GetCompaniesResponse>(
     "/api/admin/companies"
   )
-
+  console.log(data)
   return { 
     companies: data?.companies ?? [], 
     isLoading, 

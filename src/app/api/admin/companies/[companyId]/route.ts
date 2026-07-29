@@ -34,7 +34,7 @@ export const PUT = async (
       { message: "更新しました", data: company },
       { status: 200 }
     )
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "データの更新中にエラーが発生しました" },
       { status: 400 }

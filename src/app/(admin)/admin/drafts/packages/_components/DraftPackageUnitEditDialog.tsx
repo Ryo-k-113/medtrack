@@ -60,7 +60,7 @@ export const DraftPackageUnitEditDialog = ({
     if (!packageUnit) return
     try {
       const res = await fetcher({
-        url: `/api/admin/drugs/${packageUnit.DrugId}/packages/${packageUnit.id}`,
+        url: `/api/admin/drugs/${packageUnit.drugId}/packages/${packageUnit.id}`,
         method: "PUT",
         body: data,
         token,

@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client"
 import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
 import { toUTCDate } from "@/utils/date";
 import type {
-  DrugEditResponse,
+  GetDrugEditResponse,
   UpdateDrugRequest,
   UpdateDrugResponse,
   DeleteDrugResponse,
@@ -13,7 +13,7 @@ import type {
 } from "@/types/admin/drug"
 
 
-// 製品情報と包装情報一覧を取得
+/** 医薬品情報と包装情報一覧を取得 */ 
 export const GET = async (request: NextRequest, { params }: { params: { drugId: string } }) => {
   // 認証チェック
   const { isAuthorized, error, status } = await adminAuthCheck(request);
@@ -36,10 +36,15 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
             unifiedCode: true,
             currentShippingStatus: true,
             publishStatus: true,
-          }
-        }
-      }
+          },
+          orderBy: {
+            id: "asc", 
+          },
+        },
+      },
     })
+
+    // 早期リターン
     if (!drug) {
       return NextResponse.json(
         { message: "製品が見つかりません" },
@@ -47,20 +52,30 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
       )
     }
 
-    // priceをnumberに変換
+    // レスポンスデータの変換
     const responseData = {
       ...drug,
       price: drug.price ? Number(drug.price) : null,
+      transitionalMeasuresDate: drug.transitionalMeasuresDate?.toISOString() ?? null,
+      createdAt: drug.createdAt.toString(),
+      updatedAt: drug.updatedAt.toString()
     }
 
-    return NextResponse.json<DrugEditResponse>({ data: responseData }, { status: 200 })
+    // 成功レスポンス
+    return NextResponse.json<GetDrugEditResponse>(
+      { data: responseData }, 
+      { status: 200 }
+    )
   } catch  {
-    return NextResponse.json({ message: "データの処理中にエラーが発生しました。" }, { status: 500 })
-}
-}
+    return NextResponse.json(
+      { message: "データの処理中にエラーが発生しました。" }, 
+      { status: 500 }
+    )
+  }
+} 
 
 
-// 製品情報の更新
+/** 医薬品の更新 */
 export const PUT = async (
   request: NextRequest,
   { params }: { params: { drugId: string } }
@@ -83,10 +98,11 @@ export const PUT = async (
       isAuthorizedGeneric,
       packageInsertUrl,
       productType,
-      GenericNameId,
-      UnitId,
-      ManufacturingCompanyId,
-      SalesCompanyId,
+      transitionalMeasuresDate,
+      genericNameId,
+      unitId,
+      manufacturingCompanyId,
+      salesCompanyId,
     } = body
 
     const updatedDrug = await prisma.drug.update({
@@ -102,23 +118,18 @@ export const PUT = async (
         isAuthorizedGeneric,
         packageInsertUrl,
         productType,
-        GenericNameId,
-        UnitId,
-        ManufacturingCompanyId,
-        SalesCompanyId,
+        transitionalMeasuresDate,
+        genericNameId,
+        unitId,
+        manufacturingCompanyId,
+        salesCompanyId,
       }
     })
-     // priceをnumberに変換
-     const responseData = {
-      ...updatedDrug,
-      price: updatedDrug.price ? Number(updatedDrug.price) : null,
-    }
+     
 
+    // 成功レスポンス
     return NextResponse.json<UpdateDrugResponse>(
-      { 
-        message: "更新しました", 
-        data: responseData 
-      },
+      { message: `${updatedDrug.name}を更新しました`},
       { status: 200 }
     )
 
@@ -136,7 +147,7 @@ export const PUT = async (
 }
 
 
-// 製品の削除(包装情報もカスケードで削除)
+/** 医薬品の削除(包装情報もカスケードで削除) */
 export const DELETE = async (
   request: NextRequest,
   { params }: { params: { drugId: string } }
@@ -153,6 +164,8 @@ export const DELETE = async (
         id: parseInt(drugId),
       }
     })
+
+    // 成功レスポンス
     return NextResponse.json<DeleteDrugResponse>(
       { message: "製品を削除しました" },
       { status: 200 }
@@ -163,7 +176,7 @@ export const DELETE = async (
 }
 }
 
-// 製品に新規包装を追加
+/** 医薬品に新規包装を追加 */
 export const POST = async (
   request: NextRequest,
   { params }: { params: { drugId: string } }
@@ -188,9 +201,9 @@ export const POST = async (
       publishStatus,
       salesTransferDate,
       discontinuedDate,
-      transitionalMeasuresDate,
     } = body
 
+    // DBに新規包装を追加
     const newPackageUnit = await prisma.packageUnit.create({
       data: {
         name,
@@ -198,33 +211,25 @@ export const POST = async (
         gs1DispensingCode: gs1DispensingCode || null,
         hotCode: hotCode || null,
         janCode: janCode || null,
-        unifiedCode: unifiedCode || null,
+        unifiedCode: unifiedCode,
         currentShippingStatus,
         publishStatus,
         salesTransferDate: toUTCDate(salesTransferDate),
         discontinuedDate: toUTCDate(discontinuedDate),
-        transitionalMeasuresDate: toUTCDate(transitionalMeasuresDate),
-        DrugId: parseInt(drugId),
+        drugId: parseInt(drugId),
       }
     })
 
-    // Date型をstring型に変換
-    const responseData = {
-      ...newPackageUnit,
-      salesTransferDate: newPackageUnit.salesTransferDate?.toISOString() ?? null,
-      discontinuedDate: newPackageUnit.discontinuedDate?.toISOString() ?? null,
-      transitionalMeasuresDate: newPackageUnit.transitionalMeasuresDate?.toISOString() ?? null,
-    }
-
+    // 成功レスポンス
     return NextResponse.json<AddPackageUnitResponse>(
-      { 
-        message: "包装を追加しました", 
-        data: responseData 
-      },
+      { message: `${newPackageUnit.name}を作成しました`},
       { status: 201 }
     )
 
   } catch {
-    return NextResponse.json({ message: "データの処理中にエラーが発生しました。"}, { status: 500 })
+    return NextResponse.json(
+      { message: "データの処理中にエラーが発生しました。"}, 
+      { status: 500 }
+    )
   }
 }

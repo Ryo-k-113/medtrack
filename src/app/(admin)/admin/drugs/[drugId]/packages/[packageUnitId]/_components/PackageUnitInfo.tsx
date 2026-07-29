@@ -30,8 +30,6 @@ export const PackageUnitInfo = () => {
 
     // 区切り線
     { label: "divider-under-code", value: null, isDivider: true },
-
-    { label: "経過措置期限", value: formatDate(packageUnit.transitionalMeasuresDate) },
     { label: "販売中止日", value: formatDate(packageUnit.discontinuedDate) },
     { label: "販売移管日", value: formatDate(packageUnit.salesTransferDate) },
   ];

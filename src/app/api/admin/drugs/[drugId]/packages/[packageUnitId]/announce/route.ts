@@ -5,6 +5,8 @@ import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
 import { toUTCDate } from "@/utils/date"
 import type { CreateAnnounceRequest, CreateAnnounceResponse } from "@/types/admin/drug"
 
+
+/** 告示履歴の登録 */
 export const POST = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string } }
@@ -20,7 +22,7 @@ export const POST = async (
     const { announceType, announcedDate, effectiveDate } = body
 
     // トランザクションで告示履歴の追加とPackageUnitの更新を同時に行う
-    const result = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
 
       // 告示履歴を追加
       const history = await tx.announceHistory.create({
@@ -28,7 +30,7 @@ export const POST = async (
           announceType,
           announcedDate: toUTCDate(announcedDate),
           effectiveDate: toUTCDate(effectiveDate),
-          PackageUnitId: parseInt(packageUnitId),
+          packageUnitId: parseInt(packageUnitId),
         }
       })
 
@@ -51,15 +53,8 @@ export const POST = async (
       return history
     })
 
-    const responseData = {
-      ...result,
-      // Dateオブジェクトとして返ってきた日付を stringに変換
-      announcedDate: result.announcedDate?.toISOString() ?? null,
-      effectiveDate: result.effectiveDate?.toISOString() ?? null,
-    }
-
     return NextResponse.json<CreateAnnounceResponse>(
-      { message: "告示を登録しました", data: responseData },
+      { message: "告示情報を登録しました"},
       { status: 201 }
     )
 

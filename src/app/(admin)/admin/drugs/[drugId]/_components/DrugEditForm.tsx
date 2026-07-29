@@ -43,10 +43,10 @@ export const DrugEditForm = () => {
       productType: drug?.productType ?? "",
       isSelectMedical: drug?.isSelectMedical ?? false,
       isAuthorizedGeneric: drug?.isAuthorizedGeneric ?? false,
-      GenericNameId: String(drug?.GenericNameId ?? ""),
-      UnitId: String(drug?.UnitId ?? ""),
-      SalesCompanyId: String(drug?.SalesCompanyId ?? ""),
-      ManufacturingCompanyId: String(drug?.ManufacturingCompanyId ?? ""),
+      genericNameId: String(drug?.genericNameId ?? ""),
+      unitId: String(drug?.unitId ?? ""),
+      salesCompanyId: String(drug?.salesCompanyId ?? ""),
+      manufacturingCompanyId: String(drug?.manufacturingCompanyId ?? ""),
     } 
   })
 

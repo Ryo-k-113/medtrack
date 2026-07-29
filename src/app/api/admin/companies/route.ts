@@ -9,15 +9,11 @@ export const GET = async (request: NextRequest) => {
 
   // 認証チェック
   const { isAuthorized, error, status } = await adminAuthCheck(request);
-  if(!isAuthorized) return NextResponse.json({ error },{ status });
+  if(!isAuthorized) return NextResponse.json({ message: error },{ status });
 
   try {
 
     const companies = await prisma.pharmaceuticalCompany.findMany({
-      select: {
-        id: true,
-        name: true,
-      },
       orderBy: { id: "asc" },
     })
 
@@ -35,7 +31,7 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   // 認証チェック
   const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
 
   try {
     // リクエストbodyを取得

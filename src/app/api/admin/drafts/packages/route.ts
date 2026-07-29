@@ -7,7 +7,7 @@ import type { GetDraftPackageUnitsResponse } from "@/types/admin/draft"
 /** GET: 下書き包装一覧取得 */
 export const GET = async (request: NextRequest) => {
   const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
 
   try {
     const packageUnits = await prisma.packageUnit.findMany({
@@ -24,7 +24,9 @@ export const GET = async (request: NextRequest) => {
         janCode: true,
         discontinuedDate: true,
         salesTransferDate: true,
-        DrugId: true,
+        createdAt: true,
+        updatedAt: true,
+        drugId: true,
         Drug: {
           select: {
             id: true,
@@ -39,6 +41,8 @@ export const GET = async (request: NextRequest) => {
       ...packageUnit,
       discontinuedDate: packageUnit.discontinuedDate?.toISOString() ?? null,
       salesTransferDate: packageUnit.salesTransferDate?.toISOString() ?? null,
+      createdAt: packageUnit.createdAt.toISOString(),
+      updatedAt: packageUnit.updatedAt.toISOString()
     }))
 
     return NextResponse.json<GetDraftPackageUnitsResponse>(
