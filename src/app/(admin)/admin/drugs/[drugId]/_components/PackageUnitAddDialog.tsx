@@ -105,16 +105,17 @@ export const PackageUnitAddDialog = () => {
               {/* コード情報 */}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <FormInput
+                  name="unifiedCode" 
+                  label="統一商品コード"
+                  required
+                />
+                <FormInput
                   name="gs1SalesCode" 
                   label="販売GS1コード"
                 />
                 <FormInput
                   name="gs1DispensingCode" 
                   label="調剤GS1コード"
-                />
-                <FormInput
-                  name="unifiedCode" 
-                  label="統一商品コード"
                 />
                 <FormInput
                   name="hotCode" 
@@ -131,10 +132,6 @@ export const PackageUnitAddDialog = () => {
                 <FormDatePicker
                   name="discontinuedDate" 
                   label="販売中止日"
-                />
-                <FormDatePicker
-                  name="transitionalMeasuresDate" 
-                  label="経過措置期限"
                 />
                 <FormDatePicker
                   name="salesTransferDate" 
