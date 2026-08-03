@@ -37,3 +37,13 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# local db
+dev.db
+
+# editor / IDE
+.vscode/
+.idea/
+
+# claude code local settings
+.claude/settings.local.json
