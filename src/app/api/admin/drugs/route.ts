@@ -5,41 +5,65 @@ import  { CreateDrugRequest, CreateDrugResponse,GetPublishedPackageUnitsResponse
 import { Prisma } from "@prisma/client"
 
 
-//** 公開済みの医薬品情報一覧を取得 */
+//** 公開中の医薬品情報一覧を取得（offsetページネーション） */
 export const GET = async (request: NextRequest) => {
-    // 認証チェック
-    const { isAuthorized, error, status } = await adminAuthCheck(request);
+  // 認証チェック
+  const { isAuthorized, error, status } = await adminAuthCheck(request);
 
-    if(!isAuthorized) return NextResponse.json({ message: error },{ status });
+  if(!isAuthorized) return NextResponse.json({ message: error },{ status });
 
   try {
-    const packageUnits = await prisma.packageUnit.findMany({
-      where: {
-        publishStatus: "PUBLISHED",
-      },
-      select: {
-        id: true,
-        name: true,
-        gs1SalesCode: true, 
-        unifiedCode: true,
-        currentShippingStatus: true,
-        Drug: {
-          select: {
-            id: true,
-            name: true,
-            yjCode: true,
-            productType: true,
-            GenericName: true,
-            SalesCompany: true,
+    // ページネーションパラメータの取得
+    const { searchParams } = new URL(request.url)
+    
+    // 現在のページ番号
+    const page = Math.max(1, Number(searchParams.get("page")) || 1)
+
+    
+    const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit")) || 10))
+    
+    // 基本のwhere条件
+    const where : Prisma.PackageUnitWhereInput = {
+      publishStatus: "PUBLISHED",
+    }
+
+    const [packageUnits, totalCount] = await Promise.all([
+      // 公開中の包装情報の取得
+      prisma.packageUnit.findMany({
+        where, 
+        select: {
+          id: true,
+          name: true,
+          gs1SalesCode: true,
+          unifiedCode: true,
+          currentShippingStatus: true,
+          Drug: {
+            select: {
+              id: true,
+              name: true,
+              yjCode: true,
+              productType: true,
+              GenericName: true,
+              SalesCompany: true,
+            },
           },
         },
-      }, 
-      orderBy: {
-        id: "asc", 
-      },
-    })
+        orderBy: {
+          id: "asc",
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
 
-    return NextResponse.json<GetPublishedPackageUnitsResponse>({ packageUnits }, { status: 200 })
+      // 公開中のデータの総件数
+      prisma.packageUnit.count({ where }),
+    ])
+
+    // 成功レスポンスを返す
+    return NextResponse.json<GetPublishedPackageUnitsResponse>(
+      { packageUnits, totalCount },
+      { status: 200 }
+    )
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 })

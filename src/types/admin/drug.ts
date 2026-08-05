@@ -20,7 +20,7 @@ export type AnnounceHistory = {
 // GET: 医薬品一覧
 //-------------------------------------
 
-/** 公開済み医薬品(包装_製品)の一覧の基本型 */
+/** 公開中医薬品(包装_製品)の一覧の基本型 */
 export type PublishedPackageUnitResponse = Pick<PackageUnit,
   | "id"
   | "name"
@@ -39,9 +39,10 @@ export type PublishedPackageUnitResponse = Pick<PackageUnit,
     }
 };
 
-/** 公開済み医薬品一覧取得のレスポンス型 */
+/** 公開中の医薬品一覧取得のレスポンス型 */
 export type GetPublishedPackageUnitsResponse = {
   packageUnits: PublishedPackageUnitResponse[];
+  totalCount: number;
 };
 
 
