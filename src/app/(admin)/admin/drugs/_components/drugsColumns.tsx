@@ -2,14 +2,25 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { DrugPackageUnit } from "../_types/DrugPackageUnit"
 import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge"
+import { ProductTypeBadge } from "@/components/Badge/ProductTypeBadge"
 
 
 
 //一覧表示のテーブル項目
 export const drugsColumns: ColumnDef<DrugPackageUnit>[] = [
-  { accessorKey: "Drug.name", 
-    size: 180, 
-    header: "医薬品名" 
+  { accessorKey: "Drug.productType",
+    size: 50,
+    header: () => <p className="text-center">区分</p>,
+    cell: ({ row }) => (
+      <p className="flex justify-center">
+        <ProductTypeBadge type={row.original.Drug.productType} />
+      </p>
+    )
+  },
+
+  { accessorKey: "Drug.name",
+    size: 180,
+    header: "医薬品名"
   },
 
   { accessorKey: "name", 
