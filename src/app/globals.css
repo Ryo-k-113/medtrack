@@ -72,8 +72,17 @@
     --status-transfer-foreground: 212 80% 25%;
 
     /* 医薬品区分タグ  */
-    --tag-brand: 210 70% 50%;
-    --tag-generic: 165 55% 50%;
+    /* 先発品（パステルレッド） */
+    --tag-brand: 0 75% 85%;
+    --tag-brand-foreground: 0 65% 30%;
+
+    /* 準先発品（パステルイエロー） */
+    --tag-quasi-brand: 48 90% 82%;
+    --tag-quasi-brand-foreground: 40 75% 25%;
+
+    /* 後発品（パステルブルー） */
+    --tag-generic: 210 80% 85%;
+    --tag-generic-foreground: 212 70% 28%;
 
     --radius: 0.5rem;
 
