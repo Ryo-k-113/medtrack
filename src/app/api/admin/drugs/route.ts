@@ -19,12 +19,21 @@ export const GET = async (request: NextRequest) => {
     // 現在のページ番号
     const page = Math.max(1, Number(searchParams.get("page")) || 1)
 
-    
+    // 1ページの表示件数
     const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit")) || 10))
-    
+
+    // 検索キーワード（医薬品名・成分名で検索）
+    const search = searchParams.get("search")?.trim()
+
     // 基本のwhere条件
     const where : Prisma.PackageUnitWhereInput = {
       publishStatus: "PUBLISHED",
+      ...(search && {
+        OR: [
+          { Drug: { name: { contains: search, mode: "insensitive" } } },
+          { Drug: { GenericName: { name: { contains: search, mode: "insensitive" } } } },
+        ],
+      }),
     }
 
     const [packageUnits, totalCount] = await Promise.all([
