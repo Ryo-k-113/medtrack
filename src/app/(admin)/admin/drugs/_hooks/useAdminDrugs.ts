@@ -11,11 +11,13 @@ export const useAdminDrugs = () => {
     page,
     pageSize,
     totalPages,
+    search,
     isLoading,
     error,
     mutate,
     changePage,
     changePageSize,
+    changeSearch,
   } = useOffsetPaginatedFetch<GetPublishedPackageUnitsResponse>(
     "/api/admin/drugs"
   )
@@ -25,10 +27,12 @@ export const useAdminDrugs = () => {
     page,
     pageSize,
     totalPages,
+    search,
     isLoading,
     error,
     mutate,
     changePage,
     changePageSize,
+    changeSearch,
   }
 }
