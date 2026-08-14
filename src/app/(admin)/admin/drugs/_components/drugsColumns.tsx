@@ -20,7 +20,7 @@ export const drugsColumns = ({
   onEditPackageUnit,
 }: ColumnsProps): ColumnDef<DrugPackageUnit>[] => [
   { accessorKey: "Drug.productType",
-    size: 50,
+    size: 60,
     header: () => <p className="text-center">区分</p>,
     cell: ({ row }) => (
       <p className="flex justify-center">
@@ -35,12 +35,16 @@ export const drugsColumns = ({
   },
 
   { accessorKey: "name", 
-    size: 180, 
+    size: 160, 
     header: "包装単位",
+  },
+  { accessorKey: "Drug.GenericName.name",
+    size: 180, 
+    header: "成分名",
   },
 
   { accessorKey: "currentShippingStatus", 
-    size: 90, 
+    size: 100, 
     header: () => <p className="text-center">出荷状況</p>,
     cell: ({ row }) => (
       <p className="text-center">
@@ -53,7 +57,7 @@ export const drugsColumns = ({
   },
 
   { accessorKey: "unifiedCode", 
-    size: 120, 
+    size: 140, 
     header: () => <p className="text-center">統一商品コード</p>, 
     cell: ({ row }) => (
       <p className="text-center">
