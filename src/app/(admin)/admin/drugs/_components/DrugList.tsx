@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm, FormProvider } from "react-hook-form"
+import { useRouter } from "next/navigation"
 import Link from 'next/link'
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -17,7 +18,8 @@ type SearchFormData = {
 }
 
 export const DrugList = () => {
-  
+  const router = useRouter()
+
   // 医薬品(包装)の一覧を取得（ページ単位）
   const {
     packageUnits,
@@ -44,6 +46,12 @@ export const DrugList = () => {
     changeSearch(keyword)
   })
 
+  // テーブルのカラム（行のドロップダウンから編集ページへ遷移）
+  const columns = drugsColumns({
+    onEditDrug: (packageUnit) => router.push(`/admin/drugs/${packageUnit.Drug.id}`),
+    onEditPackageUnit: (packageUnit) =>
+      router.push(`/admin/drugs/${packageUnit.Drug.id}/packages/${packageUnit.id}`),
+  })
 
   // ローディング表示
   if (isLoading) return <DataTableSkeleton />
@@ -59,7 +67,7 @@ export const DrugList = () => {
             <SearchBox 
               name="keyword" 
               placeholder="医薬品名・成分名で検索" 
-              className="max-w-xs"
+              className="max-w-sm"
             />
           </form>
         </FormProvider>
@@ -85,8 +93,11 @@ export const DrugList = () => {
 
         {/* 医薬品一覧テーブル */}
         <BaseTable
-          columns={drugsColumns}
+          columns={columns}
           data={packageUnits}
+          pinnedColumns={{
+            right: ["actions"],
+          }}
         />
 
         {/* ページネーション */}

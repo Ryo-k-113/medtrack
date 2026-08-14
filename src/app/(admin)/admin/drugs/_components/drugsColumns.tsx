@@ -3,11 +3,22 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DrugPackageUnit } from "../_types/DrugPackageUnit"
 import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge"
 import { ProductTypeBadge } from "@/components/Badge/ProductTypeBadge"
+import { BaseDropdown } from "@/components/Dropdown/BaseDropdown"
+import { Button } from "@/components/ui/button"
+import { Ellipsis, FileEdit, Package } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 
+type ColumnsProps = {
+  onEditDrug: (packageUnit: DrugPackageUnit) => void
+  onEditPackageUnit: (packageUnit: DrugPackageUnit) => void
+}
 
 //一覧表示のテーブル項目
-export const drugsColumns: ColumnDef<DrugPackageUnit>[] = [
+export const drugsColumns = ({
+  onEditDrug,
+  onEditPackageUnit,
+}: ColumnsProps): ColumnDef<DrugPackageUnit>[] => [
   { accessorKey: "Drug.productType",
     size: 50,
     header: () => <p className="text-center">区分</p>,
@@ -64,5 +75,41 @@ export const drugsColumns: ColumnDef<DrugPackageUnit>[] = [
   { accessorKey: "Drug.SalesCompany.name",
     size: 120, 
     header: "販売会社",
+  },
+
+  { id: "actions",
+    header: "",
+    size: 60,
+    cell: ({ row }) => (
+      <BaseDropdown
+        className="w-[180px]"
+        trigger={
+          <Button
+            variant="outline"
+            size="icon"
+            className={cn(
+              "h-8 w-8 bg-white",
+              "opacity-0 group-hover/row:opacity-100",
+              "data-[state=open]:opacity-100",
+              "transition-opacity duration-150",
+            )}
+          >
+            <Ellipsis className="h-4 w-4" />
+          </Button>
+        }
+        items={[
+          {
+            label: "医薬品ページ",
+            icon: <FileEdit className="h-4 w-4 mr-1" />,
+            onClick: () => onEditDrug(row.original),
+          },
+          {
+            label: "包装ページ",
+            icon: <Package className="h-4 w-4 mr-1" />,
+            onClick: () => onEditPackageUnit(row.original),
+          },
+        ]}
+      />
+    )
   },
 ]
