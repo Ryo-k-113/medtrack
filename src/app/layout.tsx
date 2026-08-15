@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
  
 const notoSansJP = Noto_Sans_JP({
@@ -29,8 +30,9 @@ export default function RootLayout({
         className={`${notoSansJP.variable} antialiased`}
       >
         <Toaster richColors position="top-right"/>
-        {children}
-        
+        <NuqsAdapter>
+          {children}
+        </NuqsAdapter>
       </body>
     </html>
   );

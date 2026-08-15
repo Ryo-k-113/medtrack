@@ -67,12 +67,16 @@ const config: Config = {
   			},
   			tag: {
   				brand: {
-  					DEFAULT: 'hsl(var(--brand))',
-  					foreground: 'hsl(var(--brand-foreground))'
+  					DEFAULT: 'hsl(var(--tag-brand))',
+  					foreground: 'hsl(var(--tag-brand-foreground))'
+  				},
+  				quasiBrand: {
+  					DEFAULT: 'hsl(var(--tag-quasi-brand))',
+  					foreground: 'hsl(var(--tag-quasi-brand-foreground))'
   				},
   				generic: {
-  					DEFAULT: 'hsl(var(--generic))',
-  					foreground: 'hsl(var(--generic-foreground))'
+  					DEFAULT: 'hsl(var(--tag-generic))',
+  					foreground: 'hsl(var(--tag-generic-foreground))'
   				}
   			},
 
