@@ -33,7 +33,7 @@ export const GenericNameList = () => {
   const handleCreate = async (data: GenericNameFormData) => {
     try {
       const res = await fetcher({
-        url: "/api/admin/genericNames",
+        url: "/api/admin/generic-names",
         method: "POST",
         body: data,
         token,
@@ -50,7 +50,7 @@ export const GenericNameList = () => {
     if (!editTarget) return
     try {
       const res = await fetcher({
-        url: `/api/admin/genericNames/${editTarget.id}`,
+        url: `/api/admin/generic-names/${editTarget.id}`,
         method: "PUT",
         body: data,
         token,
