@@ -1,19 +1,26 @@
 "use client"
 
 import { useState } from "react"
+import { useForm, FormProvider } from "react-hook-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { Plus, Edit } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { DataTable } from "@/components/Table/DataTable"
+import { BaseTable } from "@/components/Table/BaseTable"
 import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
+import { SearchBox } from "@/components/Form/SearchBox"
+import { PaginationControl } from "@/components/Pagination/PaginationControl"
+import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
+import { GenericNameDialog } from "./GenericNameDialog"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminGenericNames } from "../_hooks/useAdminGenericNames"
 import type { GenericName, GenericNameFormData } from "@/types/admin/genericName"
-import { GenericNameDialog } from "./GenericNameDialog"
 
+type SearchFormData = {
+  keyword: string
+}
 
 export const GenericNameList = () => {
 
@@ -23,11 +30,35 @@ export const GenericNameList = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false)  
 
   // 編集ダイアログの対象
-  const [editTarget, setEditTarget] = useState<GenericName | null>(null) 
-  
-  // 成分名一覧の取得
-  const { genericNames, isLoading, error, mutate } = useAdminGenericNames()
-  
+  const [editTarget, setEditTarget] = useState<GenericName | null>(null)
+
+  // 成分名一覧の取得（ページ単位）
+  const {
+    genericNames,
+    page,
+    pageSize,
+    totalPages,
+    search,
+    isLoading,
+    error,
+    mutate,
+    changePage,
+    changePageSize,
+    changeSearch,
+  } = useAdminGenericNames()
+
+  // 検索フォーム（検索ボタン押下時のみAPIに反映する）
+  const searchForm = useForm<SearchFormData>({
+    defaultValues: {
+      keyword: search
+    },
+  })
+
+  // 検索の実行
+  const handleSearch = searchForm.handleSubmit(({ keyword }) => {
+    changeSearch(keyword)
+  })
+
 
   // 新規作成
   const handleCreate = async (data: GenericNameFormData) => {
@@ -107,24 +138,54 @@ export const GenericNameList = () => {
   ]
 
   return (
-    <div>
+    <div className="pt-8 space-y-6">
 
-      {/* 成分名一覧のテーブル */}
-      <DataTable
-        columns={columns}
-        data={genericNames}
-        headerAction={
-          <Button
-          onClick={() => setIsCreateOpen(true)}
-          >
-            <Plus className="h-4 w-4" />
-            新規追加
-          </Button>
-        }
-      />
+      <div className="flex justify-between">
+        {/* 検索フォーム */} 
+        <FormProvider {...searchForm}>
+          <form onSubmit={handleSearch} className="flex-1">
+            <SearchBox
+              name="keyword"
+              placeholder="成分名で検索"
+              className="max-w-sm"
+            />
+          </form>
+        </FormProvider>
 
-       {/* 新規作成ダイアログ */}
-       <GenericNameDialog 
+        {/* 新規登録ボタン */}
+        <Button onClick={() => setIsCreateOpen(true)}>
+          <Plus className="h-4 w-4" />
+          新規追加
+        </Button>
+      </div>
+
+      <div className="space-y-2">
+        {/* 1ページあたりの表示件数 */}
+        <div className="flex justify-end">
+          <PaginationPageSize
+            limit={pageSize}
+            onLimitChange={changePageSize}
+          />
+        </div>
+
+        {/* 成分名一覧のテーブル */}
+        <BaseTable
+          columns={columns}
+          data={genericNames}
+        />
+
+        {/* ページネーション */}
+        <div className="flex justify-end">
+          <PaginationControl
+            page={page}
+            totalPages={totalPages}
+            onPageChange={changePage}
+          />
+        </div>
+      </div>
+
+      {/* 新規作成ダイアログ */}
+      <GenericNameDialog 
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         onSubmit={handleCreate}
@@ -139,7 +200,6 @@ export const GenericNameList = () => {
           onSubmit={handleEdit}
         />
       )}
-
     </div>
   )
 }
