@@ -2,8 +2,7 @@
 
 import { useState } from "react"
 import { useForm, FormProvider } from "react-hook-form"
-import { ColumnDef } from "@tanstack/react-table"
-import { Plus, Edit } from "lucide-react"
+import { Plus } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -13,6 +12,7 @@ import { SearchBox } from "@/components/Form/SearchBox"
 import { PaginationControl } from "@/components/Pagination/PaginationControl"
 import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
 import { GenericNameDialog } from "./GenericNameDialog"
+import { GenericNameColumns } from "./GenericNameColumns"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminGenericNames } from "../_hooks/useAdminGenericNames"
@@ -100,42 +100,9 @@ export const GenericNameList = () => {
 
 
   // 一覧のテーブルカラム
-  const columns: ColumnDef<GenericName>[] = [
-    {
-      accessorKey: "id",
-      header: "ID",
-      size: 40,
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {row.original.id}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "name",
-      header: "成分名",
-      cell: ({ row }) => (
-        <span className="text-sm">{row.original.name}</span>
-      ),
-    },
-    {
-      id: "actions",
-      header: "",
-      size: 100,
-      cell: ({ row }) => (
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            className="h-8 w-8 md:h-9 md:w-auto md:p-4"
-            onClick={() => setEditTarget(row.original)} 
-          >
-            <Edit className="h-4 w-4" />
-            <span className="hidden md:inline ml-2 text-sm">編集する</span>
-          </Button>
-        </div>
-      ),
-    },
-  ]
+  const columns = GenericNameColumns({
+    onEdit: (genericName) => setEditTarget(genericName),
+  })
 
   return (
     <div className="pt-8 space-y-6">
