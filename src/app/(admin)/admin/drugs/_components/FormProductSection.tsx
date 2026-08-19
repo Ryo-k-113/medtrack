@@ -27,10 +27,10 @@ export const FormProductSection = ({
         <h3 className="text-xl font-bold">製品情報</h3>
         {editActions}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-10 gap-6 p-6">
 
         {/* 基本情報 */}
-        <div className="flex flex-col gap-4 bg-surface border p-4 rounded-md">
+        <div className="md:col-span-4 flex flex-col gap-4 bg-surface border p-4 rounded-md">
           <FormInput
             name="name"  
             label="医薬品名" 
@@ -58,7 +58,7 @@ export const FormProductSection = ({
         </div>
 
         {/* メーカー情報 */}
-        <div className="flex flex-col gap-4 bg-surface border p-4 rounded-md">
+        <div className="md:col-span-2 flex flex-col gap-4 bg-surface border p-4 rounded-md">
           <FormInput 
             name="yjCode" 
             label="YJコード" 
@@ -83,7 +83,7 @@ export const FormProductSection = ({
         </div>
 
         {/* 付属情報 */}
-        <div className="flex flex-col gap-4 bg-surface border p-4 rounded-md">
+        <div className="md:col-span-2 flex flex-col gap-4 bg-surface border p-4 rounded-md">
           <FormSelectBox 
             name="productType" 
             label="区分" 
@@ -104,7 +104,7 @@ export const FormProductSection = ({
         </div>
 
         {/* チェックボックス */}
-        <div className="flex flex-col gap-4 bg-surface border p-4 rounded-md">
+        <div className="md:col-span-2 flex flex-col gap-4 bg-surface border p-4 rounded-md">
           <FormCheckbox 
             name="isAuthorizedGeneric" 
             label="AG" 
