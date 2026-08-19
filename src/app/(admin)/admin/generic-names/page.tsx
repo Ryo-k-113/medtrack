@@ -4,7 +4,7 @@ import { AdminPageTitle } from "@/app/(admin)/admin/_components/AdminPageTitle"
 import { GenericNameList } from "./_components/GenericNameList"
 
 
-export default function AdminCompaniesPage() {
+export default function AdminGenericNamesPage() {
   return (
     <div>
       {/* ページタイトル */}

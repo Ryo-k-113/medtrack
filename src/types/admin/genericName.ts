@@ -13,6 +13,7 @@ export type GenericName = PrismaGenericName
 /** 成分名一覧取得のレスポンス型 */
 export type GetGenericNamesResponse = {
   genericNames: GenericName[]
+  totalCount: number
 }
 
 

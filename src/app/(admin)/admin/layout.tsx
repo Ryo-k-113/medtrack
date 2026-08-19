@@ -37,7 +37,7 @@ export default function AdminLayout({
       items: [
         { href: "/admin/drugs", label: "医薬品一覧", icon: Pill },
         { href: "/admin/companies", label: "製薬会社一覧", icon: Building },
-        { href: "/admin/genericNames", label: "成分名一覧", icon: FlaskConical },
+        { href: "/admin/generic-names", label: "成分名一覧", icon: FlaskConical },
         { href: "/admin/units", label: "規格単位一覧", icon: Ruler },
       ],
     },

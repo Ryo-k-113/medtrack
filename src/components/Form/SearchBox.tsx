@@ -37,7 +37,7 @@ export const SearchBox = ({
           />
           <InputGroupAddon
             align="inline-end"
-            className="p-1" 
+            className="p-1.5" 
           >
             <InputGroupButton
               type="submit"
