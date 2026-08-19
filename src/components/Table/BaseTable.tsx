@@ -18,8 +18,8 @@ import {
 import { cn } from "@/lib/utils"
 
 
-type DataTableProps<TData> = {
-  columns:       ColumnDef<TData, unknown>[]
+type BaseTableProps<TData> = {
+  columns:       ColumnDef<TData, never>[]
   data:          TData[]
   pinnedColumns?: {
     left?:  string[]
@@ -31,7 +31,7 @@ export const BaseTable = <TData,>({
   columns,
   data,
   pinnedColumns,
-}: DataTableProps<TData>) => {
+}: BaseTableProps<TData>) => {
 
   const table = useReactTable({
     data,
