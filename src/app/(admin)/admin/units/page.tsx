@@ -9,7 +9,7 @@ export default function AdminUnitsPage() {
     <div>
       {/* ページタイトル */}
       <AdminPageTitle
-        title="製薬会社一覧"
+        title="規格単位一覧"
       />
 
       {/* 規格単位一覧 */}
