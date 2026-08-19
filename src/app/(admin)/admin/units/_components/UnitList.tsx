@@ -1,19 +1,26 @@
 "use client"
 
 import { useState } from "react"
-import { ColumnDef } from "@tanstack/react-table"
-import { Plus, Edit } from "lucide-react"
+import { useForm, FormProvider } from "react-hook-form"
+import { Plus } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { DataTable } from "@/components/Table/DataTable"
+import { BaseTable } from "@/components/Table/BaseTable"
 import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
-import { useAdminUnits } from "../_hooks/useAdminUnits"
+import { SearchBox } from "@/components/Form/SearchBox"
+import { PaginationControl } from "@/components/Pagination/PaginationControl"
+import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
 import { UnitDialog } from "./UnitDialog"
+import { UnitColumns } from "./UnitColumns"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useAdminUnits } from "../_hooks/useAdminUnits"
 import type { Unit, UnitFormData } from "@/types/admin/unit"
 
+type SearchFormData = {
+  keyword: string
+}
 
 export const UnitList = () => {
   const { token } = useSupabaseSession()
@@ -24,8 +31,32 @@ export const UnitList = () => {
   // 編集ダイアログの対象
   const [editTarget, setEditTarget] = useState<Unit | null>(null) 
 
-  // 規格単位の取得
-  const { units, isLoading, error, mutate } = useAdminUnits()
+  // 規格単位一覧の取得（ページ単位）
+  const {
+    units,
+    page,
+    pageSize,
+    totalPages,
+    search,
+    isLoading,
+    error,
+    mutate,
+    changePage,
+    changePageSize,
+    changeSearch,
+  } = useAdminUnits()
+
+  // 検索フォーム（検索ボタン押下時のみAPIに反映する）
+  const searchForm = useForm<SearchFormData>({
+    defaultValues: {
+      keyword: search
+    },
+  })
+
+  // 検索の実行
+  const handleSearch = searchForm.handleSubmit(({ keyword }) => {
+    changeSearch(keyword)
+  })
 
 
   // 新規作成
@@ -67,59 +98,56 @@ export const UnitList = () => {
 
 
   // 一覧のテーブルカラム
-  const columns: ColumnDef<Unit>[] = [
-    {
-      accessorKey: "id",
-      header: "ID",
-      size: 40,
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {row.original.id}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "name",
-      header: "規格単位", 
-      cell: ({ row }) => (
-        <span className="text-sm">{row.original.name}</span>
-      ),
-    },
-    {
-      id: "actions",
-      header: "",
-      size: 100,
-      cell: ({ row }) => (
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            className="h-8 w-8 md:h-9 md:w-auto md:p-4"
-            onClick={() => setEditTarget(row.original)} 
-          >
-            <Edit className="h-4 w-4" />
-            <span className="hidden md:inline ml-2 text-sm">編集する</span>
-          </Button>
-        </div>
-      ),
-    },
-  ]
+  const columns = UnitColumns({
+    onEdit: (unit) => setEditTarget(unit),
+  })
 
   return (
-    <div>
+    <div className="pt-8 space-y-6">
 
-      {/* 規格単位一覧のテーブル */}
-      <DataTable
-        columns={columns}
-        data={units}
-        headerAction={
-          <Button
-            onClick={() => setIsCreateOpen(true)}
-          >
-            <Plus className="h-4 w-4" />
-            新規追加
-          </Button>
-        }
-      />
+      <div className="flex justify-between">
+        {/* 検索フォーム */}
+        <FormProvider {...searchForm}>
+          <form onSubmit={handleSearch} className="flex-1">
+            <SearchBox
+              name="keyword"
+              placeholder="規格単位で検索"
+              className="max-w-sm"
+            />
+          </form>
+        </FormProvider>
+
+        {/* 新規登録ボタン */}
+        <Button onClick={() => setIsCreateOpen(true)}>
+          <Plus className="h-4 w-4" />
+          新規追加
+        </Button>
+      </div>
+
+      <div className="space-y-2">
+        {/* 1ページあたりの表示件数 */}
+        <div className="flex justify-end">
+          <PaginationPageSize
+            limit={pageSize}
+            onLimitChange={changePageSize}
+          />
+        </div>
+
+        {/* 規格単位一覧のテーブル */}
+        <BaseTable
+          columns={columns}
+          data={units}
+        />
+
+        {/* ページネーション */}
+        <div className="flex justify-end">
+          <PaginationControl
+            page={page}
+            totalPages={totalPages}
+            onPageChange={changePage}
+          />
+        </div>
+      </div>
 
       {/* 新規作成ダイアログ */}
       <UnitDialog 
@@ -129,15 +157,12 @@ export const UnitList = () => {
       />
 
       {/* 編集ダイアログ */}
-      {editTarget && (
-        <UnitDialog
-          isOpen={!!editTarget}
-          onClose={() => setEditTarget(null)}
-          unit={editTarget} 
-          onSubmit={handleEdit}
-        />
-      )}
-
+      <UnitDialog
+        isOpen={!!editTarget}
+        onClose={() => setEditTarget(null)}
+        unit={editTarget}
+        onSubmit={handleEdit}
+      />
     </div>
   )
 }

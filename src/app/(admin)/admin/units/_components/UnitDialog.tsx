@@ -11,7 +11,7 @@ import { type Unit, type UnitFormData, unitSchema } from "@/types/admin/unit"
 type Props = {
   isOpen: boolean
   onClose: () => void
-  unit?: Unit
+  unit?: Unit | null
   onSubmit: (data: UnitFormData) => Promise<void>
 }
 

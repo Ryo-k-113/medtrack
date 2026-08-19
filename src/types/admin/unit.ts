@@ -13,6 +13,7 @@ export type Unit = PrismaUnit
 /** 規格単位一覧取得のレスポンス型 */
 export type GetUnitsResponse = {
   units: Unit[]
+  totalCount: number
 }
 
 // --------------------------
