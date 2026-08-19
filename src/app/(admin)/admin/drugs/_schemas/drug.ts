@@ -13,7 +13,7 @@ export const packageUnitFormSchema = z.object({
 
   name: z.string().min(1, "包装名は必須です"),
 
-  CurrentShippingStatus: z
+  currentShippingStatus: z
     // 入力値は ProductType または "" を許容
     .union([z.enum(CurrentShippingStatus), z.literal("")])
     // 送信時に空文字ならエラー
@@ -138,7 +138,7 @@ export type DrugFormInput = z.input<typeof drugFormSchema>
 export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
   publishStatus: PublishStatus.DRAFT, 
   name: "", 
-  currentShippingStatus: "" , 
+  currentShippingStatus: "", 
   gs1DispensingCode: "", 
   gs1SalesCode: "",
   unifiedCode: "", 
