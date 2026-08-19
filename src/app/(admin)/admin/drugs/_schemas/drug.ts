@@ -75,9 +75,16 @@ export const drugFormSchema = z.object({
     .min(1, "製造販売元を選択してください")
     .transform((val) => Number(val)),
 
-  productType: z.enum(
-    ProductType, { message: "製品区分を選択してください"}
-  ),
+  // productType: z.enum(
+  //   ProductType, { message: "製品区分を選択してください"}
+  // ),
+  productType: z
+    // 入力値は ProductType または "" を許容
+    .union([z.enum(ProductType), z.literal("")])
+    // 送信時に空文字ならエラー
+    .refine((val) => val !== "", {
+      message: "区分を選択してください",
+    }),
 
   //  任意項目
   packageInsertUrl: z.string().transform((val) => (val === "" ? null : val)),

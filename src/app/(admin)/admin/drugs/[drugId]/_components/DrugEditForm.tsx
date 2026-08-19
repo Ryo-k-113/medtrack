@@ -13,6 +13,7 @@ import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
 import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/app/(admin)/admin/drugs/_schemas/drug"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
+import { ProductType } from "@prisma/client"
 
 
 
@@ -37,17 +38,19 @@ export const DrugEditForm = () => {
     values: {
       name: drug?.name ?? "",
       yjCode: drug?.yjCode ?? "",
-      price: drug?.price ?? undefined,
+      price: drug?.price ?? "", 
       drugPriceListingCode: drug?.drugPriceListingCode ?? "",
       packageInsertUrl: drug?.packageInsertUrl ?? "",
       productType: drug?.productType ?? "",
       isSelectMedical: drug?.isSelectMedical ?? false,
       isAuthorizedGeneric: drug?.isAuthorizedGeneric ?? false,
-      genericNameId: String(drug?.genericNameId ?? ""),
-      unitId: String(drug?.unitId ?? ""),
-      salesCompanyId: String(drug?.salesCompanyId ?? ""),
-      manufacturingCompanyId: String(drug?.manufacturingCompanyId ?? ""),
-    } 
+      genericNameId: drug?.genericNameId ? String(drug.genericNameId) : "",
+      unitId: drug?.unitId ? String(drug.unitId) : "",
+      salesCompanyId: drug?.salesCompanyId ? String(drug.salesCompanyId) : "",
+      manufacturingCompanyId: drug?.manufacturingCompanyId
+        ? String(drug.manufacturingCompanyId)
+        : "",
+    }
   })
 
   const { handleSubmit } = form
