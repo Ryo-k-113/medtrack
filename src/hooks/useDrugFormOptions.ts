@@ -32,7 +32,7 @@ export const useDrugFormOptions = (): FormOptions => {
     useDataFetch<GetUnitsResponse>("/api/admin/units")
   
   const { data: genericNameData, isLoading: isGenericNamesLoading } =
-    useDataFetch<GetGenericNamesResponse>("/api/admin/genericNames")
+    useDataFetch<GetGenericNamesResponse>("/api/admin/generic-names")
 
   // フォームitemに合う形に変換
   const companyOptions = toSelectOptions(companyData?.companies ?? [])
