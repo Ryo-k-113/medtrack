@@ -157,14 +157,12 @@ export const UnitList = () => {
       />
 
       {/* 編集ダイアログ */}
-      {editTarget && (
-        <UnitDialog
-          isOpen={!!editTarget}
-          onClose={() => setEditTarget(null)}
-          unit={editTarget}
-          onSubmit={handleEdit}
-        />
-      )}
+      <UnitDialog
+        isOpen={!!editTarget}
+        onClose={() => setEditTarget(null)}
+        unit={editTarget}
+        onSubmit={handleEdit}
+      />
     </div>
   )
 }
