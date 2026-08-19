@@ -10,10 +10,17 @@ export const packageUnitFormSchema = z.object({
   publishStatus: z.enum(PublishStatus, {
     message: "ステータスが不正です" 
   }),
+
   name: z.string().min(1, "包装名は必須です"),
-  currentShippingStatus: z.enum(CurrentShippingStatus, {
-    message: "出荷状況を選択してください" 
-  }),
+
+  CurrentShippingStatus: z
+    // 入力値は ProductType または "" を許容
+    .union([z.enum(CurrentShippingStatus), z.literal("")])
+    // 送信時に空文字ならエラー
+    .refine((val) => val !== "", {
+      message: "出荷状況を選択してください",
+    }),
+
   unifiedCode: z
   .string()
   .min(1, "統一コードを入力してください") 
@@ -75,9 +82,6 @@ export const drugFormSchema = z.object({
     .min(1, "製造販売元を選択してください")
     .transform((val) => Number(val)),
 
-  // productType: z.enum(
-  //   ProductType, { message: "製品区分を選択してください"}
-  // ),
   productType: z
     // 入力値は ProductType または "" を許容
     .union([z.enum(ProductType), z.literal("")])
@@ -134,7 +138,7 @@ export type DrugFormInput = z.input<typeof drugFormSchema>
 export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
   publishStatus: PublishStatus.DRAFT, 
   name: "", 
-  currentShippingStatus: "" as CurrentShippingStatus, 
+  currentShippingStatus: "" , 
   gs1DispensingCode: "", 
   gs1SalesCode: "",
   unifiedCode: "", 
@@ -148,12 +152,12 @@ export const DEFAULT_PACKAGE_UNIT: PackageUnitFormInput = {
 export const DEFAULT_DRUG_FORM_VALUES: DrugFormInput = {
   name: "", 
   genericNameId: "", 
-  price: "" as unknown as number, 
+  price: "", 
   unitId: "", 
   yjCode: "",
   drugPriceListingCode: "", 
   packageInsertUrl: "",
-  productType: "" as ProductType,
+  productType: "" ,
   salesCompanyId: "",
   manufacturingCompanyId: "",
   isSelectMedical: false,
