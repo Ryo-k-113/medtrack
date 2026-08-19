@@ -159,14 +159,12 @@ export const GenericNameList = () => {
       />
 
       {/* 編集ダイアログ */}
-      {editTarget && (
         <GenericNameDialog
           isOpen={!!editTarget}
           onClose={() => setEditTarget(null)}
-          genericName ={editTarget}
+          genericName={editTarget}
           onSubmit={handleEdit}
         />
-      )}
     </div>
   )
 }

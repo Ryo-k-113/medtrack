@@ -11,7 +11,7 @@ import { type GenericName, type GenericNameFormData, genericNameFormSchema } fro
 type Props = {
   isOpen: boolean
   onClose: () => void
-  genericName?: GenericName 
+  genericName?: GenericName | null
   onSubmit: (data: GenericNameFormData) => Promise<void>
 }
 
@@ -55,7 +55,7 @@ export const GenericNameDialog = ({ isOpen, onClose, genericName, onSubmit }: Pr
       <BaseDialog
         isOpen={isOpen}
         onClose={handleClose}
-        title={isEdit ? "成分名を編集する" : "成分名を追加する"} // 
+        title={isEdit ? "成分名を編集する" : "成分名を追加する"} 
         className="max-w-md"
         actions={
           <div className="flex justify-end gap-4">
