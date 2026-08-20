@@ -46,7 +46,7 @@ export const BaseDialog = ({
           />
         )}
 
-        <DialogContent className={cn("z-50", className)}>
+        <DialogContent className={cn("z-50 p-6 md:p-10 gap-6", className)}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
