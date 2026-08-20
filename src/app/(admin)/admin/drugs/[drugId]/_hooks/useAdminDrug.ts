@@ -5,7 +5,7 @@ import type { GetDrugEditResponse } from "@/types/admin/drug"
 
 /**
  *  idから製品と関連する包装を取得するカスタムフック
- *  @returns 製品id、製品情報、包装情報、ローディング状態、データ再取得関数
+ *  @returns 製品id、製品情報、包装情報、ローディング状態、データ再取得関数,エラー
  */
 
 
@@ -17,6 +17,7 @@ export const useAdminDrug = () => {
     data: drugData,
     isLoading: isDrugLoading,
     mutate,
+    error,
   } = useDataFetch<GetDrugEditResponse>(`/api/admin/drugs/${drugId}`)
 
   const drug = drugData?.data
@@ -28,5 +29,6 @@ export const useAdminDrug = () => {
     packageUnits,
     isDrugLoading,
     mutate,
+    error,
   }
 }
