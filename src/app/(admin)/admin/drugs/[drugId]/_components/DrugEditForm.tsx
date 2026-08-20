@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormProductSection"
 import { PackageUnitListSection } from "./PackageUnitListSection"
 import { DrugEditActions } from "./DrugEditActions"
+import { DrugEditFormSkeleton } from "./DrugEditFormSkeleton"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
@@ -91,7 +92,7 @@ export const DrugEditForm = () => {
     }
   }
   
-  if (isLoading) return <div>読み込み中...</div>
+  if (isLoading) return <DrugEditFormSkeleton />
   if (!drug) return <div>データが見つかりません</div>
 
   return (
