@@ -116,8 +116,6 @@ export const DrugEditForm = () => {
         </form>
       </FormProvider>
 
-      {/* 包装一覧 */}
-      <PackageUnitListSection />
     </div>
   )
 }

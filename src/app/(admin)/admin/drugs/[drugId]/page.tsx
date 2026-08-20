@@ -5,6 +5,7 @@ import { AdminPageTitle } from "../../_components/AdminPageTitle"
 import { useAdminDrug } from "./_hooks/useAdminDrug"
 import AdminDrugEditLoading from "./loading"
 import { notFound } from "next/navigation"
+import { PackageUnitListSection } from "./_components/PackageUnitListSection"
 
 
 export default function AdminDrugEditPage() {
@@ -27,6 +28,9 @@ export default function AdminDrugEditPage() {
 
       {/* 医薬品の編集フォーム */}
       <DrugEditForm />
+      
+      {/* 包装一覧 */}
+      <PackageUnitListSection />
     </div> 
   ) 
 
