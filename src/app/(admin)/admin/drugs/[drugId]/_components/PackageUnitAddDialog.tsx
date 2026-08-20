@@ -6,7 +6,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { FormInput } from "@/components/Form/FormInput"
 import { FormSelectBox } from "@/components/Form/FormSelectBox"
 import { FormDatePicker } from "@/components/Form/FormDatePicker"
@@ -35,6 +35,12 @@ export const PackageUnitAddDialog = () => {
 
   const { handleSubmit, formState: { isSubmitting }, reset } = form
 
+  // モーダルを閉じる
+  const handleClose = () => {
+    reset()
+    setIsOpen(false)
+  }
+
   // 包装追加
   const onSubmit = async (data: CreatePackageUnitFormData) => {
     try {
@@ -45,8 +51,7 @@ export const PackageUnitAddDialog = () => {
         token,
       }) 
       toast.success( res.message )
-      reset()
-      setIsOpen(false)
+      handleClose()
       mutate()
 
     } catch (error) {
@@ -67,25 +72,39 @@ export const PackageUnitAddDialog = () => {
         包装を追加する
       </Button>
 
-      {/* モーダル */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen} modal={false}>
+      {/* 新規包装追加ダイアログ */}
+      <BaseDialog
+        isOpen={isOpen}
+        onClose={handleClose}
+        title="包装を追加する"
+        className="max-w-4xl"
+        actions={
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={isSubmitting}
+              onClick={handleClose}
+            >
+              キャンセル
+            </Button>
+            <Button
+              type="submit"
+              form="packageUnitAddForm"
+              disabled={isSubmitting}
+            >
+              追加する
+            </Button>
+          </>
+        }
+      >
+        <FormProvider {...form}>
+          <form id="packageUnitAddForm" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-        {/* 背景オーバーレイ*/}
-        {isOpen && (
-          <div className="fixed inset-0 z-50 bg-black/70" />
-        )}
-
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>包装を追加する</DialogTitle>
-          </DialogHeader>
-          <FormProvider {...form}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-              <div className="flex justify-end items-center">
-                {/* 公開ステータスのトグルボタン */}
-                <FormPublishStatusToggle name="publishStatus" />
-              </div>
+            <div className="flex justify-end items-center">
+              {/* 公開ステータスのトグルボタン */}
+              <FormPublishStatusToggle name="publishStatus" />
+            </div>
 
               {/* 基本情報 */}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -127,41 +146,20 @@ export const PackageUnitAddDialog = () => {
                 />
               </div>
 
-              {/* 日付情報 */}
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <FormDatePicker
-                  name="discontinuedDate" 
-                  label="販売中止日"
-                />
-                <FormDatePicker
-                  name="salesTransferDate" 
-                  label="販売移管日"
-                />
-              </div>
-              
-              <DialogFooter>
-                <Button 
-                  type="button" 
-                  variant="secondary" 
-                  disabled={isSubmitting}
-                  onClick={() => {
-                    reset() 
-                    setIsOpen(false)
-                  }}
-                >
-                  キャンセル
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                >
-                  追加する
-                </Button>
-              </DialogFooter>
-            </form>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
+            {/* 日付情報 */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <FormDatePicker
+                name="discontinuedDate"
+                label="販売中止日"
+              />
+              <FormDatePicker
+                name="salesTransferDate"
+                label="販売移管日"
+              />
+            </div>
+          </form>
+        </FormProvider>
+      </BaseDialog>
     </div>
   );
 }
