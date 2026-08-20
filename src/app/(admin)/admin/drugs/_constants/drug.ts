@@ -1,4 +1,7 @@
 import { ProductType, CurrentShippingStatus, AnnounceType } from "@prisma/client"
+import { PublishStatus } from "@prisma/client"
+import type { CreateDrugFormInput, CreatePackageUnitFormInput } from "@/types/admin/drug"
+
 
 //出荷ステータス
 export const SHIPPING_STATUS_OPTIONS = [
@@ -24,3 +27,37 @@ export const ANNOUNCE_TYPE_OPTIONS = [
   { label: "販売中止", value: AnnounceType.DISCONTINUED_SALE },
   { label: "販売移管", value: AnnounceType.TRANSFER_OF_SALE },
 ] as const satisfies readonly { label: string; value: AnnounceType }[]
+
+
+
+/** 包装情報の初期値 */
+export const DEFAULT_PACKAGE_UNIT: CreatePackageUnitFormInput = {
+  publishStatus: PublishStatus.DRAFT,
+  name: "",
+  currentShippingStatus: "",
+  unifiedCode: "",
+  gs1DispensingCode: "",
+  gs1SalesCode: "",
+  hotCode: "",
+  janCode: "",
+  salesTransferDate: null,
+  discontinuedDate: null,
+}
+
+/** 医薬品新規登録フォーム全体の初期値 */
+export const DEFAULT_DRUG_FORM_VALUES: CreateDrugFormInput = {
+  name: "",
+  genericNameId: "",
+  price: "",
+  unitId: "",
+  yjCode: "",
+  drugPriceListingCode: "",
+  packageInsertUrl: "",
+  productType: "",
+  salesCompanyId: "",
+  manufacturingCompanyId: "",
+  isSelectMedical: false,
+  isAuthorizedGeneric: false,
+  transitionalMeasuresDate: null,
+  packageUnits: [DEFAULT_PACKAGE_UNIT],
+}

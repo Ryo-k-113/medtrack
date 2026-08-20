@@ -2,7 +2,10 @@ import { z } from "zod"
 import type { Drug, PackageUnit} from "@/types/drug"
 import type {AnnounceType ,GenericName,
   PharmaceuticalCompany } from "@prisma/client"
-import { packageUnitFormSchema } from "@/app/(admin)/admin/drugs/_schemas/drug"
+import {
+  packageUnitFormSchema,
+  drugFormSchema,
+} from "@/schemas/drug"
 
 
 // 告示履歴の型
@@ -13,7 +16,6 @@ export type AnnounceHistory = {
   announceType: AnnounceType | null
   packageUnitId: number
 }
-
 
 
 //-------------------------------------
@@ -49,11 +51,18 @@ export type GetPublishedPackageUnitsResponse = {
 //-------------------------------------
 // POST: 新規医薬品登録
 //-------------------------------------
+/**  医薬品全体の新規登録用スキーマ */
+export const createDrugFormSchema = drugFormSchema;
 
-/** 医薬品新規登録のリクエスト型(製品と複数包装) */
-export type CreateDrugRequest = Omit<Drug, "id" | "transitionalMeasuresDate"> & {
-  packageUnits: CreatePackageUnitRequest[];
-}
+/** zodスキーマから変換した医薬品新規登録の入力時の型 */
+export type CreateDrugFormInput = z.input<typeof createDrugFormSchema>
+
+/** zodスキーマから変換した医薬品新規登録のバリデーション後の型 */
+export type CreateDrugFormData = z.infer<typeof createDrugFormSchema>
+
+
+/** 医薬品の新規登録のリクエスト型 */
+export type CreateDrugRequest = CreateDrugFormData
 
 /** 包装登録のリクエスト型 */
 export type CreatePackageUnitRequest = Omit<PackageUnit,"id">
@@ -89,15 +98,37 @@ export type GetDrugEditResponse = {
 // -------------------------------------
 // PUT: 医薬品編集
 // -------------------------------------
+/** 製品情報編集フォームのスキーマ (包装情報を除く) */
+export const drugEditFormSchema = drugFormSchema.omit({
+  packageUnits: true,
+})
+
+/** zodスキーマから変換した入力時の型 */
+export type DrugEditFormInput = z.input<typeof drugEditFormSchema>
+
+/** zodスキーマから変換したバリデーション後の型 */
+export type DrugEditFormData = z.infer<typeof drugEditFormSchema>
 
 /** 医薬品の更新のリクエスト型 */
-export type UpdateDrugRequest = Drug
+export type UpdateDrugRequest = DrugEditFormData
 
 /** 医薬品の更新のレスポンス型 */
 export type UpdateDrugResponse = {
   message: string
 }
 
+// -------------------------------------
+// POST: 医薬品編集 (新規包装の追加)
+// -------------------------------------
+/**  包装情報の新規登録用スキーマ */
+export const createPackageUnitFormSchema = packageUnitFormSchema;
+
+/** zodスキーマから変換した包装情報の入力時の型 */
+export type CreatePackageUnitFormInput = z.input<typeof 
+createPackageUnitFormSchema>
+
+/** zodスキーマから変換した包装情報のバリデーション後の型 */
+export type CreatePackageUnitFormData = z.infer<typeof createPackageUnitFormSchema>
 
 //-------------------------------------
 // DELETE: 医薬品編集

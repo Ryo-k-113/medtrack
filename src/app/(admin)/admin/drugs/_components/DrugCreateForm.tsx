@@ -8,7 +8,8 @@ import { Send } from "lucide-react"
 import { toast } from "sonner";
 import { FormProductSection } from "./FormProductSection"
 import { FormPackageUnitSection } from "./FormPackageUnitSection"
-import { drugFormSchema, type DrugFormData, type DrugFormInput, DEFAULT_DRUG_FORM_VALUES } from "../_schemas/drug"
+import { createDrugFormSchema,type CreateDrugFormData, type CreateDrugFormInput, } from "@/types/admin/drug"
+import {  DEFAULT_DRUG_FORM_VALUES } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useRouter } from "next/navigation"
@@ -23,10 +24,10 @@ export const DrugCreateForm = () => {
   const { companyOptions, unitOptions, genericNameOptions, isLoading } = useDrugFormOptions()
 
 
-  const form = useForm<DrugFormInput, unknown, DrugFormData>({
+  const form = useForm<CreateDrugFormInput, unknown, CreateDrugFormData>({
     mode: "onBlur",
-    resolver: zodResolver(drugFormSchema),
-    defaultValues: DEFAULT_DRUG_FORM_VALUES as DrugFormInput,
+    resolver: zodResolver(createDrugFormSchema),
+    defaultValues: DEFAULT_DRUG_FORM_VALUES ,
   });
 
   const { 
@@ -34,7 +35,7 @@ export const DrugCreateForm = () => {
     formState: { isSubmitting ,errors} 
   } = form;
   console.log(errors)
-  const onSubmit = async (data: DrugFormData) => {
+  const onSubmit = async (data: CreateDrugFormData) => {
     console.log(data)
     try {
       const response = await fetcher({

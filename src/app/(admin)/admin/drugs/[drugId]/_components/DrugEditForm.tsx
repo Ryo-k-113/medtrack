@@ -1,5 +1,5 @@
 "use client"
-import * as React from "react"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider} from "react-hook-form" 
 import { useRouter } from "next/navigation"
@@ -11,9 +11,8 @@ import { DrugEditActions } from "./DrugEditActions"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
-import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/app/(admin)/admin/drugs/_schemas/drug"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
-import { ProductType } from "@prisma/client"
+import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/types/admin/drug";
 
 
 

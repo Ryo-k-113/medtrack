@@ -12,8 +12,8 @@ import { FormSelectBox } from "@/components/Form/FormSelectBox"
 import { FormDatePicker } from "@/components/Form/FormDatePicker"
 import { SHIPPING_STATUS_OPTIONS} from "@/app/(admin)/admin/drugs/_constants/drug"
 import { FormPublishStatusToggle } from "@/app/(admin)/admin/drugs/_components/FormPublishStatusToggle"
-
-import { packageUnitFormSchema, type PackageUnitFormData, type PackageUnitFormInput, DEFAULT_PACKAGE_UNIT } from "@/app/(admin)/admin/drugs/_schemas/drug"
+import { DEFAULT_PACKAGE_UNIT } from "@/app/(admin)/admin/drugs/_constants/drug"
+import { createPackageUnitFormSchema, type CreatePackageUnitFormData, type CreatePackageUnitFormInput,  } from "@/types/admin/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
@@ -27,16 +27,16 @@ export const PackageUnitAddDialog = () => {
   // モーダルの開閉
   const [isOpen, setIsOpen] = useState(false)
 
-  const form = useForm<PackageUnitFormInput, unknown, PackageUnitFormData>({
+  const form = useForm<CreatePackageUnitFormInput, unknown, CreatePackageUnitFormData>({
     mode: "onBlur",
-    resolver: zodResolver(packageUnitFormSchema),
+    resolver: zodResolver(createPackageUnitFormSchema),
     defaultValues: DEFAULT_PACKAGE_UNIT,
   })
 
   const { handleSubmit, formState: { isSubmitting }, reset } = form
 
   // 包装追加
-  const onSubmit = async (data: PackageUnitFormData) => {
+  const onSubmit = async (data: CreatePackageUnitFormData) => {
     try {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}`,
