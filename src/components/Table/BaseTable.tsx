@@ -19,7 +19,8 @@ import { cn } from "@/lib/utils"
 
 
 type BaseTableProps<TData> = {
-  columns:       ColumnDef<TData, never>[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns:       ColumnDef<TData, any>[]
   data:          TData[]
   pinnedColumns?: {
     left?:  string[]
