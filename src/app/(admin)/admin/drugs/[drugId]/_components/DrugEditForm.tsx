@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import { useState } from 'react';
 import { toast } from "sonner";
 import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormProductSection"
-import { PackageUnitListSection } from "./PackageUnitListSection"
 import { DrugEditActions } from "./DrugEditActions"
 import { DrugEditFormSkeleton } from "./DrugEditFormSkeleton"
 import { fetcher } from "@/utils/fetcher"
