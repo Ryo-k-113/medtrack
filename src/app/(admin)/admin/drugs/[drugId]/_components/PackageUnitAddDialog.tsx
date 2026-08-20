@@ -7,11 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
-import { FormInput } from "@/components/Form/FormInput"
-import { FormSelectBox } from "@/components/Form/FormSelectBox"
-import { FormDatePicker } from "@/components/Form/FormDatePicker"
-import { SHIPPING_STATUS_OPTIONS} from "@/app/(admin)/admin/drugs/_constants/drug"
-import { FormPublishStatusToggle } from "@/app/(admin)/admin/drugs/_components/FormPublishStatusToggle"
+import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
 import { DEFAULT_PACKAGE_UNIT } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { createPackageUnitFormSchema, type CreatePackageUnitFormData, type CreatePackageUnitFormInput,  } from "@/types/admin/drug"
 import { fetcher } from "@/utils/fetcher"
@@ -22,6 +18,7 @@ import { useAdminDrug } from "../_hooks/useAdminDrug"
 export const PackageUnitAddDialog = () => {
   const { token } = useSupabaseSession()
   
+  //医薬品IDの取得
   const { drugId, mutate } = useAdminDrug()
 
   // モーダルの開閉
@@ -99,64 +96,18 @@ export const PackageUnitAddDialog = () => {
         }
       >
         <FormProvider {...form}>
-          <form id="packageUnitAddForm" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-            <div className="flex justify-end items-center">
-              {/* 公開ステータスのトグルボタン */}
-              <FormPublishStatusToggle name="publishStatus" />
-            </div>
-
-              {/* 基本情報 */}
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <FormInput
-                  name="name" 
-                  label="包装名"
-                  required
-                />
-                <FormSelectBox
-                  name="currentShippingStatus"
-                  label="出荷状況"
-                  options={SHIPPING_STATUS_OPTIONS}
-                  required
-                />    
-              </div>
-
-              {/* コード情報 */}
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <FormInput
-                  name="unifiedCode" 
-                  label="統一商品コード"
-                  required
-                />
-                <FormInput
-                  name="gs1SalesCode" 
-                  label="販売GS1コード"
-                />
-                <FormInput
-                  name="gs1DispensingCode" 
-                  label="調剤GS1コード"
-                />
-                <FormInput
-                  name="hotCode" 
-                  label="HOTコード"
-                />
-                <FormInput
-                  name="janCode" 
-                  label="JANコード"
-                />
-              </div>
-
-            {/* 日付情報 */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <FormDatePicker
-                name="discontinuedDate"
-                label="販売中止日"
-              />
-              <FormDatePicker
-                name="salesTransferDate"
-                label="販売移管日"
-              />
-            </div>
+          <form 
+            id="packageUnitAddForm" 
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            {/* 包装フォームアイテム */}
+            <PackageUnitFormFields
+              showShippingStatus
+              showDateFields
+              basicClassName="md:grid-cols-2 w-4/5"
+              codeClassName="md:grid-cols-5"
+              dateClassName="md:grid-cols-5"
+            />
           </form>
         </FormProvider>
       </BaseDialog>
