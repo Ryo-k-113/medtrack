@@ -69,7 +69,7 @@ export const FormSelectBox = <T extends string> ({
             </SelectTrigger>
 
               {/* セレクトアイテム */}
-            <SelectContent>
+            <SelectContent position="popper">
               {options.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
