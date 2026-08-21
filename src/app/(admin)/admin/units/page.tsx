@@ -2,6 +2,8 @@
 
 import { AdminPageTitle } from "@/app/(admin)/admin/_components/AdminPageTitle"
 import { UnitList } from "./_components/UnitList"
+import { Suspense } from "react"
+import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 
 
 export default function AdminUnitsPage() {
@@ -13,7 +15,9 @@ export default function AdminUnitsPage() {
       />
 
       {/* 規格単位一覧 */}
-      <UnitList />
+      <Suspense fallback={<DataTableSkeleton />}>
+        <UnitList />
+      </Suspense>
     </div>
   )
 }

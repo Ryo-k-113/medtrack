@@ -1,6 +1,8 @@
 "use client"
 import { AdminPageTitle } from "../_components/AdminPageTitle"
 import { DrugList } from "./_components/DrugList"
+import { Suspense } from "react"
+import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 
 
 export default function AdminDrugsPage() {
@@ -12,7 +14,9 @@ export default function AdminDrugsPage() {
       />
       
       {/* 医薬品一覧 */}
-      <DrugList />
+      <Suspense fallback={<DataTableSkeleton />}>
+        <DrugList />
+      </Suspense>
     </>  
   ) 
 }
