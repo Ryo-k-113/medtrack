@@ -5,7 +5,8 @@ import type { GetUnitsResponse } from "@/types/admin/unit"
 import { SelectOption } from "@/types/ui/select"
 
 /**
- *  製薬会社、規格単位、成分名のデータを取得し、医薬品フォーム用のitemに変換するカスタムフック
+ * 医薬品フォームに必要な各種マスタデータ（製薬会社、規格単位、一般名）をマスタAPIを並列取得し、`SelectOption`（label, value）形式に変換
+ * @returns {FormOptions} 各マスタの選択肢データ、全体でのローディング状態、および最初に発生したエラー
  */
 
 
@@ -22,17 +23,18 @@ type FormOptions = {
   unitOptions: SelectOption[]
   genericNameOptions: SelectOption[]
   isLoading: boolean
+  error: Error | undefined
 }
 
 export const useDrugFormOptions = (): FormOptions => {
-  const { data: companyData, isLoading: isCompaniesLoading } =
+  const { data: companyData, isLoading: isCompaniesLoading, error: companiesError } =
     useDataFetch<GetCompaniesResponse>("/api/admin/companies")
-  
-  const { data: unitData, isLoading: isUnitsLoading } =
+
+  const { data: unitData, isLoading: isUnitsLoading, error: unitsError } =
     useDataFetch<GetUnitsResponse>("/api/admin/units")
-  
-  const { data: genericNameData, isLoading: isGenericNamesLoading } =
-    useDataFetch<GetGenericNamesResponse>("/api/admin/genericNames")
+
+  const { data: genericNameData, isLoading: isGenericNamesLoading, error: genericNamesError } =
+    useDataFetch<GetGenericNamesResponse>("/api/admin/generic-names")
 
   // フォームitemに合う形に変換
   const companyOptions = toSelectOptions(companyData?.companies ?? [])
@@ -44,5 +46,6 @@ export const useDrugFormOptions = (): FormOptions => {
     unitOptions,
     genericNameOptions,
     isLoading: isCompaniesLoading || isUnitsLoading || isGenericNamesLoading,
+    error: companiesError ?? unitsError ?? genericNamesError,
   }
 }

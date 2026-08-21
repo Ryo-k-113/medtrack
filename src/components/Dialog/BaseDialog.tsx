@@ -31,22 +31,15 @@ export const BaseDialog = ({
   className,
 }: BaseDialogProps) => {
   return (
-   
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {
           if (!open) onClose()
         }}
-        modal={false}
       >
-        {isOpen && (
-          <div
-            className="fixed inset-0 z-40 bg-black/70"
-            onClick={onClose}
-          />
-        )}
-
-        <DialogContent className={cn("z-50", className)}>
+        <DialogContent
+          className={cn("p-6 md:p-10 gap-6", className)}
+        >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
@@ -54,7 +47,7 @@ export const BaseDialog = ({
             </DialogDescription>
           </DialogHeader>
 
-          {children}
+            {children}
 
           {actions && (
             <DialogFooter>

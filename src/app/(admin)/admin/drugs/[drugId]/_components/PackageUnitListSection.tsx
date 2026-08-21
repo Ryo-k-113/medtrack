@@ -2,12 +2,19 @@
 import { useAdminDrug } from "../_hooks/useAdminDrug"
 import { PackageUnitAddDialog } from "./PackageUnitAddDialog"
 import { PackageUnitCard } from "./PackageUnitCard"
+import { PackageUnitListSectionSkeleton } from "./PackageUnitListSectionSkeleton"
 
 
 export const PackageUnitListSection = () => {
 
   // 製品idと包装を取得
-  const {drugId, packageUnits } = useAdminDrug()
+  const {drugId, packageUnits, isDrugLoading, error } = useAdminDrug()
+  
+  // ローディング表示
+  if (isDrugLoading) return <PackageUnitListSectionSkeleton />
+
+  // エラー表示
+  if(error) return <div>エラーが発生しました</div>
 
   return (
     <div className="border p-6 rounded-md bg-background shadow-sm">

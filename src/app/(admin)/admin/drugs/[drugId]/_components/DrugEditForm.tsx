@@ -1,18 +1,18 @@
 "use client"
-import * as React from "react"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider} from "react-hook-form" 
 import { useRouter } from "next/navigation"
 import { useState } from 'react';
 import { toast } from "sonner";
 import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormProductSection"
-import { PackageUnitListSection } from "./PackageUnitListSection"
 import { DrugEditActions } from "./DrugEditActions"
+import { DrugEditFormSkeleton } from "./DrugEditFormSkeleton"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
-import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/app/(admin)/admin/drugs/_schemas/drug"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
+import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/types/admin/drug";
 
 
 
@@ -23,13 +23,16 @@ export const DrugEditForm = () => {
   const [isDeleting, setIsDeleting] = useState(false)
 
   // 製薬会社、規格単位、成分名の一覧取得
-  const { companyOptions, unitOptions, genericNameOptions, isLoading:isOptionsLoading } = useDrugFormOptions()
-
+  const {
+    companyOptions,
+    unitOptions,
+    genericNameOptions,
+    isLoading: isOptionsLoading,
+    error: optionsError,
+  } = useDrugFormOptions()
 
   //製品と包装データの取得
-  const { drugId, drug, isDrugLoading, mutate } = useAdminDrug()
-
-  const isLoading = isDrugLoading || isOptionsLoading
+  const { drugId, drug, isDrugLoading, mutate, error } = useAdminDrug()
 
   const form = useForm<DrugEditFormInput, unknown, DrugEditFormData>({
     mode: "onBlur",
@@ -37,20 +40,20 @@ export const DrugEditForm = () => {
     values: {
       name: drug?.name ?? "",
       yjCode: drug?.yjCode ?? "",
-      price: drug?.price ?? undefined,
+      price: drug?.price ?? "", 
       drugPriceListingCode: drug?.drugPriceListingCode ?? "",
       packageInsertUrl: drug?.packageInsertUrl ?? "",
       productType: drug?.productType ?? "",
       isSelectMedical: drug?.isSelectMedical ?? false,
       isAuthorizedGeneric: drug?.isAuthorizedGeneric ?? false,
-      genericNameId: String(drug?.genericNameId ?? ""),
-      unitId: String(drug?.unitId ?? ""),
-      salesCompanyId: String(drug?.salesCompanyId ?? ""),
-      manufacturingCompanyId: String(drug?.manufacturingCompanyId ?? ""),
-    } 
+      genericNameId: drug?.genericNameId ? String(drug.genericNameId) : "",
+      unitId: drug?.unitId ? String(drug.unitId) : "",
+      salesCompanyId: drug?.salesCompanyId ? String(drug.salesCompanyId) : "",
+      manufacturingCompanyId: drug?.manufacturingCompanyId
+        ? String(drug.manufacturingCompanyId)
+        : "",
+    }
   })
-
-  const { handleSubmit } = form
 
   // 製品の変更を保存
   const onSubmit = async ( data: DrugEditFormData ) => {
@@ -89,13 +92,16 @@ export const DrugEditForm = () => {
     }
   }
   
-  if (isLoading) return <div>読み込み中...</div>
-  if (!drug) return <div>データが見つかりません</div>
+  // ローディング表示
+  if (isDrugLoading || isOptionsLoading) return <DrugEditFormSkeleton />
+
+  // エラー表示
+  if (error || optionsError) return <div>エラーが発生しました</div>
 
   return (
     <div>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
 
           {/* 製品情報 */}
           <div className="py-10">
@@ -114,8 +120,6 @@ export const DrugEditForm = () => {
         </form>
       </FormProvider>
 
-      {/* 包装一覧 */}
-      <PackageUnitListSection />
     </div>
   )
 }

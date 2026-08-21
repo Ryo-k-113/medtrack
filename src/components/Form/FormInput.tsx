@@ -34,7 +34,7 @@ export const FormInput = ({
       render={({ field, fieldState }) => (
         <Field 
           data-invalid={fieldState.invalid}
-          className={cn("gap-2", className)}
+          className={cn("gap-1", className)}
         >
           <FieldLabel htmlFor={name}>
             {label}

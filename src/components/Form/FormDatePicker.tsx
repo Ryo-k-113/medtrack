@@ -47,26 +47,34 @@ export function FormDatePicker({
             {label}
             {required && <span className="text-destructive">*</span>}
           </FieldLabel>
-          <Popover open={isOpen} onOpenChange={setIsOpen}>
+
+          <Popover 
+            open={isOpen} 
+            onOpenChange={setIsOpen} 
+            modal={true}
+          >
             <PopoverTrigger asChild>
               <Button
                 id={name}
-                variant={"surface"}
+                variant="surface"
                 className={cn(
-                  "w-full justify-start text-left font-normal",
+                  "w-full justify-start text-left",
                   !field.value && "text-placeholder",
                   fieldState.invalid && "border-destructive text-destructive"
                 )}
               >
                 <CalendarIcon className="h-4 w-4" />
                 {field.value ? (
-                  format(field.value, "PPP", { locale: ja })
+                  format(field.value, "yyyy/MM/dd", { locale: ja })
                 ) : (
                   <span>{placeholder}</span>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent 
+              className="w-auto p-0" 
+              align="start" 
+            >
               <Calendar
                 mode="single"
                 selected={field.value}
@@ -80,9 +88,10 @@ export function FormDatePicker({
               />
             </PopoverContent>
           </Popover>
-          {fieldState.invalid && 
-            <FieldError errors={[fieldState.error]} />
-          }
+
+          {/* エラー表示 */}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+
         </Field>
       )}
     />

@@ -21,7 +21,7 @@
     --card-foreground: 222.2 84% 4.9%;  /* #020817 ダークネイビー */
 
     --popover: 0 0% 100%;  /* #ffffff ホワイト */
-    --popover-foreground: 222.2 84% 4.9%; /* #020817 ダークネイビー */
+    --popover-foreground: 0 0% 20%;  /* #333333 ダークグレー */
 
     --primary: 206 68% 42%;            /* #2277b4 ブルー */
     --primary-foreground: 210 40% 98%; /* #f7fafc ほぼホワイト */
