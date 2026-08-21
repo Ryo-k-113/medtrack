@@ -22,6 +22,7 @@ export default function AdminDrugEditPage() {
         title={drug?.name ?? ""}
         backTo="/admin/drugs"
         backButtonText="一覧へ戻る"
+        isLoading={isLoading}
       />
       {/* 医薬品の編集フォーム */}
       <DrugEditForm />
