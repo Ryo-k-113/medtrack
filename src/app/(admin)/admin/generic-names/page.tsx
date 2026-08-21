@@ -2,6 +2,8 @@
 
 import { AdminPageTitle } from "@/app/(admin)/admin/_components/AdminPageTitle"
 import { GenericNameList } from "./_components/GenericNameList"
+import { Suspense } from "react"
+import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 
 
 export default function AdminGenericNamesPage() {
@@ -12,8 +14,10 @@ export default function AdminGenericNamesPage() {
         title="成分名一覧"
       />
 
-      {/* 製薬会社一覧 */}
-      <GenericNameList />
+      {/* 成分名一覧 */}
+      <Suspense fallback={<DataTableSkeleton />}>
+        <GenericNameList />
+      </Suspense>
     </div>
   )
 }
