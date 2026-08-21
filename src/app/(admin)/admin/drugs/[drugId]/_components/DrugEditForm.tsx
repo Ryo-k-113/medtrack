@@ -23,13 +23,16 @@ export const DrugEditForm = () => {
   const [isDeleting, setIsDeleting] = useState(false)
 
   // 製薬会社、規格単位、成分名の一覧取得
-  const { companyOptions, unitOptions, genericNameOptions, isLoading:isOptionsLoading } = useDrugFormOptions()
-
+  const {
+    companyOptions,
+    unitOptions,
+    genericNameOptions,
+    isLoading: isOptionsLoading,
+    error: optionsError,
+  } = useDrugFormOptions()
 
   //製品と包装データの取得
-  const { drugId, drug, isDrugLoading, mutate } = useAdminDrug()
-
-  const isLoading = isDrugLoading || isOptionsLoading
+  const { drugId, drug, isDrugLoading, mutate, error } = useAdminDrug()
 
   const form = useForm<DrugEditFormInput, unknown, DrugEditFormData>({
     mode: "onBlur",
@@ -51,8 +54,6 @@ export const DrugEditForm = () => {
         : "",
     }
   })
-
-  const { handleSubmit } = form
 
   // 製品の変更を保存
   const onSubmit = async ( data: DrugEditFormData ) => {
@@ -91,13 +92,16 @@ export const DrugEditForm = () => {
     }
   }
   
-  if (isLoading) return <DrugEditFormSkeleton />
-  if (!drug) return <div>データが見つかりません</div>
+  // ローディング表示
+  if (isDrugLoading || isOptionsLoading) return <DrugEditFormSkeleton />
+
+  // エラー表示
+  if (error || optionsError) return <div>エラーが発生しました</div>
 
   return (
     <div>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
 
           {/* 製品情報 */}
           <div className="py-10">
