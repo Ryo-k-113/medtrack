@@ -1,21 +1,11 @@
 import { z } from "zod"
-import type { Drug, PackageUnit} from "@/types/drug"
+import type { Drug, PackageUnit, ShippingAnnouncement } from "@/types/drug"
 import type {AnnounceType ,GenericName,
   PharmaceuticalCompany } from "@prisma/client"
 import {
   packageUnitFormSchema,
   drugFormSchema,
 } from "@/schemas/drug"
-
-
-// 告示履歴の型
-export type AnnounceHistory = {
-  id: number
-  announcedDate: string | null
-  effectiveDate: string | null
-  announceType: AnnounceType | null
-  packageUnitId: number
-}
 
 
 //-------------------------------------
@@ -160,7 +150,7 @@ export type AddPackageUnitResponse = {
 /** 包装情報と告示履歴、医薬品情報取得のレスポンス型 */
 export type PackageUnitDetailResponse = {
   data: PackageUnit & {
-    AnnounceHistories: AnnounceHistory[]
+    AnnounceHistories: ShippingAnnouncement[]
     Drug: Pick<Drug, "id" | "name" | "yjCode" | "transitionalMeasuresDate"> & {
       GenericName: { id: number, name: string }
       SalesCompany: {id: number, name: string }
