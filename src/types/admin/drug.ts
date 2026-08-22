@@ -1,7 +1,6 @@
 import { z } from "zod"
 import type { Drug, PackageUnit, ShippingAnnouncement } from "@/types/drug"
-import type {AnnounceType ,GenericName,
-  PharmaceuticalCompany } from "@prisma/client"
+import type { AnnounceType, GenericName, PharmaceuticalCompany, CurrentShippingStatus } from "@prisma/client"
 import {
   packageUnitFormSchema,
   drugFormSchema,
@@ -214,5 +213,20 @@ export type CreateAnnounceRequest = {
 
 /** 告示情報登録のレスポンス型 */
 export type CreateAnnounceResponse = {
+  message: string
+}
+
+
+//-------------------------------------
+// PATCH: 告示の非表示化（INACTIVE化）
+//-------------------------------------
+
+/** 告示の非表示化のリクエスト型 */
+export type InactivateAnnounceRequest = {
+  currentShippingStatus?: CurrentShippingStatus
+}
+
+/** 告示の非表示化のレスポンス型 */
+export type InactivateAnnounceResponse = {
   message: string
 }
