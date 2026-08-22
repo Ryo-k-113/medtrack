@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 
 type AnnounceTypeBadgeProps = {
   status: AnnounceType
+  inactive?: boolean
   className?: string
 }
 
@@ -32,12 +33,20 @@ const ANNOUNCE_TYPE_MAP: Record<AnnounceType, { label: string; className: string
 
 export const AnnounceTypeBadge = ({
   status,
+  inactive = false,
   className,
 }: AnnounceTypeBadgeProps) => {
   const { label, className: statusClassName } = ANNOUNCE_TYPE_MAP[status]
 
   return (
-    <Badge className={cn("py-1", statusClassName, className)}>
+    <Badge
+      className={cn(
+        "py-1",
+        statusClassName,
+        inactive && "opacity-50 line-through",
+        className
+      )}
+    >
       {label}
     </Badge>
   )
