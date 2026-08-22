@@ -1,6 +1,7 @@
 import { z } from "zod"
 import type { Drug, PackageUnit, ShippingAnnouncement } from "@/types/drug"
-import type { AnnounceType, GenericName, PharmaceuticalCompany, CurrentShippingStatus } from "@prisma/client"
+import type { AnnounceType, GenericName, PharmaceuticalCompany } from "@prisma/client"
+import { CurrentShippingStatus } from "@prisma/client"
 import {
   packageUnitFormSchema,
   drugFormSchema,
@@ -221,10 +222,25 @@ export type CreateAnnounceResponse = {
 // PATCH: 告示の非表示化（INACTIVE化）
 //-------------------------------------
 
+/** 告示の非表示化フォームのスキーマ */
+export const inactivateAnnounceFormSchema = z.object({
+  currentShippingStatus: z
+  .union([z.enum(CurrentShippingStatus), z.literal("")])
+  // 送信時に空文字ならエラー
+  .refine((val) => val !== "", {
+    message: "出荷状況を選択してください",
+  }),
+})
+
+
+/** zodスキーマから変換した型 (入力時の型) */
+export type InactivateAnnounceFormInput = z.input<typeof inactivateAnnounceFormSchema>
+
+/** zodスキーマから変換した型 (バリデーション後) */
+export type InactivateAnnounceFormData = z.infer<typeof inactivateAnnounceFormSchema>
+
 /** 告示の非表示化のリクエスト型 */
-export type InactivateAnnounceRequest = {
-  currentShippingStatus?: CurrentShippingStatus
-}
+export type InactivateAnnounceRequest = InactivateAnnounceFormData
 
 /** 告示の非表示化のレスポンス型 */
 export type InactivateAnnounceResponse = {

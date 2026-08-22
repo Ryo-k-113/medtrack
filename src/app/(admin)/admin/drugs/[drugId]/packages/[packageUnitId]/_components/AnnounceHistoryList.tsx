@@ -5,6 +5,7 @@ import { EyeOff } from "lucide-react"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { formatDate } from "@/utils/format"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
+import { InactivateAnnounceDialog } from "./InactivateAnnounceDialog"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -105,6 +106,13 @@ export const AnnounceHistoryList = () => {
           </table>
         </div>
       )}
+
+      {/* 非表示化のダイアログ */}
+      <InactivateAnnounceDialog
+        isOpen={inactivateTargetId !== null}
+        onClose={() => setInactivateTargetId(null)}
+        announceId={inactivateTargetId}
+      />
     </div>
   )
 }
