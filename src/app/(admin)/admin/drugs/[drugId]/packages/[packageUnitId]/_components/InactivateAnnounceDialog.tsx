@@ -51,7 +51,7 @@ export const InactivateAnnounceDialog = ({
   const onSubmit = async (data: InactivateAnnounceFormData) => {
     try {
       const res = await fetcher({
-        url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce/${announceId}`,
+        url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce/${announceId}/inactive`,
         method: "PATCH",
         body: data,
         token,
