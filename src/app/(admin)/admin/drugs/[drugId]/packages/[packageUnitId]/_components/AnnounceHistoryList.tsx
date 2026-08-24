@@ -1,22 +1,31 @@
 "use client"
 
 import { useState } from "react"
-import { EyeOff } from "lucide-react"
+import { EyeOff, Pencil, PencilOff } from "lucide-react"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { formatDate } from "@/utils/format"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
 import { InactivateAnnounceDialog } from "./InactivateAnnounceDialog"
+import { AnnounceEditDialog } from "./AnnounceEditDialog"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { ShippingAnnouncement } from "@/types/drug"
+
+
+// 編集可能か判定 
+const isEditable = (history: ShippingAnnouncement): boolean =>
+  history.publishStatus !== "INACTIVE" &&
+  history.processStatus === "PENDING"
 
 
 export const AnnounceHistoryList = () => {
-
-  //告示情報の取得
   const { announceHistories } = useAdminPackageUnit()
 
   // 非表示ダイアログの対象（告示ID）
   const [inactivateTargetId, setInactivateTargetId] = useState<number | null>(null)
+
+  // 編集ダイアログの対象
+  const [editTarget, setEditTarget] = useState<ShippingAnnouncement | null>(null)
 
   return (
     <div className="border rounded-lg p-5 bg-background shadow-sm mb-4">
@@ -25,7 +34,7 @@ export const AnnounceHistoryList = () => {
       </div>
 
       {announceHistories.length === 0 ? (
-        <p className="h-[100px] flex justify-center items-center text-sm ">
+        <p className="h-[100px] flex justify-center items-center text-sm">
           告示情報がありません
         </p>
       ) : (
@@ -34,28 +43,29 @@ export const AnnounceHistoryList = () => {
 
             {/* ヘッダー */}
             <thead>
-              <tr className="grid grid-cols-4 gap-2 py-2 px-4 mb-1  border-b bg-surface rounded-md">
+              <tr className="grid grid-cols-5 gap-2 py-2 px-4 mb-1  border-b bg-surface rounded-md">
                 <th className="text-xs">告示日</th>
                 <th className="text-xs">適用日</th>
                 <th className="text-xs">種別</th>
-                <th className="text-xs">操作 / ステータス</th>
+                <th className="text-xs">編集</th>
+                <th className="text-xs">非表示 / ステータス</th>
               </tr>
             </thead>
 
             {/* 履歴一覧 */}
             <tbody>
               {announceHistories.map((history) => {
-                // 非表示済みか判定
                 const isInactive = history.publishStatus === "INACTIVE"
-
-                // 適用日が過去か判定
                 const isPastEffectiveDate =
-                  !!history.effectiveDate && new Date(history.effectiveDate) < new Date()
+                  !!history.effectiveDate &&
+                  new Date(history.effectiveDate) < new Date()
+
+                const canEdit = isEditable(history)
 
                 return (
                   <tr
                     key={history.id}
-                    className="grid grid-cols-4 gap-2 p-4 border-b  items-center"
+                    className="grid grid-cols-5 gap-2 p-4 border-b items-center"
                   >
                     {/*  告示日 */}
                     <td className={cn("text-sm", isInactive && "line-through text-weak")}>
@@ -74,8 +84,31 @@ export const AnnounceHistoryList = () => {
                           status={history.announceType}
                           inactive={isInactive}
                           className="rounded-md"
-                        />) : "-"
-                      }
+                        />
+                      ) : "-"}
+                    </td>
+
+                    {/* 編集ボタン: INACTIVE以外かつPENDING以外はdisabled */}
+                    <td>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={!canEdit}
+                        onClick={() => setEditTarget(history)}
+                      >
+                        {canEdit ? (
+                          <>
+                            <Pencil className="h-4 w-4" />
+                            編集
+                          </>
+                        ) : (
+                          <>
+                            <PencilOff className="h-4 w-4" />
+                            編集不可
+                          </>
+                        )}
+                      </Button>
                     </td>
 
                     {/* 非表示ボタン / 非表示済みの表記 */}
@@ -113,6 +146,14 @@ export const AnnounceHistoryList = () => {
         onClose={() => setInactivateTargetId(null)}
         announceId={inactivateTargetId}
       />
+
+      {/* 編集ダイアログ */}
+      <AnnounceEditDialog
+        isOpen={!!editTarget}
+        onClose={() => setEditTarget(null)}
+        history={editTarget}
+      />
+      
     </div>
   )
 }
