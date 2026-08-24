@@ -246,3 +246,18 @@ export type InactivateAnnounceRequest = InactivateAnnounceFormData
 export type InactivateAnnounceResponse = {
   message: string
 }
+
+//-------------------------------------
+// PUT: 告示情報の登録
+//-------------------------------------
+/** 告示編集のリクエスト型 */
+export type UpdateAnnounceRequest = Pick<ShippingAnnouncement,
+  | "announcedDate"
+  | "effectiveDate"
+  | "announceType"
+>
+
+/** 告示編集のレスポンス型 */
+export type UpdateAnnounceResponse = {
+  message: string
+}
