@@ -45,10 +45,6 @@ export const PUT = async (
       )
     }
 
-    const updated = await prisma.announceHistory.findUniqueOrThrow({
-      where: { id: Number(announceId) },
-    })
-
     return NextResponse.json<UpdateAnnounceResponse>(
       { message: "告示を更新しました" },{ status: 200 }
     )
