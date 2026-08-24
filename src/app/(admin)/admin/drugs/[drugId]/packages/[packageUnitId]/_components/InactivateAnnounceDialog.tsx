@@ -52,7 +52,7 @@ export const InactivateAnnounceDialog = ({
     try {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce/${announceId}/inactive`,
-        method: "PATCH",
+        method: "POST",
         body: data,
         token,
       })

@@ -5,8 +5,8 @@ import type { InactivateAnnounceRequest, InactivateAnnounceResponse } from "@/ty
 
 
 
-/** PATCH: 適用日を迎えた告示の非表示（INACTIVE化）*/
-export const PATCH = async (
+/** POST: 適用日を迎えた告示の非表示（INACTIVE化）*/
+export const POST = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string; announceId: string; }}
 ) => {
