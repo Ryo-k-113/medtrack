@@ -7,20 +7,23 @@ import { Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
-import { announceFormSchema, type AnnounceFormData, type AnnounceFormInput } from "../_schemas/announce"
 import { AnnounceFormFields } from "./AnnounceFormFields"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
+import {
+  createAnnounceFormSchema,
+  type CreateAnnounceFormData,
+  type CreateAnnounceFormInput,
+} from "@/types/admin/drug"
 
 
 export const AnnounceForm = () => {
   const { token } = useSupabaseSession()
   const { drugId, packageUnitId, mutate } = useAdminPackageUnit()
 
-  const form = useForm<AnnounceFormInput, unknown, AnnounceFormData>({
+  const form = useForm<CreateAnnounceFormInput, unknown, CreateAnnounceFormData>({
     mode: "onBlur",
-    resolver: zodResolver(announceFormSchema),
+    resolver: zodResolver(createAnnounceFormSchema),
     defaultValues: {
-      announcedDate: null,
       effectiveDate: null,
       announceType: null,
     }
@@ -29,7 +32,7 @@ export const AnnounceForm = () => {
   const { handleSubmit, formState: { isSubmitting }, reset } = form
 
   // 告示の登録
-  const onSubmit = async ( data: AnnounceFormData ) => {
+  const onSubmit = async ( data: CreateAnnounceFormData ) => {
     try {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce`,
