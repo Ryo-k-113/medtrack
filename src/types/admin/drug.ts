@@ -1,21 +1,11 @@
 import { z } from "zod"
-import type { Drug, PackageUnit} from "@/types/drug"
-import type {AnnounceType ,GenericName,
-  PharmaceuticalCompany } from "@prisma/client"
+import type { Drug, PackageUnit, ShippingAnnouncement } from "@/types/drug"
+import type { AnnounceType, GenericName, PharmaceuticalCompany } from "@prisma/client"
+import { CurrentShippingStatus } from "@prisma/client"
 import {
   packageUnitFormSchema,
   drugFormSchema,
 } from "@/schemas/drug"
-
-
-// 告示履歴の型
-export type AnnounceHistory = {
-  id: number
-  announcedDate: string | null
-  effectiveDate: string | null
-  announceType: AnnounceType | null
-  packageUnitId: number
-}
 
 
 //-------------------------------------
@@ -160,7 +150,7 @@ export type AddPackageUnitResponse = {
 /** 包装情報と告示履歴、医薬品情報取得のレスポンス型 */
 export type PackageUnitDetailResponse = {
   data: PackageUnit & {
-    AnnounceHistories: AnnounceHistory[]
+    AnnounceHistories: ShippingAnnouncement[]
     Drug: Pick<Drug, "id" | "name" | "yjCode" | "transitionalMeasuresDate"> & {
       GenericName: { id: number, name: string }
       SalesCompany: {id: number, name: string }
@@ -224,5 +214,35 @@ export type CreateAnnounceRequest = {
 
 /** 告示情報登録のレスポンス型 */
 export type CreateAnnounceResponse = {
+  message: string
+}
+
+
+//-------------------------------------
+// POST: 告示の非表示化（INACTIVE化）
+//-------------------------------------
+
+/** 告示の非表示化フォームのスキーマ */
+export const inactivateAnnounceFormSchema = z.object({
+  currentShippingStatus: z
+  .union([z.enum(CurrentShippingStatus), z.literal("")])
+  // 送信時に空文字ならエラー
+  .refine((val) => val !== "", {
+    message: "出荷状況を選択してください",
+  }),
+})
+
+
+/** zodスキーマから変換した型 (入力時の型) */
+export type InactivateAnnounceFormInput = z.input<typeof inactivateAnnounceFormSchema>
+
+/** zodスキーマから変換した型 (バリデーション後) */
+export type InactivateAnnounceFormData = z.infer<typeof inactivateAnnounceFormSchema>
+
+/** 告示の非表示化のリクエスト型 */
+export type InactivateAnnounceRequest = InactivateAnnounceFormData
+
+/** 告示の非表示化のレスポンス型 */
+export type InactivateAnnounceResponse = {
   message: string
 }

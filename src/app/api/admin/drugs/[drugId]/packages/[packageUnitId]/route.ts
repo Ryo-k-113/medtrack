@@ -61,6 +61,8 @@ export const GET = async (
         ...h,
         announcedDate: h.announcedDate?.toISOString() ?? null,
         effectiveDate: h.effectiveDate?.toISOString() ?? null,
+        createdAt: h.createdAt.toISOString(),
+        updatedAt: h.updatedAt.toISOString(),
       }))
     }
     
