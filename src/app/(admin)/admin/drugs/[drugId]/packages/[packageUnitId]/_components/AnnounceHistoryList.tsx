@@ -17,7 +17,12 @@ const isEditable = (history: ShippingAnnouncement): boolean =>
   history.publishStatus !== "INACTIVE" &&
   history.processStatus === "PENDING"
 
+// 非表示化可能か判定 (COMPLETEかつ非表示以外)
+const canInactivate = (history: ShippingAnnouncement): boolean =>
+  history.publishStatus !== "INACTIVE" &&
+  history.processStatus === "COMPLETED"
 
+  
 export const AnnounceHistoryList = () => {
   const { announceHistories } = useAdminPackageUnit()
 
@@ -56,11 +61,9 @@ export const AnnounceHistoryList = () => {
             <tbody>
               {announceHistories.map((history) => {
                 const isInactive = history.publishStatus === "INACTIVE"
-                const isPastEffectiveDate =
-                  !!history.effectiveDate &&
-                  new Date(history.effectiveDate) < new Date()
-
+                
                 const canEdit = isEditable(history)
+                const canInactivateAnnounce = canInactivate(history)
 
                 return (
                   <tr
@@ -119,7 +122,7 @@ export const AnnounceHistoryList = () => {
                           非表示済み
                         </span>
                       ) : (
-                        isPastEffectiveDate && (
+                        canInactivateAnnounce && (
                           <Button
                             type="button"
                             variant="secondary"
