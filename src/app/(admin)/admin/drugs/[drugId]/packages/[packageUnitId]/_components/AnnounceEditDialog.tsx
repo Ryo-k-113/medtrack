@@ -9,10 +9,8 @@ import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { fetcher } from "@/utils/fetcher"
-import { ANNOUNCE_TYPE_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
 import type { ShippingAnnouncement } from "@/types/drug"
-import { FormDatePicker } from "@/components/Form/FormDatePicker"
-import { FormSelectBox } from "@/components/Form/FormSelectBox"
+import { AnnounceFormFields } from "./AnnounceFormFields"
 import {
   updateAnnounceFormSchema,
   type UpdateAnnounceFormData,
@@ -50,11 +48,13 @@ export const AnnounceEditDialog = ({
 
   const { handleSubmit, formState: { isSubmitting, isDirty }, reset } = form
 
+  // ダイアログを閉じる
   const handleClose = () => {
     reset()
     onClose()
   }
 
+  // 告示の更新
   const onSubmit = async (data: UpdateAnnounceFormData) => {
     try {
       const res = await fetcher({
@@ -105,24 +105,7 @@ export const AnnounceEditDialog = ({
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FormDatePicker
-              name="announcedDate"
-              label="告示日"
-              required
-            />
-            <FormDatePicker
-              name="effectiveDate"
-              label="実施日"
-              required
-            />
-            <FormSelectBox
-              name="announceType"
-              label="告示種別"
-              options={ANNOUNCE_TYPE_OPTIONS}
-              required
-            />
-          </div>
+          <AnnounceFormFields />
         </form>
       </FormProvider>
     </BaseDialog>
