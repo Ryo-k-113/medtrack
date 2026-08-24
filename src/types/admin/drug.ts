@@ -5,6 +5,7 @@ import { CurrentShippingStatus } from "@prisma/client"
 import {
   packageUnitFormSchema,
   drugFormSchema,
+  announceFormSchema,
 } from "@/schemas/drug"
 
 
@@ -248,14 +249,20 @@ export type InactivateAnnounceResponse = {
 }
 
 //-------------------------------------
-// PUT: 告示情報の登録
+// PUT: 告示情報の更新
 //-------------------------------------
+
+/** 告示編集フォームのスキーマ */
+export const updateAnnounceFormSchema = announceFormSchema
+
+/** zodスキーマから変換した型 (入力時の型) */
+export type UpdateAnnounceFormInput = z.input<typeof updateAnnounceFormSchema>
+
+/** zodスキーマから変換した型 (バリデーション後) */
+export type UpdateAnnounceFormData = z.infer<typeof updateAnnounceFormSchema>
+
 /** 告示編集のリクエスト型 */
-export type UpdateAnnounceRequest = Pick<ShippingAnnouncement,
-  | "announcedDate"
-  | "effectiveDate"
-  | "announceType"
->
+export type UpdateAnnounceRequest = UpdateAnnounceFormData
 
 /** 告示編集のレスポンス型 */
 export type UpdateAnnounceResponse = {
