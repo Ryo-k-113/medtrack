@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CurrentShippingStatus, PublishStatus, ProductType } from "@prisma/client"
+import { CurrentShippingStatus, PublishStatus, ProductType, AnnounceType } from "@prisma/client"
 
 
 //----------------------------
@@ -100,5 +100,30 @@ export const drugFormSchema = z.object({
   packageUnits: z
     .array(packageUnitFormSchema)
     .min(1, "1つの包装情報を追加してください"),
+});
+
+
+//----------------------------
+//  告示情報フォームのベーススキーマ
+//----------------------------
+
+/** 告示情報のスキーマ */ 
+export const announceFormSchema = z.object({
+  announcedDate: z
+    .date()
+    .nullable()
+    .refine((val) => val !== null, "告示日は必須です")
+    .transform((date) => date.toISOString()),
+
+  effectiveDate: z
+    .date()
+    .nullable()
+    .refine((val) => val !== null, "実施日は必須です")
+    .transform((date) => date.toISOString()),
+
+  announceType: z
+    .enum(AnnounceType)
+    .nullable()
+    .refine((val) => val !== null, "告示種別は必須です"),
 });
 

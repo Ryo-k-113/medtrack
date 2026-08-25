@@ -26,12 +26,18 @@ type BaseTableProps<TData> = {
     left?:  string[]
     right?: string[]
   }
+  emptyContent?: React.ReactNode
+  headerClassName?: string
+  className?: string
 }
 
 export const BaseTable = <TData,>({
   columns,
   data,
   pinnedColumns,
+  emptyContent = "データがありません",
+  headerClassName,
+  className,
 }: BaseTableProps<TData>) => {
 
   const table = useReactTable({
@@ -47,11 +53,14 @@ export const BaseTable = <TData,>({
   })
 
   return (
-    <div className="rounded-md border overflow-hidden">
+    <div className={cn("rounded-md border overflow-hidden", className)}>
       <Table className="w-full table-fixed bg-white">
 
         {/* ヘッダー */}
-        <TableHeader className="bg-primary hover:bg-primary sticky top-0 z-[1]">
+        <TableHeader className={cn(
+            "bg-primary text-primary-foreground hover:bg-primary sticky top-0 z-[1]",
+            headerClassName
+          )}>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -131,7 +140,7 @@ export const BaseTable = <TData,>({
                 colSpan={columns.length}
                 className="h-24 text-center"
               >
-                データがありません
+                {emptyContent}
               </TableCell>
             </TableRow>
           )}

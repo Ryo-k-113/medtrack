@@ -5,24 +5,25 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { FormSelectBox } from "@/components/Form/FormSelectBox"
-import { FormDatePicker } from "@/components/Form/FormDatePicker"
 import { fetcher } from "@/utils/fetcher"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
-import { announceFormSchema, type AnnounceFormData, type AnnounceFormInput } from "../_schemas/announce"
-import { ANNOUNCE_TYPE_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
+import { AnnounceFormFields } from "./AnnounceFormFields"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
+import {
+  createAnnounceFormSchema,
+  type CreateAnnounceFormData,
+  type CreateAnnounceFormInput,
+} from "@/types/admin/drug"
 
 
 export const AnnounceForm = () => {
   const { token } = useSupabaseSession()
   const { drugId, packageUnitId, mutate } = useAdminPackageUnit()
 
-  const form = useForm<AnnounceFormInput, unknown, AnnounceFormData>({
+  const form = useForm<CreateAnnounceFormInput, unknown, CreateAnnounceFormData>({
     mode: "onBlur",
-    resolver: zodResolver(announceFormSchema),
+    resolver: zodResolver(createAnnounceFormSchema),
     defaultValues: {
-      announcedDate: null,
       effectiveDate: null,
       announceType: null,
     }
@@ -30,7 +31,8 @@ export const AnnounceForm = () => {
 
   const { handleSubmit, formState: { isSubmitting }, reset } = form
 
-  const onSubmit = async ( data: AnnounceFormData ) => {
+  // 告示の登録
+  const onSubmit = async ( data: CreateAnnounceFormData ) => {
     try {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce`,
@@ -56,24 +58,7 @@ export const AnnounceForm = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
           {/* 告示種別・告示日・実施日 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FormDatePicker
-              name="announcedDate"
-              label="告示日"
-              required
-            />
-            <FormDatePicker
-              name="effectiveDate"
-              label="実施日"
-              required
-            />
-            <FormSelectBox
-              name="announceType"
-              label="告示種別"
-              options={ANNOUNCE_TYPE_OPTIONS}
-              required
-            />
-          </div>
+          <AnnounceFormFields />
 
           {/* ボタン */}
           <div className="flex justify-end">

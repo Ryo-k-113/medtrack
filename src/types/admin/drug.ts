@@ -1,10 +1,11 @@
 import { z } from "zod"
 import type { Drug, PackageUnit, ShippingAnnouncement } from "@/types/drug"
-import type { AnnounceType, GenericName, PharmaceuticalCompany } from "@prisma/client"
+import type { GenericName, PharmaceuticalCompany } from "@prisma/client"
 import { CurrentShippingStatus } from "@prisma/client"
 import {
   packageUnitFormSchema,
   drugFormSchema,
+  announceFormSchema,
 } from "@/schemas/drug"
 
 
@@ -205,12 +206,17 @@ export type DeletePackageUnitResponse = {
 // POST: 告示情報の登録
 //-------------------------------------
 
+/** 告示登録フォームのスキーマ */
+export const createAnnounceFormSchema = announceFormSchema
+
+/** zodスキーマから変換した型 (入力時の型) */
+export type CreateAnnounceFormInput = z.input<typeof createAnnounceFormSchema>
+
+/** zodスキーマから変換した型 (バリデーション後) */
+export type CreateAnnounceFormData = z.infer<typeof createAnnounceFormSchema>
+
 /** 告示情報登録のリクエスト型 */
-export type CreateAnnounceRequest = {
-  announceType: AnnounceType
-  announcedDate: string
-  effectiveDate: string
-}
+export type CreateAnnounceRequest = CreateAnnounceFormData
 
 /** 告示情報登録のレスポンス型 */
 export type CreateAnnounceResponse = {
@@ -244,5 +250,26 @@ export type InactivateAnnounceRequest = InactivateAnnounceFormData
 
 /** 告示の非表示化のレスポンス型 */
 export type InactivateAnnounceResponse = {
+  message: string
+}
+
+//-------------------------------------
+// PUT: 告示情報の更新
+//-------------------------------------
+
+/** 告示編集フォームのスキーマ */
+export const updateAnnounceFormSchema = announceFormSchema
+
+/** zodスキーマから変換した型 (入力時の型) */
+export type UpdateAnnounceFormInput = z.input<typeof updateAnnounceFormSchema>
+
+/** zodスキーマから変換した型 (バリデーション後) */
+export type UpdateAnnounceFormData = z.infer<typeof updateAnnounceFormSchema>
+
+/** 告示編集のリクエスト型 */
+export type UpdateAnnounceRequest = UpdateAnnounceFormData
+
+/** 告示編集のレスポンス型 */
+export type UpdateAnnounceResponse = {
   message: string
 }
