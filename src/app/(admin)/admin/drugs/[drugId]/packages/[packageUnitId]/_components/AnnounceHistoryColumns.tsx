@@ -32,6 +32,7 @@ export const AnnounceHistoryColumns = ({
 }: ColumnsProps) => [
   columnHelper.accessor("announcedDate", {
     header: "告示日",
+    size: 120,
     cell: (info) => {
       const isInactive = info.row.original.publishStatus === "INACTIVE"
       return (
@@ -44,6 +45,7 @@ export const AnnounceHistoryColumns = ({
 
   columnHelper.accessor("effectiveDate", {
     header: "適用日",
+    size: 140,
     cell: (info) => {
       const isInactive = info.row.original.publishStatus === "INACTIVE"
       return (
@@ -56,6 +58,7 @@ export const AnnounceHistoryColumns = ({
 
   columnHelper.accessor("announceType", {
     header: "種別",
+    size: 140,
     cell: (info) => {
       const announceType = info.getValue()
       const isInactive = info.row.original.publishStatus === "INACTIVE"
@@ -71,7 +74,8 @@ export const AnnounceHistoryColumns = ({
 
   columnHelper.display({
     id: "edit",
-    header: "編集",
+    header: "",
+    size: 140,
     cell: ({ row }) => {
       const canEdit = isEditable(row.original)
       return (
@@ -91,7 +95,7 @@ export const AnnounceHistoryColumns = ({
 
   columnHelper.display({
     id: "inactivate",
-    header: "非表示 / ステータス",
+    header: "",
     cell: ({ row }) => {
       const isInactive = row.original.publishStatus === "INACTIVE"
 
