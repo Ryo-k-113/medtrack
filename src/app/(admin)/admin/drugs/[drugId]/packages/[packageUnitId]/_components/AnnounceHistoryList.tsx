@@ -32,7 +32,12 @@ export const AnnounceHistoryList = () => {
 
       {/* 告示履歴のテーブル */}
       <div className="pt-4 max-h-[800px] overflow-y-auto pr-1">
-        <BaseTable columns={columns} data={announceHistories} />
+        <BaseTable 
+          columns={columns} 
+          data={announceHistories} 
+          emptyContent="履歴がありません"
+          className="border-x-0 rounded-none"
+        />
       </div>
 
       {/* 非表示化のダイアログ */}
