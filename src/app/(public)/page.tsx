@@ -1,5 +1,8 @@
 "use client"
 
+import { SearchBar } from "./_components/SearchBar"
+
+
 export default function TopPage() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -13,11 +16,8 @@ export default function TopPage() {
       <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         
         {/* 上部：検索バーエリア */}
-        <section className="max-w-2xl mx-auto py-12">
-          {/* 検索バープレースホルダー */}
-          <div className="h-12 bg-white rounded-lg border shadow-sm p-3 text-sm text-weak">
-            キーワードを入力...
-          </div>
+        <section className="max-w-2xl mx-auto">
+          <SearchBar />
         </section>
 
         {/* 下部：2カラムエリア（左：カード一覧 / 右：カレンダー） */}
