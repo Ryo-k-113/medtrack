@@ -1,10 +1,11 @@
-import Link from "next/link"
 import { FileText } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { IconTooltipLink } from "@/components/Tooltip/IconTooltipLink"
 import { PackageStatusTag } from "./PackageStatusTag"
 import { ProductTypeTag } from "./ProductTypeTag"
 import type { SearchDrugResult } from "@/types/search"
+
 
 type DrugCardProps = {
   drug: SearchDrugResult
@@ -24,16 +25,12 @@ export const DrugCard = ({ drug }: DrugCardProps) => {
             </Badge>
           </div>
 
-          {drug.packageInsertUrl && (
-            <Link
+          {drug.packageInsertUrl && (  
+            <IconTooltipLink
               href={drug.packageInsertUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="添付文書を開く"
-              className="text-weak hover:text-primary"
-            >
-              <FileText className="h-5 w-5" />
-            </Link>
+              icon={FileText}
+              tooltipText="添付文書を開く"
+            />
           )}
         </div>
 
