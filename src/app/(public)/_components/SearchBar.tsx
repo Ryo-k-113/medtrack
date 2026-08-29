@@ -64,7 +64,7 @@ export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
           />
         </form>
         <p className="mt-2 text-xs text-weak">
-          複数検索する場合は「,」で区切って検索してください
+          複数検索(最大3件)する場合は「,」で区切って検索してください。
         </p>
       </div>
     </FormProvider>
