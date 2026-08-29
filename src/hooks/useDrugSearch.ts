@@ -23,7 +23,7 @@ export const useDrugSearch = (keyword: string) => {
   })
 
   const { data, isLoading, error } = useDataFetch<SearchDrugsResponse>(
-    `/api/drugs/search?${query.toString()}`
+    keyword ? `/api/drugs/search?${query.toString()}` : null
   )
 
   const totalCount = data?.totalCount ?? 0
@@ -46,8 +46,8 @@ export const useDrugSearch = (keyword: string) => {
     page,
     pageSize,
     totalPages,
-    isLoading,
-    error,
+    isLoading: keyword ? isLoading : false, 
+    error: keyword ? error : null,
     changePage,
     changePageSize,
   }

@@ -10,14 +10,16 @@ import { fetcher } from '@/utils/fetcher';
  * @returns レスポンスデータ、ローディング状態、エラー情報、キャッシュ再取得（mutate）関数
  */
 
-export const useDataFetch = <T>(url: string) => {
+export const useDataFetch = <T>(url: string | null) => {
   const { token, isLoading: isSessionLoading } = useSupabaseSession();
   
   const { data, error, isLoading, mutate } = useSWR<T>(
-    isSessionLoading ? null : [url, token],
-    ([url, token]: [ string, string | null ]) => fetcher({ url, token }),
+    // urlがnullの場合はリクエストしない 
+    isSessionLoading || !url ? null : [url, token],
+    ([url, token]: [string, string | null]) =>
+      fetcher({ url, token }),
     { keepPreviousData: true } // ページネーション時に前ページのデータを表示したまま更新
-  );
+  )
 
   return { 
     data, 
