@@ -4,6 +4,7 @@ import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
 import { DrugCard } from "./DrugCard"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { ShippingStatusGuide } from "./ShippingStatusGuide"
+import { SearchResultTabSkeleton } from "./SearchResultTabSkeleton"
 
 type Props = {
   keyword: string
@@ -25,9 +26,7 @@ export const SearchResultTab = ({ keyword, result }: Props) => {
   // ローディング
   if (isLoading) return (
     <TabsContent value={keyword}>
-      <p className="text-center text-weak py-12">
-        読み込み中...
-      </p>
+      <SearchResultTabSkeleton />
     </TabsContent>
   )
 
