@@ -2,7 +2,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { SearchResultTab } from "./SearchResultTab"
-import { ShippingStatusGuide } from "./ShippingStatusGuide"
 
 
 type Props = {
