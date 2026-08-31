@@ -42,10 +42,10 @@ export const BaseDropdown = ({
         {trigger}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent 
+      <DropdownMenuContent
         align={align}
         side={side}
-        className={className}
+        className={cn("flex flex-col gap-1", className)}
       >
         {items.map((item, index) => (
           <React.Fragment key={index}>
