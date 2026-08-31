@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Bookmark, Settings } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 
 // マイページのメニューアイテム
 const MENU_ITEMS = [
@@ -62,7 +62,7 @@ export default function MyPageLayout({
             )}
           >
             {item.label}
-            
+
             {/* 選択したアイテムに下線アニメーション */}
             {active && (
               <motion.span
