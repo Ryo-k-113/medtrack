@@ -2,6 +2,7 @@
 
 import { useMemo } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { Session } from "@supabase/supabase-js"
 import { createClient } from "@/lib/supabase/client"
@@ -14,11 +15,13 @@ import { LogIn } from "lucide-react"
 
 type AuthNavProps = {
   session: Session | null | undefined
+  onNavigateMypage: () => void
+  onNavigateBookmark: () => void
   onLogout: () => void
 }
 
 // ログイン状態に応じたヘッダーアイコンの表示
-const AuthNav = ({ session, onLogout }: AuthNavProps) => {
+const AuthNav = ({ session, onNavigateMypage, onNavigateBookmark, onLogout }: AuthNavProps) => {
   if (session) {
     // メールアドレスの頭文字（アイコン表示用）
     const emailInitial = session.user.email?.charAt(0).toUpperCase() ?? "?"
@@ -32,7 +35,8 @@ const AuthNav = ({ session, onLogout }: AuthNavProps) => {
             </AvatarFallback>
           </Avatar>
         }
-        items={UserMenuItems({ onLogout })}
+        items={UserMenuItems({ onNavigateBookmark,onNavigateMypage, onLogout })}
+        className="p-2"
       />
     )
   }
@@ -52,8 +56,18 @@ const AuthNav = ({ session, onLogout }: AuthNavProps) => {
 }
 
 export const Header = () => {
+  const router = useRouter()
   const supabase = useMemo(() => createClient(), [])
   const { session, isLoading } = useSupabaseSession()
+
+  // マイページへの遷移
+  const handleNavigateMypage = () => {
+    router.push("/mypage")
+  }
+  // マイページのブックマークへ遷移
+  const handleNavigateBookmark = () => {
+    router.push("/mypage/bookmarks")
+  }
 
   // ログアウト処理
   const handleLogout = async () => {
@@ -68,7 +82,14 @@ export const Header = () => {
           <Link href="/">MedTrack</Link>
         </h1>
 
-        {!isLoading && <AuthNav session={session} onLogout={handleLogout} />}
+        {!isLoading && (
+          <AuthNav
+            session={session}
+            onNavigateMypage={handleNavigateMypage}
+            onNavigateBookmark={handleNavigateBookmark}
+            onLogout={handleLogout}
+          />
+        )}
       </div>
     </header>
   )
