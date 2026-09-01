@@ -100,7 +100,7 @@ export const BaseTable = <TData,>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className="group/row bg-white"
+                className="group/row bg-white hover:bg-slate-50"
               >
                 {row.getVisibleCells().map((cell) => {
                   const isPinned = cell.column.getIsPinned()
