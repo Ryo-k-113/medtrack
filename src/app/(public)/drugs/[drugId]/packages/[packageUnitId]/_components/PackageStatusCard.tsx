@@ -8,35 +8,35 @@ type PackageStatusCardProps = {
   name:       string
   status:     CurrentShippingStatus
   href?:       string
-  active?:    boolean
   className?: string
+}
+
+// 出荷状況ごとのカード背景色・border色
+const STATUS_CARD_CLASS: Record<CurrentShippingStatus, string> = {
+  NORMAL_SHIPMENT: "border-status-normal bg-status-normal/10",
+  LIMITED_SHIPMENT: "border-amber-200 bg-status-limited/10",
+  SHIPMENT_SUSPENDED: "border-status-stop/60 bg-status-stop/10",
+  DISCONTINUED_SALE: "border-status-discontinued/40 bg-status-discontinued/20",
 }
 
 // 出荷状況バッジと包装名を表示するカード(hrefがある場合はカードリンク)
 export const PackageStatusCard = ({
-  name,
+  name, 
   status,
   href,
-  active    = false,
   className,
 }: PackageStatusCardProps) => {
 
   const baseClassName = cn(
-    "relative flex flex-col items-start justify-center gap-2 rounded-lg border p-4",
-    active
-      ? "border-primary/40 bg-primary/10" 
-      : "bg-surface",
+    "relative flex flex-col items-start justify-center gap-2 rounded-lg border p-4 font-semibold text-md",
+    STATUS_CARD_CLASS[status],
     className,
   )
 
   const content = (
     <>
       <ShippingStatusBadge status={status} className="rounded-md" />
-      <p className={cn(
-        "font-bold",
-        active && "text-primary", 
-        "group-hover:text-primary",
-      )}>
+      <p className="group-hover:text-primary">
         {name}
       </p>
     </>
@@ -49,7 +49,7 @@ export const PackageStatusCard = ({
         href={href}
         className={cn(
           baseClassName,
-          "group pr-9 transition-colors",
+          "group pr-9 py-3 transition-colors",
           "hover:border-primary hover:bg-primary/10",
         )}
       >

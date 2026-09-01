@@ -34,7 +34,6 @@ export const SelectedPackageSection = () => {
       <PackageStatusCard
         name={packageUnit.name}
         status={packageUnit.currentShippingStatus}
-        active
       />
 
       {/* コード表示 */}
