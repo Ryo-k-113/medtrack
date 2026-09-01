@@ -13,7 +13,7 @@ export const SectionCard = ({ title, headerAction, children, className }: Sectio
   <Card className="bg-background p-4 text-foreground shadow-sm md:rounded-2xl md:p-6">
     {(title || headerAction) && (
       <CardHeader className="mb-4 flex-row items-center justify-between space-y-0 p-0">
-        {title && <CardTitle className="text-base font-bold">{title}</CardTitle>}
+        {title && <CardTitle className="text-lg font-bold">{title}</CardTitle>}
         {headerAction}
       </CardHeader>
     )}
