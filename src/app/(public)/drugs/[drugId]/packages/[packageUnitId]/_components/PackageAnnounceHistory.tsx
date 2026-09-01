@@ -18,6 +18,7 @@ export const PackageAnnounceHistory = () => {
         columns={PackageAnnounceHistoryColumns}
         data={announceHistories}
         emptyContent="告知履歴はありません"
+        headerClassName="bg-slate-200/40 font-bold text-foreground hover:bg-slate-200/40"
       />
     </SectionCard>
   )
