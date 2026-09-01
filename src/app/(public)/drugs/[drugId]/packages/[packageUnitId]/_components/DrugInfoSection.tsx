@@ -7,8 +7,8 @@ import { usePackageDetail } from "@/hooks/usePackageDetail"
 // ラベルと値を表示する情報ボックス
 const InfoBox = ({ label, value }: { label: string; value: string }) => (
   <div className="rounded-lg border bg-surface px-4 py-3">
-    <p className="text-xs text-weak">{label}</p>
-    <p className="truncate text-sm font-bold">{value}</p>
+    <p className="text-sm text-weak">{label}</p>
+    <p className="truncate font-semibold">{value}</p>
   </div>
 )
 
