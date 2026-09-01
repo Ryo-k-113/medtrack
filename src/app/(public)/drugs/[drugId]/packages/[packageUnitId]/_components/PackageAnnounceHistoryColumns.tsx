@@ -10,10 +10,10 @@ const columnHelper = createColumnHelper<AnnounceHistoryItem>()
 // 告知履歴の一覧表示項目
 export const PackageAnnounceHistoryColumns = [
   columnHelper.accessor("announcedDate", {
-    header: "告知日",
+    header: () => <span className="pl-4">告知日</span>,
     size: 80,
     cell: (info) => (
-      <span className="text-sm">{formatDate(info.getValue()) ?? "-"}</span>
+      <span className="text-sm pl-4">{formatDate(info.getValue()) ?? "-"}</span>
     ),
   }),
 
