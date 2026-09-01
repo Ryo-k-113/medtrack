@@ -3,16 +3,21 @@
 import { SectionCard } from "@/components/Card/SectionCard"
 import { PackageStatusCard } from "./PackageStatusCard"
 import { SelectedPackageSectionSkeleton } from "./SelectedPackageSectionSkeleton"
+import { CopyButton } from "@/components/Button/CopyButton"
 import { usePackageDetail } from "@/hooks/usePackageDetail"
 import { cn } from "@/lib/utils"
 
-// コードを表示するボックス
+
+// コードを表示するボックス（値があればコピーボタンを表示）
 const CodeBox = ({ label, value }: { label: string; value: string | null }) => (
-  <div className="rounded-lg border bg-surface px-4 py-3">
-    <p className="text-sm text-weak">{label}</p>
-    <p className={cn("font-bold", !value && "text-sm font-normal text-weak")}>
-      {value ?? "未登録"}
-    </p>
+  <div className="flex items-start justify-between gap-3 rounded-lg border bg-surface px-4 py-3">
+    <div className="min-w-0">
+      <p className="text-sm text-weak">{label}</p>
+      <p className={cn("break-all font-bold", !value && "text-sm font-normal text-weak")}>
+        {value ?? "未登録"}
+      </p>
+    </div>
+    {value && <CopyButton value={value} label={label} />}
   </div>
 )
 
