@@ -7,7 +7,8 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import { TabsContent } from "@/components/ui/tabs"
 import { BaseTabs } from "@/components/Tabs/BaseTabs"
 import { Skeleton } from "@/components/ui/skeleton"
-
+import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { usePackageAnnouncements } from "@/hooks/usePackageAnnouncements"
 import { PackageAnnouncementCard } from "./PackageAnnouncementCard"
 import type { AnnouncementDateType } from "@/types/user/drug"
@@ -26,6 +27,7 @@ const ACTIVE_TAB: AnnouncementDateType = "ANNOUNCED"
 export const PackageAnnouncementSection = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(getYesterday)
  
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
   const dateParam = format(selectedDate, "yyyy-MM-dd")
 
@@ -72,7 +74,7 @@ export const PackageAnnouncementSection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
 
         {/* 左側：医薬品の更新情報 */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-8 order-last lg:order-none">
           {/* 告知情報をタブ表示 */}
           <BaseTabs
             value={ACTIVE_TAB}
@@ -89,7 +91,7 @@ export const PackageAnnouncementSection = () => {
         </div>
 
         {/* 右側：カレンダー */}
-        <aside className="lg:col-span-4">
+        <aside className="lg:col-span-4 order-first lg:order-none">
 
           {/* カレンダー表示(デスクトップ) */}
           <BaseCalendar
@@ -98,6 +100,28 @@ export const PackageAnnouncementSection = () => {
             className="hidden lg:flex bg-white border rounded-lg shadow-sm p-0  w-full justify-center lg:py-6"
           />
 
+          {/* カレンダーをpopoverで展開(モバイル) */}
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="surface" 
+                  size="sm"
+                  className="w-full max-w-[160px] justify-center  hover:bg-white lg:hidden"
+                >
+                  <CalendarIcon className="h-4 w-4" />
+                  {format(selectedDate, "yyyy/MM/dd", { locale: ja })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <BaseCalendar
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date)
+                    setIsCalendarOpen(false)
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
         </aside>
       </div>        
     </section>
