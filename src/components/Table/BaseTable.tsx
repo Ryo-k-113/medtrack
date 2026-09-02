@@ -57,12 +57,12 @@ export const BaseTable = <TData,>({
       <Table className="w-full table-fixed bg-white">
 
         {/* ヘッダー */}
-        <TableHeader className={cn(
-            "bg-primary text-primary-foreground hover:bg-primary sticky top-0 z-[1]",
-            headerClassName
-          )}>
+        <TableHeader className="sticky top-0 z-[1]">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow
+              key={headerGroup.id}
+              className={cn("bg-primary hover:bg-primary", headerClassName)}
+            >
               {headerGroup.headers.map((header) => {
                 const isPinned = header.column.getIsPinned()
 
@@ -70,6 +70,7 @@ export const BaseTable = <TData,>({
                   <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
+                    className={cn("text-primary-foreground", headerClassName)}
                     style={{
                       width: header.getSize(),
                       position: isPinned ? "sticky" : undefined,
@@ -80,7 +81,7 @@ export const BaseTable = <TData,>({
                         : undefined,
                       zIndex: isPinned ? 20 : undefined,
                     }}
-                    className="bg-primary text-primary-foreground font-bold"
+                    
                   >
                     {header.isPlaceholder
                       ? null
@@ -99,7 +100,7 @@ export const BaseTable = <TData,>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className="group/row bg-white"
+                className="group/row bg-white hover:bg-slate-50"
               >
                 {row.getVisibleCells().map((cell) => {
                   const isPinned = cell.column.getIsPinned()

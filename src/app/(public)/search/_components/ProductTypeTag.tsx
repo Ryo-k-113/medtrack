@@ -29,7 +29,7 @@ export const ProductTypeTag = ({ type, className }: ProductTypeTagProps) => {
   if (!productType) return null
 
   return (
-    <Badge className={cn("rounded-md", productType.className, className)}>
+    <Badge className={cn("rounded-md px-2 py-1", productType.className, className)}>
       {productType.label}
     </Badge>
   )
