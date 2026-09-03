@@ -2,9 +2,14 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-export const GoogleLoginButton = () => {
-  
+type GoogleLoginButtonProps = {
+  className?: string
+}
+
+export const GoogleLoginButton = ({ className }: GoogleLoginButtonProps) => {
+
   const signInWithGoogle = async () => {
     const supabase = await createClient()
     await supabase.auth.signInWithOAuth({
@@ -20,7 +25,7 @@ export const GoogleLoginButton = () => {
       variant="outline" 
       type="button"  
       onClick={signInWithGoogle}
-      className="rounded-full w-full "
+      className={cn("h-12 w-full rounded-full", className)}
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path

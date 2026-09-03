@@ -60,7 +60,7 @@ export const PasswordInput = ({
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent hover:text-foreground"
+              className="absolute right-1 top-1/2 -translate-y-1/2 text-weak hover:bg-transparent hover:text-weak"
               onClick={() => setShowPassword((prev) => !prev)}
               tabIndex={-1}
               aria-label={showPassword ? "パスワードを非表示" : "パスワードを表示"}

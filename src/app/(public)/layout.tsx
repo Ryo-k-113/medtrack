@@ -8,11 +8,11 @@ export default function PublicLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="flex min-h-svh flex-col">
       <Header />
-      <main>
+      <main className="flex flex-1 flex-col">
         {children}
       </main>
-    </>
+    </div>
   );
 }
