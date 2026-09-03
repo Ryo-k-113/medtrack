@@ -151,7 +151,7 @@ export type AddPackageUnitResponse = {
 /** 包装情報と告示履歴、医薬品情報取得のレスポンス型 */
 export type PackageUnitDetailResponse = {
   data: PackageUnit & {
-    AnnounceHistories: ShippingAnnouncement[]
+    shippingAnnouncements: ShippingAnnouncement[]
     Drug: Pick<Drug, "id" | "name" | "yjCode" | "transitionalMeasuresDate"> & {
       GenericName: { id: number, name: string }
       SalesCompany: {id: number, name: string }

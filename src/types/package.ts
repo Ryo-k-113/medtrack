@@ -18,7 +18,7 @@ export type PackageDetailResult = Pick<
     ManufacturingCompany: Pick<PharmaceuticalCompany, "id" | "name">
     PackageUnits: Pick<PackageUnit, "id" | "name" | "currentShippingStatus">[]
   }
-  AnnounceHistories: Pick<ShippingAnnouncement, "id" | "announcedDate" | "effectiveDate" | "announceType">[]
+  shippingAnnouncements: Pick<ShippingAnnouncement, "id" | "announcedDate" | "effectiveDate" | "announceType">[]
 }
 
 /** 包装詳細取得のレスポンス型 */

@@ -18,9 +18,20 @@ export const PUT = async (
   const body: UpdateAnnounceRequest = await request.json()
   const { announcedDate, effectiveDate, announceType } = body
 
+  // 告示種別・告示日・適用日は必須
+  const announcedAt = toUTCDate(announcedDate)
+  const effectiveAt = toUTCDate(effectiveDate)
+
+  if (!announceType || !announcedAt || !effectiveAt) {
+    return NextResponse.json(
+      { message: "告示種別・告示日・適用日は必須です" },
+      { status: 400 }
+    )
+  }
+
   try {
     // PENDINGかつ非表示化されていない告示のみ更新対象
-    const result = await prisma.announceHistory.updateMany({
+    const result = await prisma.shippingAnnouncement.updateMany({
       where: {
         id: Number(announceId),
         packageUnitId: Number(packageUnitId),
@@ -31,8 +42,8 @@ export const PUT = async (
         publishStatus: { not: "INACTIVE" },
       },
       data: {
-        announcedDate: toUTCDate(announcedDate),
-        effectiveDate: toUTCDate(effectiveDate),
+        announcedDate: announcedAt,
+        effectiveDate: effectiveAt,
         announceType: announceType,
       }
     })

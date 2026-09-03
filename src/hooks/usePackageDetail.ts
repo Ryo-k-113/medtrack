@@ -28,7 +28,7 @@ export const usePackageDetail = () => {
     packageUnit,
     drug: packageUnit?.Drug,
     packageUnits: packageUnit?.Drug?.PackageUnits ?? [],
-    announceHistories: packageUnit?.AnnounceHistories ?? [],
+    announceHistories: packageUnit?.shippingAnnouncements ?? [],
     isLoading,
     error,
   }

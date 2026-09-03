@@ -21,7 +21,7 @@ export const GET = async (request: NextRequest) => {
     nextDate.setUTCDate(nextDate.getUTCDate() + 1)
 
     // 公開中の告知情報・包装のみを対象
-    const baseWhere: Prisma.AnnounceHistoryWhereInput = {
+    const baseWhere: Prisma.ShippingAnnouncementWhereInput = {
       publishStatus: "PUBLISHED",
       PackageUnit: { publishStatus: "PUBLISHED" },
       announcedDate: { gte: targetDate, lt: nextDate },
@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest) => {
 
 
     const [histories, announcedCount] = await Promise.all([
-      prisma.announceHistory.findMany({
+      prisma.shippingAnnouncement.findMany({
         where: baseWhere,
         select: {
           id: true,
@@ -55,7 +55,7 @@ export const GET = async (request: NextRequest) => {
         },
         orderBy: { id: "asc" },
       }),
-      prisma.announceHistory.count({ where: baseWhere }),
+      prisma.shippingAnnouncement.count({ where: baseWhere }),
     ])
 
     // レスポンスデータの変換（Date型をstringへ変換）

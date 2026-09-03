@@ -3,7 +3,7 @@ import { formatDate } from "@/utils/format"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
 import type { PackageDetailResult } from "@/types/package"
 
-type AnnounceHistoryItem = PackageDetailResult["AnnounceHistories"][number]
+type AnnounceHistoryItem = PackageDetailResult["shippingAnnouncements"][number]
 
 const columnHelper = createColumnHelper<AnnounceHistoryItem>()
 

@@ -21,15 +21,26 @@ export const POST = async (
     const body: CreateAnnounceRequest = await request.json()
     const { announceType, announcedDate, effectiveDate } = body
 
+    // 告示種別・告示日・適用日は必須
+    const announcedAt = toUTCDate(announcedDate)
+    const effectiveAt = toUTCDate(effectiveDate)
+
+    if (!announceType || !announcedAt || !effectiveAt) {
+      return NextResponse.json(
+        { message: "告示種別・告示日・適用日は必須です" },
+        { status: 400 }
+      )
+    }
+
     // トランザクションで告示履歴の追加とPackageUnitの更新を同時に行う
     await prisma.$transaction(async (tx) => {
 
       // 告示履歴を追加
-      const history = await tx.announceHistory.create({
+      const history = await tx.shippingAnnouncement.create({
         data: {
           announceType,
-          announcedDate: toUTCDate(announcedDate),
-          effectiveDate: toUTCDate(effectiveDate),
+          announcedDate: announcedAt,
+          effectiveDate: effectiveAt,
           packageUnitId: parseInt(packageUnitId),
         }
       })
@@ -37,10 +48,10 @@ export const POST = async (
       // 販売中止・販売移管の場合は日付を更新
       const updateData: Record<string, unknown> = {}
       if (announceType === "DISCONTINUED_SALE") {
-        updateData.discontinuedDate = toUTCDate(effectiveDate)
+        updateData.discontinuedDate = effectiveAt
       }
       if (announceType === "TRANSFER_OF_SALE") {
-        updateData.salesTransferDate = toUTCDate(effectiveDate)
+        updateData.salesTransferDate = effectiveAt
       }
 
       if (Object.keys(updateData).length > 0) {

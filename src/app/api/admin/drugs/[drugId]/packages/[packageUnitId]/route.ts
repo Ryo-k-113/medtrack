@@ -23,7 +23,7 @@ export const GET = async (
         drugId: parseInt(drugId),  
       },
       include: {
-        AnnounceHistories: {
+        shippingAnnouncements: {
           orderBy: { announcedDate: "desc" }
         },
         Drug: {
@@ -57,7 +57,7 @@ export const GET = async (
         ...packageUnit.Drug,
         transitionalMeasuresDate: packageUnit.Drug.transitionalMeasuresDate?.toISOString() ?? null,
       },
-      AnnounceHistories: packageUnit.AnnounceHistories.map((h) => ({
+      shippingAnnouncements: packageUnit.shippingAnnouncements.map((h) => ({
         ...h,
         announcedDate: h.announcedDate?.toISOString() ?? null,
         effectiveDate: h.effectiveDate?.toISOString() ?? null,
@@ -132,7 +132,7 @@ export const PUT = async (
   }
 }
 
-// 包装の削除（AnnounceHistoryもカスケード削除）
+// 包装の削除（ShippingAnnouncementもカスケード削除）
 export const DELETE = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string } }

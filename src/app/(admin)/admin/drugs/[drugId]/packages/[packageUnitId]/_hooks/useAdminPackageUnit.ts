@@ -22,7 +22,7 @@ export const useAdminPackageUnit = () => {
   )
 
   const packageUnit = data?.data
-  const announceHistories = data?.data?.AnnounceHistories ?? []
+  const announceHistories = data?.data?.shippingAnnouncements ?? []
   const drug = data?.data?.Drug
 
   return {
