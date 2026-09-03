@@ -1,34 +1,27 @@
 "use client"
 
-import { useState } from 'react';
-import Link  from "next/link";
-import { useForm } from 'react-hook-form';
-import { useRouter } from "next/navigation";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormData, authSchema } from '@/app/(public)/(auth)/_schemas/authSchema';
-import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
-import { loginHandler, signupHandler } from "@/lib/supabase-auth/authHandler";
+import Link from "next/link"
+import { useForm, FormProvider } from "react-hook-form"
+import { useRouter } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { LogIn, UserPlus } from "lucide-react"
+import { FormData, authSchema } from "@/app/(public)/(auth)/_schemas/authSchema"
+import { GoogleLoginButton } from "@/components/auth/GoogleLoginButton"
+import { loginHandler, signupHandler } from "@/lib/supabase-auth/authHandler"
 import { Button } from "@/components/ui/button"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { FormInput } from "@/components/Form/FormInput"
+import { PasswordInput } from "@/components/Form/PasswordInput"
+import { FieldDescription, FieldSeparator } from "@/components/ui/field"
 
-// icon
-import { Eye, EyeOff } from 'lucide-react';
 
 type AuthFormProps = {
-  formType: "signup" | "login";
-  title: string;
-  buttonText: string;
-  guideText: string;
-  linkHref: string;
-  linkText: string;
-};
+  formType: "signup" | "login"
+  title: string
+  buttonText: string
+  guideText: string
+  linkHref: string
+  linkText: string
+}
 
 export const AuthForm = ({
   formType,
@@ -37,17 +30,11 @@ export const AuthForm = ({
   guideText,
   linkHref,
   linkText,
-}: AuthFormProps)  => {
-  
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
-  
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+}: AuthFormProps) => {
+
+  const router = useRouter()
+
+  const form = useForm<FormData>({
     resolver: zodResolver(authSchema),
     mode: "onBlur",
     defaultValues: {
@@ -56,109 +43,72 @@ export const AuthForm = ({
     },
   })
 
-  
-  // 送信
-  const onSubmit = async (formData: FormData ) => {
-  
+  const { handleSubmit, reset, formState: { isSubmitting } } = form
+
+  // 送信ボタンのアイコン（新規登録・ログインで切り替え）
+  const SubmitIcon = formType === "signup" ? UserPlus : LogIn
+
+  // フォーム送信（新規登録・ログインで処理を分岐）
+  const onSubmit = async (formData: FormData) => {
     if (formType === "signup") {
-      await signupHandler(formData, reset);
-    } else {
-      await loginHandler(formData, router)
+      await signupHandler(formData, reset)
+      return
     }
+    await loginHandler(formData, router)
   }
-  
+
   return (
-    <div className="min-h-svh flex flex-col justify-center items-center">
-      <div className="w-full max-w-sm">
+    <div className="flex flex-1 flex-col items-center justify-start  sm:justify-center">
+      <div className="w-full max-w-md px-4 pt-10 sm:pt-0">
+        <FormProvider {...form}>
+          <div className="space-y-4 sm:space-y-8">
 
-      <FieldGroup>
-          <div className="text-foreground text-xl text-left text-balance font-bold">
-            {title}
-          </div>
+            {/* タイトル */}
+            <h1 className="text-lg sm:text-xl font-bold">{title}</h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-          <Field>
-            <FieldLabel htmlFor="email">メールアドレス</FieldLabel>
-            <Input 
-              id="email"  
-              type="email" 
-              placeholder="email@example.com"  
-              {...register('email')} 
-              disabled={isSubmitting} 
-              />
-            {errors.email && (
-              <p className="text-sm text-destructive">
-                {errors.email.message}
-              </p>
-            )}
-          </Field>
-          <Field>
-            <div className='sm:flex gap-3'>
-              <FieldLabel htmlFor="password">
-                パスワード
-              </FieldLabel>
-              <FieldDescription className='text-gray-500'>
-                ※英数記号を含む8文字以上
-              </FieldDescription>
-            </div>
-            <div className="relative">
-              <Input 
-                id="password" 
-                type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••" 
-                {...register('password')} 
-                disabled={isSubmitting}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+
+              {/* 入力欄 */}
+              <div className="space-y-6">
+                <FormInput
+                  name="email"
+                  label="メールアドレス"
+                  type="email"
+                  placeholder="email@example.com"
                 />
+
+                <PasswordInput
+                  name="password"
+                  label="パスワード"
+                  description="※英数記号を含む8文字以上"
+                />
+              </div>
+
+              {/* 送信ボタン */}
               <Button
-                type='button'
-                variant='ghost'
-                size='icon'
-                className='absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:bg-transparent'
-                onClick={() => setShowPassword(prev => !prev)}
-                tabIndex={-1}
-                aria-label={
-                  showPassword
-                  ? "パスワードを非表示"
-                  : "パスワードを表示"
-                }
-                >
-                {showPassword ? (<EyeOff className='w-4 h-4' />) : (<Eye className='w-4 h-4' />)}
-              </Button>
-            </div>
-              {errors.password && (
-                <p className="text-sm text-destructive">
-                {errors.password.message}
-              </p>
-            )}
-          </Field>
-        
-          <Field>
-            <Button 
-              variant="default"
-              type="submit" 
-              className="font-bold rounded-full"
-              disabled={isSubmitting} 
+                type="submit"
+                className="h-10 w-full font-bold rounded-full sm:h-12"
+                disabled={isSubmitting}
               >
-              {buttonText}
-            </Button>
-        </Field>  
-        </form>
+                <SubmitIcon className="h-4 w-4" />
+                {isSubmitting ? "送信中..." : buttonText}
+              </Button>
+            </form>
 
-        <FieldSeparator>または</FieldSeparator>   
-        
-        {/* Googleログイン */}
-        <span className="sr-only">Googleでログイン</span>
-        <GoogleLoginButton />
+            {/* Googleログイン */}
+            <FieldSeparator className="my-0">または</FieldSeparator>
+            <GoogleLoginButton className="h-10 sm:h-12"/>
 
-        <Field>
-          <FieldDescription className="px-6 text-center">
-            {guideText}
-            <Button variant="link" className='p-2' asChild>
-              <Link href={linkHref}>{linkText}</Link>
-            </Button>
-          </FieldDescription>
-        </Field>
-      </FieldGroup>
+            {/* ログイン・新規登録の切り替え */}
+            <FieldDescription className="text-center">
+              {guideText}
+              <Button variant="link" asChild>
+                <Link href={linkHref}>{linkText}</Link>
+              </Button>
+            </FieldDescription>
+
+          </div>
+        </FormProvider>
       </div>
     </div>
   )
