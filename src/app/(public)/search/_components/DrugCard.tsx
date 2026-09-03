@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { IconTooltipLink } from "@/components/Tooltip/IconTooltipLink"
 import { PackageStatusTag } from "./PackageStatusTag"
-import { ProductTypeTag } from "./ProductTypeTag"
+import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
 import type { SearchDrugResult } from "@/types/search"
 
 

@@ -1,5 +1,5 @@
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { BaseTabs } from "@/components/Tabs/BaseTabs"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { SearchResultTab } from "./SearchResultTab"
 
@@ -24,28 +24,16 @@ export const SearchResults = ({ keywords }: Props) => {
 
   return (
     // 検索結果のタブ表示
-    <Tabs
+    <BaseTabs
       key={keywords.join(",")}
       defaultValue={keywords[0]}
       className="w-full"
-    > 
-    
-      {/* キーワードごとのタブ */}
-      <TabsList className="h-auto w-full justify-start gap-6 rounded-none border-b bg-transparent p-0">
-        {keywords.map((keyword, index) => (
-          <TabsTrigger
-            key={keyword}
-            value={keyword}
-            className="text-weak/60 rounded-none border-b-2 border-transparent px-1 pb-3 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
-          >
-            {keyword}
-            <span className="ml-1.5 text-xs text-weak">
-              ({results[index].isLoading ? "…" : results[index].totalCount}件)
-            </span>
-          </TabsTrigger>
-        ))}
-      </TabsList>
-
+      items={keywords.map((keyword, index) => ({
+        value: keyword,
+        label: keyword,
+        count: results[index].isLoading ? "…" : results[index].totalCount,
+      }))}
+    >
       {/* タブコンテンツ  */}
       {keywords.map((keyword, index) => (
         <SearchResultTab
@@ -54,6 +42,6 @@ export const SearchResults = ({ keywords }: Props) => {
           result={results[index]}
         />
       ))}
-    </Tabs>
+    </BaseTabs>
   )
 }
