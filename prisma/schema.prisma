@@ -41,9 +41,9 @@ model BookmarkDrug {
   userId     Int       @map("user_id")
   drugId     Int       @map("drug_id")
 
-  // リレーション
-  user  User  @relation(fields: [userId], references: [id])
-  drug  Drug  @relation(fields: [drugId], references: [id])
+  // リレーション（医薬品・ユーザーの削除時はブックマークも削除）
+  User  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Drug  Drug  @relation(fields: [drugId], references: [id], onDelete: Cascade)
 
   // 複合キー (ユーザーと医薬品の組み合わせで一意に)
   @@unique([userId, drugId])
@@ -126,7 +126,7 @@ model PackageUnit {
   
   // リレーション
   Drug                  Drug @relation(fields: [drugId], references: [id], onDelete: Cascade )
-  AnnounceHistories         AnnounceHistory[]
+  shippingAnnouncements ShippingAnnouncement[]
 
   @@map("package_units")
 }
@@ -150,12 +150,12 @@ enum CurrentShippingStatus {
 }
 
 
-// 各包装の出荷状況履歴
-model AnnounceHistory {
+// 各包装の出荷状況の告示
+model ShippingAnnouncement {
   id              Int                     @id @default(autoincrement())
-  announcedDate   DateTime?               @map("announced_date") // 告示日
-  effectiveDate   DateTime?               @map("effective_date") // 適用日
-  announceType    AnnounceType?           @map("announce_type")
+  announcedDate   DateTime                @map("announced_date") // 告示日
+  effectiveDate   DateTime                @map("effective_date") // 適用日
+  announceType    AnnounceType            @map("announce_type")
   publishStatus   AnnouncePublishStatus   @default(PUBLISHED) @map("publish_status")
   processStatus   ProcessStatus           @default(PENDING) @map("process_status")
   createdAt       DateTime                @default(now()) @map("created_at")
@@ -170,7 +170,7 @@ model AnnounceHistory {
   // インデックス（定期実行用）
   @@index([effectiveDate, processStatus, publishStatus])
 
-  @@map("announce_histories")
+  @@map("shipping_announcements")
 }
 
 // 告示情報の公開ステータス

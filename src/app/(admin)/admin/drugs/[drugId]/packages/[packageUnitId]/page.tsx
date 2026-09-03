@@ -4,7 +4,7 @@ import { AdminPageTitle } from "@/app/(admin)/admin/_components/AdminPageTitle"
 import { DrugInfo } from "./_components/DrugInfo"
 import { PackageUnitInfo } from "./_components/PackageUnitInfo"
 import { AnnounceForm } from "./_components/AnnounceForm"
-import { AnnounceHistoryList } from "./_components/AnnounceHistoryList"
+import { ShippingAnnouncementList } from "./_components/ShippingAnnouncementList"
 import AdminPackageUnitEditLoading from "./loading"
 import { useAdminPackageUnit } from "./_hooks/useAdminPackageUnit"
 
@@ -34,7 +34,7 @@ export default function AdminPackageUnitPage() {
             <AnnounceForm />
            
             {/* 告示履歴 */}
-            <AnnounceHistoryList />
+            <ShippingAnnouncementList />
           </div>
 
           {/* 右カラム */}

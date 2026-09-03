@@ -1,4 +1,4 @@
-import type { PackageUnit as PrismaPackageUnit, Drug as PrismaDrug, AnnounceHistory as PrismaAnnounceHistory } from "@prisma/client"
+import type { PackageUnit as PrismaPackageUnit, Drug as PrismaDrug, ShippingAnnouncement as PrismaShippingAnnouncement } from "@prisma/client"
 
 
 /** 包装の基本型 */
@@ -25,7 +25,7 @@ export type Drug = Omit<PrismaDrug, "price" | "transitionalMeasuresDate" | "crea
 
 /** 出荷状況の告示の基本型 */
 export type ShippingAnnouncement = Omit<
-  PrismaAnnounceHistory,
+  PrismaShippingAnnouncement,
   "announcedDate" | "effectiveDate" | "createdAt" | "updatedAt"
 > & {
   // Date型をstringへ変更

@@ -26,7 +26,7 @@ const canInactivate = (history: ShippingAnnouncement): boolean =>
 const columnHelper = createColumnHelper<ShippingAnnouncement>()
 
 // 一覧表示のテーブル項目
-export const AnnounceHistoryColumns = ({
+export const ShippingAnnouncementColumns = ({
   onEdit,
   onInactivate,
 }: ColumnsProps) => [

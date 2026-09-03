@@ -6,7 +6,7 @@ import { DrugSummary } from "./_components/DrugSummary"
 import { SelectedPackageSection } from "./_components/SelectedPackageSection"
 import { DrugInfoSection } from "./_components/DrugInfoSection"
 import { OtherPackageList } from "./_components/OtherPackageList"
-import { PackageAnnounceHistory } from "./_components/PackageAnnounceHistory"
+import { PackageShippingAnnouncements } from "./_components/PackageShippingAnnouncements"
 
 export default function PackageDetailPage() {
   const { packageUnit, isLoading, error } = usePackageDetail()
@@ -31,7 +31,7 @@ export default function PackageDetailPage() {
       <DrugInfoSection />
 
       {/* 包装の告知履歴 */}
-      <PackageAnnounceHistory />
+      <PackageShippingAnnouncements />
     </div>
   )
 }

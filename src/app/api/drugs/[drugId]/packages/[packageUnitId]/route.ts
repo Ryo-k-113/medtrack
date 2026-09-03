@@ -48,7 +48,7 @@ export const GET = async (
             },
           },
         },
-        AnnounceHistories: {
+        shippingAnnouncements: {
           where: { publishStatus: "PUBLISHED" },
           select: { id: true, announcedDate: true, effectiveDate: true, announceType: true },
           orderBy: { announcedDate: "desc" },
@@ -72,7 +72,7 @@ export const GET = async (
         ...packageUnit.Drug,
         price: packageUnit.Drug.price ? Number(packageUnit.Drug.price) : null,
       },
-      AnnounceHistories: packageUnit.AnnounceHistories.map((history) => ({
+      shippingAnnouncements: packageUnit.shippingAnnouncements.map((history) => ({
         ...history,
         announcedDate: history.announcedDate?.toISOString() ?? null,
         effectiveDate: history.effectiveDate?.toISOString() ?? null,

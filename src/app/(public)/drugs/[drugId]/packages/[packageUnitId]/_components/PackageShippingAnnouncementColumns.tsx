@@ -3,12 +3,12 @@ import { formatDate } from "@/utils/format"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
 import type { PackageDetailResult } from "@/types/package"
 
-type AnnounceHistoryItem = PackageDetailResult["AnnounceHistories"][number]
+type ShippingAnnouncementItem = PackageDetailResult["shippingAnnouncements"][number]
 
-const columnHelper = createColumnHelper<AnnounceHistoryItem>()
+const columnHelper = createColumnHelper<ShippingAnnouncementItem>()
 
 // 告知履歴の一覧表示項目
-export const PackageAnnounceHistoryColumns = [
+export const PackageShippingAnnouncementColumns = [
   columnHelper.accessor("announcedDate", {
     header: () => <span className="pl-4">告知日</span>,
     size: 80,

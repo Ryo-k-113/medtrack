@@ -25,7 +25,7 @@ export const POST = async (
 
     await prisma.$transaction(async (tx) => {
       // 対象の告示をINACTIVEに
-      const result = await tx.announceHistory.updateMany({
+      const result = await tx.shippingAnnouncement.updateMany({
         where: {
           id: Number(announceId),
           packageUnitId: Number(packageUnitId),
