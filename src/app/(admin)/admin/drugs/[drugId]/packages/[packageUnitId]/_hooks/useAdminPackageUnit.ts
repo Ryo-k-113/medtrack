@@ -22,14 +22,14 @@ export const useAdminPackageUnit = () => {
   )
 
   const packageUnit = data?.data
-  const announceHistories = data?.data?.shippingAnnouncements ?? []
+  const shippingAnnouncements = data?.data?.shippingAnnouncements ?? []
   const drug = data?.data?.Drug
 
   return {
     drugId,
     packageUnitId,
     packageUnit,
-    announceHistories,
+    shippingAnnouncements,
     drug,
     isLoading,
     mutate,

@@ -2,7 +2,7 @@ import { DrugSummarySkeleton } from "./_components/DrugSummarySkeleton"
 import { SelectedPackageSectionSkeleton } from "./_components/SelectedPackageSectionSkeleton"
 import { DrugInfoSectionSkeleton } from "./_components/DrugInfoSectionSkeleton"
 import { OtherPackageListSkeleton } from "./_components/OtherPackageListSkeleton"
-import { PackageAnnounceHistorySkeleton } from "./_components/PackageAnnounceHistorySkeleton"
+import { PackageShippingAnnouncementsSkeleton } from "./_components/PackageShippingAnnouncementsSkeleton"
 
 export default function PackageDetailLoading() {
   return (
@@ -11,7 +11,7 @@ export default function PackageDetailLoading() {
       <SelectedPackageSectionSkeleton />
       <DrugInfoSectionSkeleton />
       <OtherPackageListSkeleton />
-      <PackageAnnounceHistorySkeleton />
+      <PackageShippingAnnouncementsSkeleton />
     </div>
   )
 }

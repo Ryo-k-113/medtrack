@@ -3,14 +3,14 @@
 import { useState } from "react"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { BaseTable } from "@/components/Table/BaseTable"
-import { AnnounceHistoryColumns } from "./AnnounceHistoryColumns"
+import { ShippingAnnouncementColumns } from "./ShippingAnnouncementColumns"
 import { InactivateAnnounceDialog } from "./InactivateAnnounceDialog"
 import { AnnounceEditDialog } from "./AnnounceEditDialog"
 import type { ShippingAnnouncement } from "@/types/drug"
 
 
-export const AnnounceHistoryList = () => {
-  const { announceHistories } = useAdminPackageUnit()
+export const ShippingAnnouncementList = () => {
+  const { shippingAnnouncements } = useAdminPackageUnit()
 
   // 非表示ダイアログの対象（告示ID）
   const [inactivateTargetId, setInactivateTargetId] = useState<number | null>(null)
@@ -19,7 +19,7 @@ export const AnnounceHistoryList = () => {
   const [editTarget, setEditTarget] = useState<ShippingAnnouncement | null>(null)
 
   // テーブルのカラム
-  const columns = AnnounceHistoryColumns({
+  const columns = ShippingAnnouncementColumns({
     onEdit: (history) => setEditTarget(history),
     onInactivate: (id) => setInactivateTargetId(id),
   })
@@ -34,7 +34,7 @@ export const AnnounceHistoryList = () => {
       <div className="pt-4 max-h-[800px] overflow-y-auto pr-1">
         <BaseTable 
           columns={columns} 
-          data={announceHistories} 
+          data={shippingAnnouncements} 
           emptyContent="履歴がありません"
           className="border-x-0 rounded-none"
         />
