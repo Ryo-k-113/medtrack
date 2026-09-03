@@ -41,9 +41,9 @@ model BookmarkDrug {
   userId     Int       @map("user_id")
   drugId     Int       @map("drug_id")
 
-  // リレーション
-  user  User  @relation(fields: [userId], references: [id])
-  drug  Drug  @relation(fields: [drugId], references: [id])
+  // リレーション（医薬品・ユーザーの削除時はブックマークも削除）
+  User  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Drug  Drug  @relation(fields: [drugId], references: [id], onDelete: Cascade)
 
   // 複合キー (ユーザーと医薬品の組み合わせで一意に)
   @@unique([userId, drugId])
