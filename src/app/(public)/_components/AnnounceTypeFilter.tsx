@@ -12,27 +12,27 @@ const ANNOUNCE_TYPE_OPTIONS: {
   {
     value: "NORMAL_SHIPMENT",
     label: "通常出荷",
-    activeClassName: "border-status-normal bg-status-normal text-status-normal-foreground",
+    activeClassName: "border-status-normal bg-status-normal/20 text-status-normal-foreground",
   },
   {
     value: "LIMITED_SHIPMENT",
     label: "限定出荷",
-    activeClassName: "border-status-limited bg-status-limited text-status-limited-foreground",
+    activeClassName: "border-amber-200 bg-status-limited/20 text-status-limited-foreground",
   },
   {
     value: "SHIPMENT_SUSPENDED",
     label: "出荷停止",
-    activeClassName: "border-status-stop bg-status-stop text-status-stop-foreground",
+    activeClassName: "border-status-stop/70 bg-status-stop/20 text-status-stop-foreground",
   },
   {
     value: "DISCONTINUED_SALE",
     label: "販売中止",
-    activeClassName: "border-status-discontinued bg-status-discontinued text-status-discontinued-foreground",
+    activeClassName: "border-status-discontinued/50 bg-status-discontinued/20 text-status-discontinued",
   },
   {
     value: "TRANSFER_OF_SALE",
     label: "販売移管",
-    activeClassName: "border-status-transfer bg-status-transfer text-status-transfer-foreground",
+    activeClassName: "border-blue-300 bg-status-transfer/20 text-status-transfer-foreground",
   },
 ]
 
@@ -75,7 +75,7 @@ export const AnnounceTypeFilter = ({
         className={cn(
           CHIP_CLASS,
           selected.length === 0
-            ? "border-primary bg-primary text-primary-foreground"
+            ? "border-primary bg-primary/10 text-primary"
             : CHIP_INACTIVE_CLASS
         )}
       >
