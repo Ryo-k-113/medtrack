@@ -20,7 +20,7 @@ type BookmarkButtonProps = {
 
 // 医薬品のブックマークを追加・解除するボタン
 export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonProps) => {
-  const { isBookmarked, toggleBookmark, isLoggedIn } = useBookmarks()
+  const { isBookmarked, toggleBookmark, addBookmark, isLoggedIn } = useBookmarks()
 
   const bookmarked = isBookmarked(drugId)
   const label = bookmarked ? "ブックマークを解除" : "ブックマークに追加"
@@ -38,10 +38,20 @@ export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonPr
 
       // drugNameが渡されている場合のみ結果を通知する
       if (drugName) {
-        if (bookmarked) {   
-          toast.success(`${drugName}のブックマークを解除しました`)
+        if (bookmarked) {
+          toast.success(<span>{drugName}の<br />ブックマークを解除しました</span>, {
+            duration: 8000, 
+            action: {
+              label: "元に戻す",
+              onClick: () => {
+                addBookmark(drugId).catch(() => {
+                  toast.error("ブックマークの復元に失敗しました")
+                })
+              },
+            },
+          })
         } else {
-          toast.success(`${drugName}をブックマークしました`)
+          toast.success(<span>{drugName}を<br />ブックマークしました</span>)
         }
       }
     } catch {
