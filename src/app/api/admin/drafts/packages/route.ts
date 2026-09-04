@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import type { GetDraftPackageUnitsResponse } from "@/types/admin/draft"
 
 
 /** GET: 下書き包装一覧取得 */
 export const GET = async (request: NextRequest) => {
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
 
   try {
     const packageUnits = await prisma.packageUnit.findMany({

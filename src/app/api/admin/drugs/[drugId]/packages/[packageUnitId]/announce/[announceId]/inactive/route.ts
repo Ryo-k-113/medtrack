@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import type { InactivateAnnounceRequest, InactivateAnnounceResponse } from "@/types/admin/drug"
 
 
@@ -12,8 +12,8 @@ export const POST = async (
 ) => {
 
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
 
   const { drugId, packageUnitId, announceId } = params
 

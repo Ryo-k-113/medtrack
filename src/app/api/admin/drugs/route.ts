@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import  { CreateDrugRequest, CreateDrugResponse,GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
 import { Prisma } from "@prisma/client"
 
@@ -8,9 +8,8 @@ import { Prisma } from "@prisma/client"
 //** 公開中の医薬品情報一覧を取得（offsetページネーション） */
 export const GET = async (request: NextRequest) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request);
-
-  if(!isAuthorized) return NextResponse.json({ message: error },{ status });
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
 
   try {
     // ページネーションパラメータの取得
@@ -84,9 +83,8 @@ export const GET = async (request: NextRequest) => {
 /** 医薬品情報の新規登録 */
 export const POST = async (request: NextRequest) => {
   //admin権限の確認
-  const { isAuthorized, error, status } = await adminAuthCheck(request);
-
-  if(!isAuthorized) return NextResponse.json({ message: error },{ status });
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
   
   try {
     // リクエストのbodyを取得
