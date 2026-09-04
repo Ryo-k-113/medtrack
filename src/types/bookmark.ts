@@ -8,6 +8,12 @@ export type BookmarksResponse = {
   drugs: BookmarkedDrug[]
 }
 
+/** ブックマーク済み医薬品IDのレスポンス型（ボタンの状態判定用） */
+export type BookmarkIdsResponse = {
+  drugIds: number[]
+}
+
+
 /** ブックマーク登録のリクエスト型 */
 export type CreateBookmarkRequest = {
   drugId: number
