@@ -17,3 +17,9 @@ export type CreateBookmarkRequest = {
 export type CreateBookmarkResponse = {
   message: string
 }
+
+/** ブックマーク解除のレスポンス型 */
+export type DeleteBookmarkResponse = {
+  message: string
+}
+
