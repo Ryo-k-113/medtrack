@@ -21,8 +21,7 @@ type BookmarkButtonProps = {
 
 // 医薬品のブックマークを追加・解除するボタン
 export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonProps) => {
-  const { isBookmarked,  toggleBookmark, isLoggedIn, isLoading
-  } = useBookmarks()
+  const { isBookmarked, toggleBookmark, isLoggedIn } = useBookmarks()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const bookmarked = isBookmarked(drugId)
@@ -67,7 +66,7 @@ export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonPr
             aria-label={label}
             aria-pressed={bookmarked}
             className={cn(
-              "shrink-0 text-weak transition-colors hover:text-primary disabled:opacity-50",
+              "shrink-0 text-weak hover:text-primary",
               bookmarked && "text-primary",
               className
             )}
