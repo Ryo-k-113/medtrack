@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import type { UpdateCompanyRequest, UpdateCompanyResponse } from "@/types/admin/company"
 
 
@@ -12,8 +12,8 @@ export const PUT = async (
 ) => {
 
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
   
   // 製薬会社IDの取得
   const { companyId } = params;

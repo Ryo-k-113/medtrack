@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import type { UpdateUnitRequest, UpdateUnitResponse } from "@/types/admin/unit"
 
 
@@ -11,8 +11,8 @@ export const PUT = async (
 ) => {
 
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
   
   // 規格単位IDの取得
   const { unitId } = params;

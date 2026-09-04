@@ -2,15 +2,14 @@ import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client"
 import type { GetUnitsResponse, CreateUnitRequest, CreateUnitResponse } from "@/types/admin/unit"
-import { adminAuthCheck } from "../_lib/adminAuthCheck";
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 
 
 /** 規格単位一覧の取得（offsetページネーション） */
 export const GET = async (request: NextRequest) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request);
-
-  if(!isAuthorized) return NextResponse.json({ message: error },{ status });
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
 
   try {
     // ページネーションパラメータの取得
@@ -56,8 +55,8 @@ export const GET = async (request: NextRequest) => {
 /** 規格単位を新規作成 */
 export const POST = async (request: NextRequest) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ message: error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
 
   try {
     // リクエストbodyを取得

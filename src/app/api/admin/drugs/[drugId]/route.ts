@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client"
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck";
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import { toUTCDate } from "@/utils/date";
 import type {
   GetDrugEditResponse,
@@ -16,8 +16,8 @@ import type {
 /** 医薬品情報と包装情報一覧を取得 */ 
 export const GET = async (request: NextRequest, { params }: { params: { drugId: string } }) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request);
-  if(!isAuthorized) return NextResponse.json({ error },{ status });
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
   
   const { drugId } = params;
 
@@ -81,8 +81,8 @@ export const PUT = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
    
   const { drugId } = params;
 
@@ -153,8 +153,8 @@ export const DELETE = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
    
   const { drugId } = params;
 
@@ -182,8 +182,8 @@ export const POST = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
   
   const { drugId } = params;
 

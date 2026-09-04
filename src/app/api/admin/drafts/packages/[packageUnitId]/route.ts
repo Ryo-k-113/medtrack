@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { adminAuthCheck } from "@/app/api/admin/_lib/adminAuthCheck"
+import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import type { PublishPackageUnitResponse } from "@/types/admin/draft"
 
 
@@ -9,8 +9,8 @@ export const PATCH = async (
   request: NextRequest,
   { params }: { params: { packageUnitId: string } }
 ) => {
-  const { isAuthorized, error, status } = await adminAuthCheck(request)
-  if (!isAuthorized) return NextResponse.json({ error }, { status })
+  const { errorResponse } = await getAdminUser(request)
+  if (errorResponse) return errorResponse
   
   // 包装IDを取得
   const packageUnitId = params.packageUnitId
