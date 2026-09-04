@@ -4,14 +4,16 @@ import { Badge } from "@/components/ui/badge"
 import { IconTooltipLink } from "@/components/Tooltip/IconTooltipLink"
 import { PackageStatusTag } from "./PackageStatusTag"
 import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
+import { BookmarkButton } from "@/components/Button/BookmarkButton"
 import type { SearchDrugResult } from "@/types/search"
 
 
 type DrugCardProps = {
   drug: SearchDrugResult
+  notifyBookmarkChange?: boolean
 }
 
-export const DrugCard = ({ drug }: DrugCardProps) => {
+export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) => {
   return (
     <Card className="shadow">
       <CardContent className="px-6 py-4 space-y-4">
@@ -34,12 +36,19 @@ export const DrugCard = ({ drug }: DrugCardProps) => {
           )}
         </div>
 
-        {/* 中段：医薬品名・薬価 */}
+        {/* 中段：ブックマーク・医薬品名・薬価 */}
         <div className="flex flex-col items-start justify-between md:flex-row md:gap-4">
-          <div>
-            <h3 className="text-lg font-bold">{drug.name}</h3>
-            {/* 成分名 */}
-            <p className="text-sm text-weak">{drug.GenericName.name}</p>
+          <div className="flex items-start gap-2">
+            <BookmarkButton
+              drugId={drug.id}
+              drugName={notifyBookmarkChange ? drug.name : undefined}
+              className="mt-1"
+            />
+            <div>
+              <h3 className="text-lg font-bold">{drug.name}</h3>
+              {/* 成分名 */}
+              <p className="text-sm text-weak">{drug.GenericName.name}</p>
+            </div>
           </div>
           <p className="hidden md:block shrink-0 text-sm text-weak text-end pt-1">
             薬価 : {drug.price !== null && drug.price ? `${drug.price}円 / ${drug.Unit.name}` : "-"}

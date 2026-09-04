@@ -1,0 +1,87 @@
+"use client"
+
+import { useState } from "react"
+import { Bookmark } from "lucide-react"
+import { toast } from "sonner"
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { useBookmarks } from "@/hooks/useBookmarks"
+import { cn } from "@/lib/utils"
+
+
+type BookmarkButtonProps = {
+  drugId: number
+  drugName?: string
+  className?: string
+}
+
+// 医薬品のブックマークを追加・解除するボタン
+export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonProps) => {
+  const { isBookmarked,  toggleBookmark, isLoggedIn, isLoading
+  } = useBookmarks()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const bookmarked = isBookmarked(drugId)
+  const label = bookmarked ? "ブックマークを解除" : "ブックマークに追加"
+
+
+  const handleClick = async () => {
+    // 未ログイン時はログインを案内する
+    if (!isLoggedIn) {
+      toast.error("ブックマークにはログインが必要です")
+      return
+    }
+    setIsSubmitting(true)
+
+    try { 
+      // ブックマークの切り替え
+      await toggleBookmark(drugId)
+
+      // drugNameが渡されている場合のみ結果を通知する
+      if (drugName) {
+        if (bookmarked) {   
+          toast.success(`${drugName}のブックマークを解除しました`)
+        } else {
+          toast.success(`${drugName}をブックマークしました`)
+        }
+      }
+    } catch {
+      toast.error("ブックマークの更新に失敗しました")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            onClick={handleClick}
+            disabled={isSubmitting}
+            aria-label={label}
+            aria-pressed={bookmarked}
+            className={cn(
+              "shrink-0 text-weak transition-colors hover:text-primary disabled:opacity-50",
+              bookmarked && "text-primary",
+              className
+            )}
+        >  
+            <Bookmark 
+              className="h-5 w-5" 
+              fill={bookmarked? "currentColor" : "none" }
+            />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{label}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
