@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Bookmark } from "lucide-react"
 import { toast } from "sonner"
 import {
@@ -22,11 +21,9 @@ type BookmarkButtonProps = {
 // 医薬品のブックマークを追加・解除するボタン
 export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonProps) => {
   const { isBookmarked, toggleBookmark, isLoggedIn } = useBookmarks()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const bookmarked = isBookmarked(drugId)
   const label = bookmarked ? "ブックマークを解除" : "ブックマークに追加"
-
 
   const handleClick = async () => {
     // 未ログイン時はログインを案内する
@@ -34,7 +31,6 @@ export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonPr
       toast.error("ブックマークにはログインが必要です")
       return
     }
-    setIsSubmitting(true)
 
     try { 
       // ブックマークの切り替え
@@ -50,8 +46,6 @@ export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonPr
       }
     } catch {
       toast.error("ブックマークの更新に失敗しました")
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -62,7 +56,6 @@ export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonPr
           <button
             type="button"
             onClick={handleClick}
-            disabled={isSubmitting}
             aria-label={label}
             aria-pressed={bookmarked}
             className={cn(

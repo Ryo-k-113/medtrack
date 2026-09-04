@@ -6,6 +6,7 @@ import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { fetcher } from "@/utils/fetcher"
 import type { BookmarkIdsResponse } from "@/types/bookmark"
 
+
 /**
  * ブックマーク関連のキャッシュをまとめて再取得する
  * ID一覧とマイページの医薬品一覧を対象にする
@@ -18,6 +19,7 @@ const revalidateBookmarks = () =>
       typeof key[0] === "string" &&
       key[0].startsWith("/api/bookmarks")
   )
+
 
 /**
  * ブックマークの状態判定と追加・解除を行うカスタムフック
@@ -37,31 +39,51 @@ export const useBookmarks = () => {
   // ブックマーク済みかどうか
   const isBookmarked = (drugId: number) => drugIds.includes(drugId)
 
-  /**
-   * ブックマークに追加する
-   * @param drugId - 対象の医薬品ID
-   */
+
+  // ID一覧のキャッシュを即座に書き換えてUIに反映する
+  const rewriteCacheIds = (updateIds: (currentIds: number[]) => number[]) =>
+    globalMutate(
+      ["/api/bookmarks/ids", token],
+      (current?: BookmarkIdsResponse) =>
+        current ? { drugIds: updateIds(current.drugIds) } : current,
+      { revalidate: false } // 再取得はrevalidateBookmarksで行う
+    )
+
+  // ブックマークに追加
   const addBookmark = async (drugId: number) => {
-    await fetcher({
-       url: "/api/bookmarks", 
-       method: "POST", 
-       body: { drugId }, 
-       token 
-    })
-    await revalidateBookmarks()
+
+    await rewriteCacheIds((currentIds) => [...currentIds, drugId])
+
+    try {
+      await fetcher({
+        url: "/api/bookmarks",
+        method: "POST",
+        body: { drugId },
+        token
+      })
+    } finally {
+      //サーバーの実データと同期する
+      await revalidateBookmarks()
+    }
   }
 
-  /**
-   * ブックマークを解除する
-   * @param drugId - 対象の医薬品ID
-   */
+  //　ブックマークを解除
   const removeBookmark = async (drugId: number) => {
-    await fetcher({ 
-      url: `/api/bookmarks/${drugId}`, 
-      method: "DELETE", 
-      token 
-    })
-    await revalidateBookmarks()
+
+    await rewriteCacheIds((currentIds) =>
+      currentIds.filter((id) => id !== drugId)
+    )
+
+    try {
+      await fetcher({
+        url: `/api/bookmarks/${drugId}`,
+        method: "DELETE",
+        token
+      })
+    } finally {
+      // サーバーの実データと同期する
+      await revalidateBookmarks()
+    }
   }
 
   /**
