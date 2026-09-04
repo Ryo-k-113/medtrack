@@ -12,3 +12,8 @@ export type BookmarksResponse = {
 export type CreateBookmarkRequest = {
   drugId: number
 }
+
+/** ブックマーク登録のレスポンス型 */
+export type CreateBookmarkResponse = {
+  message: string
+}

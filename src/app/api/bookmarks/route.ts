@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getCurrentUser } from "@/app/api/_lib/getCurrentUser"
-import type { BookmarksResponse, CreateBookmarkRequest } from "@/types/bookmark"
+import type {
+  BookmarksResponse,
+  CreateBookmarkRequest,
+  CreateBookmarkResponse,
+} from "@/types/bookmark"
 
 /** 1ユーザーあたりのブックマーク上限 */
 const MAX_BOOKMARKS = 1000
@@ -100,7 +104,10 @@ export const POST = async (request: NextRequest) => {
       update: {},
     })
 
-    return NextResponse.json({ message: "ブックマークに追加しました" }, { status: 201 })
+    return NextResponse.json<CreateBookmarkResponse>(
+      { message: "ブックマークに追加しました" },
+      { status: 201 }
+    )
 
   } catch {
     return NextResponse.json({ message: "エラーが発生しました" }, { status: 400 })
