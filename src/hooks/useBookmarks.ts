@@ -4,8 +4,14 @@ import { mutate as globalMutate } from "swr"
 import { useDataFetch } from "@/hooks/useDataFetch"
 import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { fetcher } from "@/utils/fetcher"
-import type { BookmarkIdsResponse } from "@/types/bookmark"
+import type {
+  BookmarkIdsResponse,
+  BookmarkItem,
+  CreateBookmarkResponse,
+} from "@/types/bookmark"
 
+/** 登録リクエストの応答が返るまでの仮ID */
+const UNSYNCED_BOOKMARK_ID = 0
 
 /**
  * ブックマーク関連のキャッシュをまとめて再取得する
@@ -24,7 +30,7 @@ const revalidateBookmarks = () =>
 /**
  * ブックマークの状態判定と追加・解除を行うカスタムフック
  * 医薬品カードごとに呼ばれるため、医薬品データは持たずIDのみを取得する
- * @returns ブックマーク医薬品ID一覧、bookmark状態判定、追加・解除、ログイン状態
+ * @returns ブックマーク一覧、bookmark状態判定、追加・解除、ログイン状態
  */
 export const useBookmarks = () => {
   const { session, token } = useSupabaseSession()
@@ -34,33 +40,46 @@ export const useBookmarks = () => {
     session ? "/api/bookmarks/ids" : null
   )
 
-  const drugIds = data?.drugIds ?? []
+  const bookmarks = data?.bookmarks ?? []
 
   // ブックマーク済みかどうか
-  const isBookmarked = (drugId: number) => drugIds.includes(drugId)
+  const isBookmarked = (drugId: number) =>
+    bookmarks.some((bookmark) => bookmark.drugId === drugId)
 
 
   // ID一覧のキャッシュを即座に書き換えてUIに反映する
-  const rewriteCacheIds = (updateIds: (currentIds: number[]) => number[]) =>
+  const rewriteCacheBookmarks = (
+    updateBookmarks: (current: BookmarkItem[]) => BookmarkItem[]
+  ) =>
     globalMutate(
       ["/api/bookmarks/ids", token],
       (current?: BookmarkIdsResponse) =>
-        current ? { drugIds: updateIds(current.drugIds) } : current,
+        current ? { bookmarks: updateBookmarks(current.bookmarks) } : current,
       { revalidate: false } // 再取得はrevalidateBookmarksで行う
     )
 
   // ブックマークに追加
   const addBookmark = async (drugId: number) => {
-
-    await rewriteCacheIds((currentIds) => [...currentIds, drugId])
+    // 登録前はサーバーのIDが不明なため、仮のIDで先にUIへ反映する
+    await rewriteCacheBookmarks((current) => [
+      ...current,
+      { id: UNSYNCED_BOOKMARK_ID, drugId },
+    ])
 
     try {
-      await fetcher({
-        url: "/api/bookmarks",
+      const result: CreateBookmarkResponse = await fetcher({
+        url: `/api/drugs/${drugId}/bookmark`,
         method: "POST",
         body: { drugId },
         token
       })
+
+      // 再取得を待たずに、仮IDを登録結果の実IDへ差し替える
+      await rewriteCacheBookmarks((current) =>
+        current.map((bookmark) =>
+          bookmark.drugId === drugId ? result.bookmark : bookmark
+        )
+      )
     } finally {
       //サーバーの実データと同期する
       await revalidateBookmarks()
@@ -69,15 +88,24 @@ export const useBookmarks = () => {
 
   //　ブックマークを解除
   const removeBookmark = async (drugId: number) => {
+    // ブックマークIDの取得
+    const bookmarkId = bookmarks.find((bookmark) => bookmark.drugId === drugId)?.id
 
-    await rewriteCacheIds((currentIds) =>
-      currentIds.filter((id) => id !== drugId)
+    // IDが未確定の場合は、実データを取り出す
+    if (!bookmarkId) {
+      await revalidateBookmarks()
+      return
+    }
+
+    await rewriteCacheBookmarks((current) =>
+      current.filter((bookmark) => bookmark.drugId !== drugId)
     )
 
     try {
       await fetcher({
-        url: `/api/bookmarks/${drugId}`,
+        url: `/api/drugs/${drugId}/bookmark`,
         method: "DELETE",
+        body: { bookmarkId },
         token
       })
     } finally {
@@ -99,7 +127,7 @@ export const useBookmarks = () => {
   }
 
   return {
-    drugIds,
+    bookmarks,
     isBookmarked,
     addBookmark,
     removeBookmark,
@@ -108,5 +136,3 @@ export const useBookmarks = () => {
     isLoading,
   }
 }
-
-

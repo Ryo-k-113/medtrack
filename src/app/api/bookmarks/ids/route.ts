@@ -16,13 +16,10 @@ export const GET = async (request: NextRequest) => {
   try {
     const bookmarks = await prisma.bookmarkDrug.findMany({
       where: { userId: currentUser.id },
-      select: { drugId: true },
+      select: { id: true, drugId: true },
     })
 
-    // idの配列に変換
-    const drugIds = bookmarks.map((bookmark) => bookmark.drugId)
-
-    return NextResponse.json<BookmarkIdsResponse>({ drugIds }, { status: 200 })
+    return NextResponse.json<BookmarkIdsResponse>({ bookmarks }, { status: 200 })
 
   } catch {
     return NextResponse.json({ message: "エラーが発生しました" }, { status: 400 })

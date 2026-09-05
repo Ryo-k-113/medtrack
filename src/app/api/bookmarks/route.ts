@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getCurrentUser } from "@/app/api/_lib/getCurrentUser"
-import type {
-  BookmarksResponse,
-  CreateBookmarkRequest,
-  CreateBookmarkResponse,
-} from "@/types/bookmark"
-
-/** 1ユーザーあたりのブックマーク上限 */
-const MAX_BOOKMARKS = 1000
+import type { BookmarksResponse } from "@/types/bookmark"
 
 /** ブックマークした医薬品の一覧取得 */
 export const GET = async (request: NextRequest) => {
@@ -52,62 +45,6 @@ export const GET = async (request: NextRequest) => {
     }))
     
     return NextResponse.json<BookmarksResponse>({ drugs }, { status: 200 })
-
-  } catch {
-    return NextResponse.json({ message: "エラーが発生しました" }, { status: 400 })
-  }
-}
-
-/** ブックマークの登録 */
-export const POST = async (request: NextRequest) => {
-  // 認証チェック
-  const currentUser = await getCurrentUser(request)
-
-  if (!currentUser) {
-    return NextResponse.json({ message: "認証が必要です" }, { status: 401 })
-  }
-
-  try {
-    const body: CreateBookmarkRequest = await request.json()
-    const drugId = Number(body.drugId)
-
-    if (!drugId) {
-      return NextResponse.json({ message: "医薬品IDが不正です" }, { status: 400 })
-    }
-
-    // 医薬品の存在チェック
-    const drug = await prisma.drug.findUnique({
-      where: { id: drugId },
-      select: { id: true },
-    })
-
-    if (!drug) {
-      return NextResponse.json({ message: "医薬品が見つかりません" }, { status: 404 })
-    }
-
-    // ブックマークの上限チェック
-    const bookmarkCount = await prisma.bookmarkDrug.count({
-      where: { userId: currentUser.id },
-    })
-
-    if (bookmarkCount >= MAX_BOOKMARKS) {
-      return NextResponse.json(
-        { message: `ブックマークは${MAX_BOOKMARKS}件までです` },
-        { status: 400 }
-      )
-    }
-
-    // 登録済みの場合は何もしない
-    await prisma.bookmarkDrug.upsert({
-      where: { userId_drugId: { userId: currentUser.id, drugId } },
-      create: { userId: currentUser.id, drugId },
-      update: {},
-    })
-
-    return NextResponse.json<CreateBookmarkResponse>(
-      { message: "ブックマークに追加しました" },
-      { status: 201 }
-    )
 
   } catch {
     return NextResponse.json({ message: "エラーが発生しました" }, { status: 400 })
