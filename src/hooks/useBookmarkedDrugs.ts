@@ -15,7 +15,7 @@ export const useBookmarkedDrugs = () => {
 
   // 未ログイン時はリクエストしない
   const { data, isLoading, error, mutate } = useDataFetch<BookmarksResponse>(
-    session ? "/api/bookmarks" : null
+    session ? "/api/me/bookmarks" : null
   )
 
   return {

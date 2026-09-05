@@ -13,6 +13,9 @@ import type {
 /** 登録リクエストの応答が返るまでの仮ID */
 const UNSYNCED_BOOKMARK_ID = 0
 
+/** ブックマーク関連のGET APIのパス（再検証のフィルタと共通で使う） */
+const BOOKMARKS_API_PATH = "/api/me/bookmarks"
+
 /**
  * ブックマーク関連のキャッシュをまとめて再取得する
  * ID一覧とマイページの医薬品一覧を対象にする
@@ -23,7 +26,7 @@ const revalidateBookmarks = () =>
     (key) =>
       Array.isArray(key) &&
       typeof key[0] === "string" &&
-      key[0].startsWith("/api/bookmarks")
+      key[0].startsWith(BOOKMARKS_API_PATH)
   )
 
 
@@ -37,7 +40,7 @@ export const useBookmarks = () => {
 
   // 未ログイン時はリクエストしない
   const { data, isLoading } = useDataFetch<BookmarkIdsResponse>(
-    session ? "/api/bookmarks/ids" : null
+    session ? `${BOOKMARKS_API_PATH}/ids` : null
   )
 
   const bookmarks = data?.bookmarks ?? []
@@ -52,7 +55,7 @@ export const useBookmarks = () => {
     updateBookmarks: (current: BookmarkItem[]) => BookmarkItem[]
   ) =>
     globalMutate(
-      ["/api/bookmarks/ids", token],
+      [`${BOOKMARKS_API_PATH}/ids`, token],
       (current?: BookmarkIdsResponse) =>
         current ? { bookmarks: updateBookmarks(current.bookmarks) } : current,
       { revalidate: false } // 再取得はrevalidateBookmarksで行う
