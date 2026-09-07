@@ -23,3 +23,7 @@ export const STUCK_RUNNING_MINUTES = 30
  * 定期実行が発火していない可能性
  */
 export const STALE_LAST_RUN_HOURS = 12
+
+
+/** 定期実行の履歴を取得するAPIのエンドポイント */
+export const BATCH_LOGS_API_PATH = "/api/admin/batch/logs"
