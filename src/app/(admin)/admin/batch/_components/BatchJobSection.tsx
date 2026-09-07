@@ -8,8 +8,8 @@ import { BatchJobCard } from "./BatchJobCard"
 import { BatchLogColumns } from "./BatchLogColumns"
 import { useAdminBatchLogs } from "../_hooks/useAdminBatchLogs"
 import { useLatestBatchLog } from "../_hooks/useLatestBatchLog"
+import { useRunUpdateShippingStatus } from "../_hooks/useRunUpdateShippingStatus"
 import { BATCH_JOB_TYPE_LABEL } from "@/constants/batch"
-
 
 // 定期実行の処理ごとの状況表示・手動実行と、全処理の実行履歴
 export const BatchJobSection = () => {
@@ -27,6 +27,7 @@ export const BatchJobSection = () => {
   const { latestLog, isLoading: isLatestLoading } =
     useLatestBatchLog("UPDATE_SHIPPING_STATUS")
 
+  const { runUpdateShippingStatus, isRunning } = useRunUpdateShippingStatus()
 
   if (error) {
     return (
@@ -48,6 +49,8 @@ export const BatchJobSection = () => {
           title={BATCH_JOB_TYPE_LABEL.UPDATE_SHIPPING_STATUS}
           latestLog={latestLog}
           isLoading={isLatestLoading}
+          isRunning={isRunning}
+          onRun={runUpdateShippingStatus}
         />
       </div>
 

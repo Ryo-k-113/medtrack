@@ -1,24 +1,30 @@
 "use client"
 
 import { AlertCircle, AlertTriangle, RefreshCw } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { SectionCard } from "@/components/Card/SectionCard"
 import { BatchJobStatusBadge } from "@/components/Badge/BatchJobStatusBadge"
 import { BatchErrorMessage } from "./BatchErrorMessage"
 import { formatDateTime } from "@/utils/format"
 import { STUCK_RUNNING_MINUTES, STALE_LAST_RUN_HOURS } from "@/constants/batch"
 import type { BatchLog } from "@/types/admin/batch"
+import { cn } from "@/lib/utils"
 
 type BatchJobCardProps = {
   title: string
   latestLog: BatchLog | null
   isLoading: boolean
+  isRunning: boolean
+  onRun: () => void
 }
 
-// 定期実行ジョブの最新状況を表示するカード
+// 定期実行ジョブの最新状況と手動実行ボタンを表示するカード
 export const BatchJobCard = ({
   title,
   latestLog,
   isLoading,
+  isRunning,
+  onRun,
 }: BatchJobCardProps) => {
   const elapsedMs = latestLog
     ? Date.now() - new Date(latestLog.startedAt).getTime()
@@ -34,7 +40,7 @@ export const BatchJobCard = ({
 
   return (
     <SectionCard>
-      {/* 上段：ジョブ名・ステータス */}
+      {/* 上段：ジョブ名・ステータス・手動実行 */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <h3 className="font-semibold">{title}</h3>
@@ -42,6 +48,15 @@ export const BatchJobCard = ({
           }
         </div>
 
+        <Button
+          variant="surface"
+          size="sm"
+          onClick={onRun}
+          disabled={isRunning || isLoading}
+        >
+          <RefreshCw className={cn("h-4 w-4", isRunning && "animate-spin")} />
+          {isRunning ? "実行中..." : "手動実行"}
+        </Button>
       </div>
 
       {/* 下段：最新の実行結果 */}
