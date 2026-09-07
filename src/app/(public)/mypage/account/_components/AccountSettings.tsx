@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useLoginMethods } from "../_hooks/useLoginMethods"
+import { AccountSettingsSkeleton } from "./AccountSettingsSkeleton"
 import { LoginMethodRow } from "./LoginMethodRow"
 import { EmailChangeDialog } from "./EmailChangeDialog"
 import { PasswordChangeForm } from "./PasswordChangeForm"
@@ -12,6 +13,7 @@ export const AccountSettings = () => {
   const { isLoading, isLoggedIn, googleEmail, loginEmail } = useLoginMethods()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
+  if (isLoading) return <AccountSettingsSkeleton />
 
   if (!isLoggedIn) {
     return (
