@@ -4,8 +4,11 @@ import { BaseTable } from "@/components/Table/BaseTable"
 import { DataTableSkeleton } from "@/components/Table/DataTableSkeleton"
 import { PaginationControl } from "@/components/Pagination/PaginationControl"
 import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
+import { BatchJobCard } from "./BatchJobCard"
 import { BatchLogColumns } from "./BatchLogColumns"
 import { useAdminBatchLogs } from "../_hooks/useAdminBatchLogs"
+import { useLatestBatchLog } from "../_hooks/useLatestBatchLog"
+import { BATCH_JOB_TYPE_LABEL } from "@/constants/batch"
 
 
 // 定期実行の処理ごとの状況表示・手動実行と、全処理の実行履歴
@@ -21,6 +24,9 @@ export const BatchJobSection = () => {
     changePageSize,
   } = useAdminBatchLogs()
 
+  const { latestLog, isLoading: isLatestLoading } =
+    useLatestBatchLog("UPDATE_SHIPPING_STATUS")
+
 
   if (error) {
     return (
@@ -34,6 +40,16 @@ export const BatchJobSection = () => {
 
   return (
     <div className="space-y-[56px] pt-8">
+
+      {/* ジョブの最新状況 */}
+      <div className="space-y-3">
+        <h2 className="font-bold pl-2">処理の実行状況</h2>
+        <BatchJobCard
+          title={BATCH_JOB_TYPE_LABEL.UPDATE_SHIPPING_STATUS}
+          latestLog={latestLog}
+          isLoading={isLatestLoading}
+        />
+      </div>
 
       {/* 実行履歴 */}
       <div className="space-y-3">
