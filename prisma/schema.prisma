@@ -255,6 +255,7 @@ model BatchProcessingLog {
   startedAt      DateTime       @default(now()) @map("started_at")
   completedAt    DateTime?      @map("completed_at")
   failedAt       DateTime?      @map("failed_at")
+  errorCode      String?        @map("error_code")
   errorMessage   String?        @map("error_message")
   processedCount Int            @default(0) @map("processed_count")
   createdAt      DateTime       @default(now()) @map("created_at")

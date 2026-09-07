@@ -17,7 +17,7 @@ import {
   SidebarTrigger
 } from "@/components/ui/sidebar"
 
-import { Pill, Building, FlaskConical, Ruler, Package } from 'lucide-react';
+import { Pill, Building, FlaskConical, Ruler, Package, Timer } from 'lucide-react';
 
 
 export default function AdminLayout({
@@ -45,6 +45,12 @@ export default function AdminLayout({
       label: "下書き",
       items: [
         { href: "/admin/drafts/packages", label: "包装情報", icon: Package },
+      ],
+    },
+    {
+      label: "システム",
+      items: [
+        { href: "/admin/batch", label: "定期実行管理", icon: Timer },
       ],
     },
   ]
@@ -116,7 +122,10 @@ export default function AdminLayout({
 
           {/* メインエリア */}
           <main className="flex-1 overflow-x-auto overflow-y-auto p-6 bg-background">
-            {children}
+            {/* 広い画面でも内容が横に伸びすぎないよう幅を制限する */}
+            <div className="mx-auto w-full max-w-7xl">
+              {children}
+            </div>
           </main>
         </div>
         

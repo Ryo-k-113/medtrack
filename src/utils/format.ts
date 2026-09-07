@@ -19,3 +19,21 @@ export const formatDate = (dateString: string | null | undefined): string | null
   
   return format(date, "yyyy/MM/dd");
 };
+
+/**
+ * ISO形式の日付文字列を「YYYY/MM/DD HH:mm」形式に変換する
+ * @param dateString - 日付文字列
+ * @returns フォーマットされた文字列、データがない・不正な場合は null
+ */
+export const formatDateTime = (dateString: string | null | undefined): string | null => {
+
+  if (!dateString) return null;
+
+  const date = new Date(dateString);
+
+  if (!isValid(date)) {
+    return null;
+  }
+
+  return format(date, "yyyy/MM/dd HH:mm");
+};
