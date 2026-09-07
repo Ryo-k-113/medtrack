@@ -1,0 +1,64 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { useLoginMethods } from "../_hooks/useLoginMethods"
+import { useEmailChangeMessage } from "../_hooks/useEmailChangeMessage"
+import { AccountSettingsSkeleton } from "./AccountSettingsSkeleton"
+import { LoginMethodRow } from "./LoginMethodRow"
+import { EmailChangeDialog } from "./EmailChangeDialog"
+import { PasswordChangeForm } from "./PasswordChangeForm"
+
+// ログイン方法ごとの設定をまとめて表示する
+export const AccountSettings = () => {
+  const { isLoading, isLoggedIn, googleEmail, loginEmail } = useLoginMethods()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  // 確認リンクから戻ってきた場合の通知
+  useEmailChangeMessage()
+
+  if (isLoading) return <AccountSettingsSkeleton />
+
+  if (!isLoggedIn) {
+    return (
+      <p className="py-12 text-center text-sm text-weak">
+        ログインすると表示されます。
+      </p>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Googleログイン */}
+      <LoginMethodRow
+        title="Googleログイン"
+        email={googleEmail}
+      />
+
+      {/* メールアドレスログイン */}
+      <LoginMethodRow
+        title="メールアドレスログイン"
+        email={loginEmail}
+        action={
+          loginEmail && (
+            <Button variant="surface" size="sm" onClick={() => setIsDialogOpen(true)}>
+              変更
+            </Button>
+          )
+        }
+        description={
+          loginEmail &&
+          "変更ボタンを押して新しいメールアドレスを入力すると、確認メールを送信します。"
+        }
+      />
+
+      {/* パスワード変更（メールアドレスログインを設定している場合のみ） */}
+      {loginEmail && <PasswordChangeForm />}
+
+      <EmailChangeDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
+    </div>
+  )
+}
