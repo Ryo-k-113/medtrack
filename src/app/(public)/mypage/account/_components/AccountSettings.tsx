@@ -1,13 +1,16 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useLoginMethods } from "../_hooks/useLoginMethods"
 import { LoginMethodRow } from "./LoginMethodRow"
+import { EmailChangeDialog } from "./EmailChangeDialog"
 
 
 // ログイン方法ごとの設定をまとめて表示する
 export const AccountSettings = () => {
   const { isLoading, isLoggedIn, googleEmail, loginEmail } = useLoginMethods()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
 
   if (!isLoggedIn) {
@@ -32,7 +35,7 @@ export const AccountSettings = () => {
         email={loginEmail}
         action={
           loginEmail && (
-            <Button variant="surface" size="sm" >
+            <Button variant="surface" size="sm" onClick={() => setIsDialogOpen(true)}>
               変更
             </Button>
           )
@@ -43,6 +46,10 @@ export const AccountSettings = () => {
         }
       />
 
+      <EmailChangeDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </div>
   )
 }
