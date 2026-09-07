@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useLoginMethods } from "../_hooks/useLoginMethods"
+import { useEmailChangeMessage } from "../_hooks/useEmailChangeMessage"
 import { AccountSettingsSkeleton } from "./AccountSettingsSkeleton"
 import { LoginMethodRow } from "./LoginMethodRow"
 import { EmailChangeDialog } from "./EmailChangeDialog"
@@ -12,6 +13,9 @@ import { PasswordChangeForm } from "./PasswordChangeForm"
 export const AccountSettings = () => {
   const { isLoading, isLoggedIn, googleEmail, loginEmail } = useLoginMethods()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  // 確認リンクから戻ってきた場合の通知
+  useEmailChangeMessage()
 
   if (isLoading) return <AccountSettingsSkeleton />
 
