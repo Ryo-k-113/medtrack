@@ -19,6 +19,8 @@ type BaseDialogProps = {
   children: React.ReactNode
   actions?: React.ReactNode  
   className?: string
+  titleClassName?: string
+  descriptionClassName?: string
 }
 
 export const BaseDialog = ({
@@ -29,6 +31,8 @@ export const BaseDialog = ({
   children,
   actions,
   className,
+  titleClassName,
+  descriptionClassName,
 }: BaseDialogProps) => {
   return (
       <Dialog
@@ -41,8 +45,10 @@ export const BaseDialog = ({
           className={cn("p-6 md:p-10 gap-6", className)}
         >
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className={cn("text-md", titleClassName)}>
+              {title}
+            </DialogTitle>
+            <DialogDescription className={cn("text-weak", descriptionClassName)}>
               {description ?? ""}
             </DialogDescription>
           </DialogHeader>
