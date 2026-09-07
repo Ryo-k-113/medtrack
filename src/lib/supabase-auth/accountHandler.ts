@@ -33,3 +33,27 @@ export const updateEmailHandler = async (email: string): Promise<boolean> => {
   return true
 }
 
+/**
+ * パスワードの変更
+ * @param password - 新しいパスワード
+ * @returns 変更に成功したかどうか
+ */
+export const updatePasswordHandler = async (password: string): Promise<boolean> => {
+  const supabase = createClient()
+
+  const { error } = await supabase.auth.updateUser({ password })
+
+  if (error) {
+    console.error("パスワードの変更に失敗しました", error)
+
+    const message = error.message.includes("different from the old password")
+      ? "現在のパスワードとは異なるパスワードを入力してください。"
+      : "パスワードの変更に失敗しました。"
+
+    toast.error(message)
+    return false
+  }
+
+  toast.success("パスワードを変更しました。")
+  return true
+}

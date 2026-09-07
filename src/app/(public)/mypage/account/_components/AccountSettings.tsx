@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useLoginMethods } from "../_hooks/useLoginMethods"
 import { LoginMethodRow } from "./LoginMethodRow"
 import { EmailChangeDialog } from "./EmailChangeDialog"
-
+import { PasswordChangeForm } from "./PasswordChangeForm"
 
 // ログイン方法ごとの設定をまとめて表示する
 export const AccountSettings = () => {
@@ -45,6 +45,9 @@ export const AccountSettings = () => {
           "変更ボタンを押して新しいメールアドレスを入力すると、確認メールを送信します。"
         }
       />
+
+      {/* パスワード変更（メールアドレスログインを設定している場合のみ） */}
+      {loginEmail && <PasswordChangeForm />}
 
       <EmailChangeDialog
         isOpen={isDialogOpen}
