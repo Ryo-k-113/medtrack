@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "./_components/Header";
+import { Footer } from "./_components/Footer";
 
 export default function PublicLayout({
   children,
@@ -13,6 +14,7 @@ export default function PublicLayout({
       <main className="flex flex-1 flex-col">
         {children}
       </main>
+      <Footer />
     </div>
   );
 }
