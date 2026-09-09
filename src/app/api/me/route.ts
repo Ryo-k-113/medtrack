@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { getCurrentUser, type CurrentUser } from "@/app/api/_lib/getCurrentUser"
+import { getCurrentUser } from "@/app/api/_lib/getCurrentUser"
+import type { CurrentUser } from "@/types/auth"
 
 /**
  * ログイン中のユーザー情報の取得
- * Cookieのセッションから判定するため、クライアントはトークンを保持する必要がない
  */
 export const GET = async () => {
   const currentUser = await getCurrentUser()

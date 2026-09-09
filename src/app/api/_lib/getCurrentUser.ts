@@ -1,13 +1,6 @@
-import type { Role } from "@prisma/client"
 import { createClient } from "@/lib/supabase/server"
 import { prisma } from "@/lib/prisma"
-
-/** ログイン中のユーザー */
-export type CurrentUser = {
-  id: number
-  role: Role
-  email: string
-}
+import type { CurrentUser } from "@/types/auth"
 
 /**
  * ログイン中のユーザーを取得する

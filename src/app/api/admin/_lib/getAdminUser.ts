@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
-import { getCurrentUser, type CurrentUser } from "@/app/api/_lib/getCurrentUser"
+import { getCurrentUser } from "@/app/api/_lib/getCurrentUser"
+import type { CurrentUser } from "@/types/auth"
 
 type AdminAuthResult =
   | { user: CurrentUser; errorResponse: null }

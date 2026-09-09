@@ -1,3 +1,4 @@
+import type { Role } from "@prisma/client"
 import { z } from "zod"
 
 export const authSchema = z.object({
@@ -9,3 +10,11 @@ export const authSchema = z.object({
   }),
 })
 export type AuthFormData = z.infer<typeof authSchema>
+
+
+/** ログイン中のユーザー */
+export type CurrentUser = {
+  id: number
+  role: Role
+  email: string
+}
