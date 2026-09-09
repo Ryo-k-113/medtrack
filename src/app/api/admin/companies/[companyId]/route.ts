@@ -12,7 +12,7 @@ export const PUT = async (
 ) => {
 
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   // 製薬会社IDの取得

@@ -12,7 +12,7 @@ export const POST = async (
   { params }: { params: { drugId: string; packageUnitId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   const { packageUnitId } = params;

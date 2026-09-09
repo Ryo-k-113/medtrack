@@ -11,7 +11,7 @@ export const PUT = async (
   { params }: { params: { drugId: string; packageUnitId: string; announceId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   const { drugId, packageUnitId, announceId } = params

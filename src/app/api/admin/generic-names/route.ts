@@ -8,7 +8,7 @@ import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 /** 成分名一覧の取得（offsetページネーション） */
 export const GET = async (request: NextRequest) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {
@@ -53,7 +53,7 @@ export const GET = async (request: NextRequest) => {
 /**  成分名を新規作成  */
 export const POST = async (request: NextRequest) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {

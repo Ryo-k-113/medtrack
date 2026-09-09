@@ -8,7 +8,7 @@ import { Prisma } from "@prisma/client"
 //** 公開中の医薬品情報一覧を取得（offsetページネーション） */
 export const GET = async (request: NextRequest) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {
@@ -83,7 +83,7 @@ export const GET = async (request: NextRequest) => {
 /** 医薬品情報の新規登録 */
 export const POST = async (request: NextRequest) => {
   //admin権限の確認
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   try {

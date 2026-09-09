@@ -9,7 +9,7 @@ export const PATCH = async (
   request: NextRequest,
   { params }: { params: { packageUnitId: string } }
 ) => {
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   // 包装IDを取得

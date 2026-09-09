@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import { updateShippingStatus } from "@/app/api/_lib/batch/updateShippingStatus"
 import { toBatchError } from "@/app/api/_lib/batch/toBatchError"
 import type { RunBatchResponse } from "@/types/admin/batch"
 
 /** 出荷状況の更新の手動実行（管理画面から実行） */
-export const POST = async (request: NextRequest) => {
+export const POST = async () => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {
