@@ -11,12 +11,10 @@ import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/Pac
 import { DEFAULT_PACKAGE_UNIT } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { createPackageUnitFormSchema, type CreatePackageUnitFormData, type CreatePackageUnitFormInput,  } from "@/types/admin/drug"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
 
 
 export const PackageUnitAddDialog = () => {
-  const { token } = useSupabaseSession()
   
   //医薬品IDの取得
   const { drugId, mutate } = useAdminDrug()
@@ -45,7 +43,6 @@ export const PackageUnitAddDialog = () => {
         url: `/api/admin/drugs/${drugId}`,
         method: "POST",
         body: data,
-        token,
       }) 
       toast.success( res.message )
       handleClose()

@@ -52,8 +52,7 @@ export const AdminLoginForm = () => {
 
       // ADMINロールチェック
       await fetcher({
-        url: "/api/admin/auth/role-check",
-        token, 
+        url: "/api/admin/auth/role-check", 
       })
 
       // 管理画面へリダイレクト

@@ -14,7 +14,6 @@ import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
 import { GenericNameDialog } from "./GenericNameDialog"
 import { GenericNameColumns } from "./GenericNameColumns"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminGenericNames } from "../_hooks/useAdminGenericNames"
 import type { GenericName, GenericNameFormData } from "@/types/admin/genericName"
 
@@ -23,8 +22,6 @@ type SearchFormData = {
 }
 
 export const GenericNameList = () => {
-
-  const { token } = useSupabaseSession()
 
   // 新規登録のダイアログの開閉状態
   const [isCreateOpen, setIsCreateOpen] = useState(false)  
@@ -67,7 +64,6 @@ export const GenericNameList = () => {
         url: "/api/admin/generic-names",
         method: "POST",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()
@@ -84,7 +80,6 @@ export const GenericNameList = () => {
         url: `/api/admin/generic-names/${editTarget.id}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()

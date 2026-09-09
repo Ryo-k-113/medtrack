@@ -6,7 +6,6 @@ import { toast } from "sonner"
 import { Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { AnnounceFormFields } from "./AnnounceFormFields"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import {
@@ -17,7 +16,6 @@ import {
 
 
 export const AnnounceForm = () => {
-  const { token } = useSupabaseSession()
   const { drugId, packageUnitId, mutate } = useAdminPackageUnit()
 
   const form = useForm<CreateAnnounceFormInput, unknown, CreateAnnounceFormData>({
@@ -38,7 +36,6 @@ export const AnnounceForm = () => {
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce`,
         method: "POST",
         body: data,
-        token,
       })
       toast.success(res.message)
       reset()

@@ -8,12 +8,10 @@ import { DraftPackageUnitEditDialog } from "./DraftPackageUnitEditDialog"
 import { DraftPackageUnitColumns } from "./DraftPackageUnitColumns"
 import { useAdminDraftPackageUnits } from "../_hooks/useAdminDraftPackageUnits"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import type { DraftPackageUnit } from "@/types/admin/draft"
 
 
 export const DraftPackageUnitList = () => {
-  const { token } = useSupabaseSession()
 
   // 下書きの包装一覧を取得
   const { draftPackageUnits, isLoading, error, mutate } = useAdminDraftPackageUnits()
@@ -32,7 +30,6 @@ export const DraftPackageUnitList = () => {
       const res = await fetcher({
         url: `/api/admin/drafts/packages/${id}`,
         method: "PATCH",
-        token,
       })
       toast.success( 
         <div className="flex flex-col gap-0.5">

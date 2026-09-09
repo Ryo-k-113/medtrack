@@ -6,7 +6,6 @@ import { toast } from "sonner"
 import { Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { fetcher } from "@/utils/fetcher"
 import type { ShippingAnnouncement } from "@/types/drug"
@@ -29,7 +28,6 @@ export const AnnounceEditDialog = ({
   onClose,
   history,
 }: Props) => {
-  const { token } = useSupabaseSession()
   const { drugId, packageUnitId, mutate } = useAdminPackageUnit()
 
   const form = useForm<UpdateAnnounceFormInput, unknown, UpdateAnnounceFormData>({
@@ -61,7 +59,6 @@ export const AnnounceEditDialog = ({
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce/${history?.id}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()
