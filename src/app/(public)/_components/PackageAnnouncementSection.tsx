@@ -133,7 +133,7 @@ export const PackageAnnouncementSection = () => {
           <AnnounceTypeFilter
             selected={selectedTypes}
             onChange={handleChangeTypes}
-            className="justify-start md:justify-end pb-4"
+            className="justify-start pb-3 mb-4 md:justify-end md:pb-0"
           />
 
           {/* 告知情報をタブ表示 */}
