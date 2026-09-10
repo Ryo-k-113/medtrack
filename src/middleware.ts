@@ -8,6 +8,9 @@ const LOGIN_PATH = "/login"
 /** 権限が不足している場合の遷移先 */
 const TOP_PATH = "/"
 
+/** 管理者を表すロール（Prismaのenumに合わせる） */
+const ADMIN_ROLE = "ADMIN"
+
 /** 管理者権限が必要なパスの接頭辞 */
 const ADMIN_PATH = "/admin"
 
@@ -63,11 +66,14 @@ export const middleware = async (request: NextRequest) => {
 
   // 管理者ページは権限も確認する
   if (pathname.startsWith(ADMIN_PATH)) {
+    // 設定値の表記揺れで権限判定が静かに失敗しないよう、大文字に揃えて比較する
     const role =
-      typeof user.app_metadata?.role === "string" ? user.app_metadata.role : null
+      typeof user.app_metadata?.role === "string"
+        ? user.app_metadata.role.toUpperCase()
+        : null
 
     // ユーザー向けのトップページへ送る
-    if (role !== "ADMIN") return redirectTo(TOP_PATH)
+    if (role !== ADMIN_ROLE) return redirectTo(TOP_PATH)
   }
 
   return ref.response
