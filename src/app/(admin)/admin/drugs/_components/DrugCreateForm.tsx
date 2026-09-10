@@ -11,13 +11,11 @@ import { FormPackageUnitSection } from "./FormPackageUnitSection"
 import { createDrugFormSchema,type CreateDrugFormData, type CreateDrugFormInput, } from "@/types/admin/drug"
 import {  DEFAULT_DRUG_FORM_VALUES } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useRouter } from "next/navigation"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
 
 
 export const DrugCreateForm = () => {
-  const { token } = useSupabaseSession();
   const router = useRouter();
 
   // 製薬会社、規格単位、成分名の一覧取得
@@ -41,7 +39,6 @@ export const DrugCreateForm = () => {
       const response = await fetcher({
         url: "/api/admin/drugs",
         method: "POST",
-        token,
         body: data,
       })
       if (!response) throw new Error()

@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getCurrentUser } from "@/app/api/_lib/getCurrentUser"
 import type { BookmarksResponse } from "@/types/bookmark"
 
 /** ブックマークした医薬品の一覧取得 */
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
   // 認証チェック
-  const currentUser = await getCurrentUser(request)
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
     return NextResponse.json({ message: "認証が必要です" }, { status: 401 })

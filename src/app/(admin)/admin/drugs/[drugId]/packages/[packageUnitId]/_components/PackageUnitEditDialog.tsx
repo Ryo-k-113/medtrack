@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button"
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
 
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { fetcher } from "@/utils/fetcher"
 
@@ -18,7 +17,6 @@ import { packageUnitEditFormSchema, type PackageUnitEditFormData, type PackageUn
 
 
 export const PackageUnitEditDialog = () => {
-  const { token } = useSupabaseSession()
 
   // 製品・包装ID、包装情報を取得
   const { drugId, packageUnitId, packageUnit, mutate } = useAdminPackageUnit()
@@ -56,7 +54,6 @@ export const PackageUnitEditDialog = () => {
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()

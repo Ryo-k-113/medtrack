@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { mutate as globalMutate } from "swr"
 import { toast } from "sonner"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { fetcher } from "@/utils/fetcher"
 import { BATCH_LOGS_API_PATH } from "@/constants/batch"
 
@@ -13,14 +12,11 @@ const RUN_UPDATE_SHIPPING_STATUS_URL = "/api/admin/batch/update-shipping-status"
 /**
  * 実行履歴のキャッシュをまとめて再取得する
  * 一覧とカード用の最新結果の両方を対象にする
- * （useDataFetchのキーは [url, token] のため、url部分で判定する）
+ * （useDataFetchのキーはURLの文字列のため、前方一致で判定する）
  */
 const revalidateBatchLogs = () =>
   globalMutate(
-    (key) =>
-      Array.isArray(key) &&
-      typeof key[0] === "string" &&
-      key[0].startsWith(BATCH_LOGS_API_PATH)
+    (key) => typeof key === "string" && key.startsWith(BATCH_LOGS_API_PATH)
   )
 
 /**
@@ -28,7 +24,6 @@ const revalidateBatchLogs = () =>
  * @returns 実行関数、実行中の判定
  */
 export const useRunUpdateShippingStatus = () => {
-  const { token } = useSupabaseSession()
   const [isRunning, setIsRunning] = useState(false)
 
   /** 出荷状況の更新を手動で実行する */
@@ -39,7 +34,6 @@ export const useRunUpdateShippingStatus = () => {
       const result = await fetcher({
         url: RUN_UPDATE_SHIPPING_STATUS_URL,
         method: "POST",
-        token,
       })
       toast.success(result.message)
 

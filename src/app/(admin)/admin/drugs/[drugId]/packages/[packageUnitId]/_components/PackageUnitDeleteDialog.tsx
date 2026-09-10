@@ -8,14 +8,12 @@ import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BaseAlertDialog } from "@/components/AlertDialog/BaseAlertDialog"
 
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { fetcher } from "@/utils/fetcher"
 
 
 export const PackageUnitDeleteDialog = () => {
   const router = useRouter()
-  const { token } = useSupabaseSession()
   const { drugId, packageUnitId } = useAdminPackageUnit()
 
   const [isDeleting, setIsDeleting] = useState(false)
@@ -27,7 +25,6 @@ export const PackageUnitDeleteDialog = () => {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}`,
         method: "DELETE",
-        token,
       })
       toast.success(res.message)
       router.replace(`/admin/drugs/${drugId}`)

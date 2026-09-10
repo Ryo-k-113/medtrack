@@ -17,7 +17,7 @@ export const POST = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const currentUser = await getCurrentUser(request)
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
     return NextResponse.json({ message: "認証が必要です" }, { status: 401 })
@@ -86,7 +86,7 @@ export const DELETE = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const currentUser = await getCurrentUser(request)
+  const currentUser = await getCurrentUser()
 
   if (!currentUser) {
     return NextResponse.json({ message: "認証が必要です" }, { status: 401 })

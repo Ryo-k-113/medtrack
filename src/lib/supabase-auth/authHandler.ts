@@ -1,85 +1,64 @@
 "use client"
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { createClient } from "@/lib/supabase/client";
-import { FormData } from "@/app/(public)/(auth)/_schemas/authSchema";
+import { mutate as globalMutate } from "swr";
 import { toast } from "sonner";
+import { fetcher } from "@/utils/fetcher";
+import { ME_API_PATH } from "@/hooks/useMe";
+import { REDIRECT_TO_QUERY_KEY, resolveRedirectPath } from "@/constants/auth";
+import type { AuthFormData, CurrentUser } from "@/types/auth";
 
-//ログイン
-export const loginHandler = async ( formData: FormData, router: AppRouterInstance ) => {
-  const supabase = await createClient()
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email: formData.email,
-    password: formData.password,
-  })
-  
-  if(error) {
-    toast.error("メールアドレスまたはパスワードが異なります。");
-    return;
-  }
-
+/**
+ * ログイン
+ * 認証とセッションのCookie発行はサーバー側で行う
+ */
+export const loginHandler = async (
+  formData: AuthFormData,
+  router: AppRouterInstance
+) => {
   try {
-  // セッションからアクセストークンを取得
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    const token = session?.access_token;
+    const currentUser: CurrentUser = await fetcher({
+      url: "/api/auth/login",
+      method: "POST",
+      body: { ...formData },
+    })
 
-    if (!token) {
-      throw new Error('セッション取得エラー');
-    }
+    // ログイン直後の状態を反映する
+    await globalMutate(ME_API_PATH, currentUser, { revalidate: false })
 
-    // ユーザーの確認と作成
-    const res = await fetch('/api/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }
-    });
+    // ミドルウェアが付与した戻り先へ遷移する
+    const redirectPath = resolveRedirectPath(
+      new URLSearchParams(window.location.search).get(REDIRECT_TO_QUERY_KEY)
+    )
 
-    if (res.ok) {
-      // ホームページにリダイレクト
-      router.replace("/");
-      toast.success("ログインに成功しました。");
-    }
+    router.replace(redirectPath)
+    toast.success("ログインに成功しました。")
 
   } catch (error) {
-    console.error( "ログイン処理中にエラーが発生しました", error);
-    toast.error("エラーが発生しました");
-  } 
+    toast.error(
+      error instanceof Error ? error.message : "エラーが発生しました"
+    )
+  }
 }
 
-//新規登録
-export const signupHandler = async (formData: FormData, reset: () => void) => {
+/**
+ * 新規登録
+ * 確認メールのリンクを開くまでログインは完了しない
+ */
+export const signupHandler = async (formData: AuthFormData, reset: () => void) => {
   try {
-    const supabase = await createClient()
-    const { error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/login`,
-      },
-    });
+    const result = await fetcher({
+      url: "/api/auth/signup",
+      method: "POST",
+      body: { ...formData },
+    })
 
-    if (error) {
-      let errorMessage = "認証エラーが発生しました。";
-      if (error.message.includes("already")) {
-        errorMessage = "すでに登録されているメールアドレスです。";
-      }
-      toast.error(errorMessage);
-      return;
-    }
+    toast.success(result.message)
+    reset()
 
-    toast.success(
-      "登録確認メールを送信しました。"
-    );
-
-    reset();
-    
   } catch (error) {
-    console.error("サインアップ処理中にエラーが発生しました:", error);
-    toast.error("処理中にエラーが発生しました。もう一度お試しください。");
+    toast.error(
+      error instanceof Error ? error.message : "処理中にエラーが発生しました。"
+    )
   }
-};
+}

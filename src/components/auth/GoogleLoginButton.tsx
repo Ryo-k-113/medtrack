@@ -1,7 +1,7 @@
 "use client"
 
-import { createClient } from '@/lib/supabase/client'
 import { Button } from "@/components/ui/button"
+import { REDIRECT_TO_QUERY_KEY } from "@/constants/auth"
 import { cn } from "@/lib/utils"
 
 type GoogleLoginButtonProps = {
@@ -10,14 +10,17 @@ type GoogleLoginButtonProps = {
 
 export const GoogleLoginButton = ({ className }: GoogleLoginButtonProps) => {
 
-  const signInWithGoogle = async () => {
-    const supabase = await createClient()
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback/google`,
-      },
-    })
+  // 認証はサーバー側で開始するため、戻り先を引き継いで遷移するだけにする
+  const signInWithGoogle = () => {
+    const redirectTo = new URLSearchParams(window.location.search).get(
+      REDIRECT_TO_QUERY_KEY
+    )
+
+    const query = redirectTo
+      ? `?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(redirectTo)}`
+      : ""
+
+    window.location.assign(`/api/auth/google${query}`)
   }
 
   return (

@@ -10,7 +10,7 @@ import type { GetBatchLogsResponse } from "@/types/admin/batch"
  */
 export const GET = async (request: NextRequest) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {

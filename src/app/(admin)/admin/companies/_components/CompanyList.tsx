@@ -11,12 +11,10 @@ import { useAdminCompanies } from "../_hooks/useAdminCompanies"
 import type { Company, CompanyFormData } from "@/types/admin/company"
 import { CompanyDialog } from "./CompanyDialog"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { toast } from "sonner"
 
 
 export const CompanyList = () => {
-  const { token } = useSupabaseSession()
   
   // 新規登録のダイアログの開閉状態
   const [isCreateOpen, setIsCreateOpen] = useState(false)  
@@ -35,7 +33,6 @@ export const CompanyList = () => {
         url: "/api/admin/companies",
         method: "POST",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()
@@ -52,7 +49,6 @@ export const CompanyList = () => {
         url: `/api/admin/companies/${editTarget.id}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()

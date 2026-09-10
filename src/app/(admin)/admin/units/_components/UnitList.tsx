@@ -14,7 +14,6 @@ import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
 import { UnitDialog } from "./UnitDialog"
 import { UnitColumns } from "./UnitColumns"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminUnits } from "../_hooks/useAdminUnits"
 import type { Unit, UnitFormData } from "@/types/admin/unit"
 
@@ -23,7 +22,6 @@ type SearchFormData = {
 }
 
 export const UnitList = () => {
-  const { token } = useSupabaseSession()
   
   // 新規登録のダイアログの開閉状態
   const [isCreateOpen, setIsCreateOpen] = useState(false)  
@@ -66,7 +64,6 @@ export const UnitList = () => {
         url: "/api/admin/units", 
         method: "POST",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()
@@ -83,7 +80,6 @@ export const UnitList = () => {
         url: `/api/admin/units/${editTarget.id}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()

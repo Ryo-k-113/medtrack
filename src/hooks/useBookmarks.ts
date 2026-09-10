@@ -2,7 +2,7 @@
 
 import { mutate as globalMutate } from "swr"
 import { useDataFetch } from "@/hooks/useDataFetch"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
 import { fetcher } from "@/utils/fetcher"
 import type {
   BookmarkIdsResponse,
@@ -19,14 +19,11 @@ const BOOKMARKS_API_PATH = "/api/me/bookmarks"
 /**
  * ブックマーク関連のキャッシュをまとめて再取得する
  * ID一覧とマイページの医薬品一覧を対象にする
- * （useDataFetchのキーは [url, token] のため、url部分で判定する）
+ * （useDataFetchのキーはURLの文字列のため、前方一致で判定する）
  */
 const revalidateBookmarks = () =>
   globalMutate(
-    (key) =>
-      Array.isArray(key) &&
-      typeof key[0] === "string" &&
-      key[0].startsWith(BOOKMARKS_API_PATH)
+    (key) => typeof key === "string" && key.startsWith(BOOKMARKS_API_PATH)
   )
 
 
@@ -36,11 +33,11 @@ const revalidateBookmarks = () =>
  * @returns ブックマーク一覧、bookmark状態判定、追加・解除、ログイン状態
  */
 export const useBookmarks = () => {
-  const { session, token } = useSupabaseSession()
+  const { isLoggedIn } = useMe()
 
   // 未ログイン時はリクエストしない
   const { data, isLoading } = useDataFetch<BookmarkIdsResponse>(
-    session ? `${BOOKMARKS_API_PATH}/ids` : null
+    isLoggedIn ? `${BOOKMARKS_API_PATH}/ids` : null
   )
 
   const bookmarks = data?.bookmarks ?? []
@@ -55,7 +52,7 @@ export const useBookmarks = () => {
     updateBookmarks: (current: BookmarkItem[]) => BookmarkItem[]
   ) =>
     globalMutate(
-      [`${BOOKMARKS_API_PATH}/ids`, token],
+      `${BOOKMARKS_API_PATH}/ids`,
       (current?: BookmarkIdsResponse) =>
         current ? { bookmarks: updateBookmarks(current.bookmarks) } : current,
       { revalidate: false } // 再取得はrevalidateBookmarksで行う
@@ -74,7 +71,6 @@ export const useBookmarks = () => {
         url: `/api/drugs/${drugId}/bookmark`,
         method: "POST",
         body: { drugId },
-        token
       })
 
       // 再取得を待たずに、仮IDを登録結果の実IDへ差し替える
@@ -109,7 +105,6 @@ export const useBookmarks = () => {
         url: `/api/drugs/${drugId}/bookmark`,
         method: "DELETE",
         body: { bookmarkId },
-        token
       })
     } finally {
       // サーバーの実データと同期する
@@ -135,7 +130,7 @@ export const useBookmarks = () => {
     addBookmark,
     removeBookmark,
     toggleBookmark,
-    isLoggedIn: !!session,
+    isLoggedIn,
     isLoading,
   }
 }

@@ -1,30 +1,36 @@
 "use client"
 
-import { useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import type { Session } from "@supabase/supabase-js"
-import { createClient } from "@/lib/supabase/client"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
+import { logoutHandler } from "@/lib/supabase-auth/logoutHandler"
+import { REDIRECT_TO_QUERY_KEY } from "@/constants/auth"
+import type { CurrentUser } from "@/types/auth"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { BaseDropdown } from "@/components/Dropdown/BaseDropdown"
 import { UserMenuItems } from "./userMenuItems"
 import { LogIn } from "lucide-react"
 
+/** ログインページのパス */
+const LOGIN_PATH = "/login"
+
+/** 戻り先に含めないパス（認証ページ自体へ戻しても意味がないため） */
+const AUTH_PATHS = [LOGIN_PATH, "/signup"]
+
 type AuthNavProps = {
-  session: Session | null | undefined
+  me: CurrentUser | null
   onNavigateMypage: () => void
   onNavigateBookmark: () => void
+  onNavigateLogin: () => void
   onLogout: () => void
 }
 
 // ログイン状態に応じたヘッダーアイコンの表示
-const AuthNav = ({ session, onNavigateMypage, onNavigateBookmark, onLogout }: AuthNavProps) => {
-  if (session) {
+const AuthNav = ({ me, onNavigateMypage, onNavigateBookmark, onNavigateLogin, onLogout }: AuthNavProps) => {
+  if (me) {
     // メールアドレスの頭文字（アイコン表示用）
-    const emailInitial = session.user.email?.charAt(0).toUpperCase() ?? "?"
+    const emailInitial = me.email.charAt(0).toUpperCase()
 
     return (
       <BaseDropdown
@@ -45,20 +51,17 @@ const AuthNav = ({ session, onNavigateMypage, onNavigateBookmark, onLogout }: Au
     <Button
       variant="default"
       className="h-9 rounded-full px-4 text-sm font-bold md:h-10 md:px-6 md:text-base"
-      asChild
+      onClick={onNavigateLogin}
     >
-      <Link href="/login">
-        <LogIn className="h-3.5 w-3.5 md:h-4 md:w-4" />
-        ログイン
-      </Link>
+      <LogIn className="h-3.5 w-3.5 md:h-4 md:w-4" />
+      ログイン
     </Button>
   )
 }
 
 export const Header = () => {
   const router = useRouter()
-  const supabase = useMemo(() => createClient(), [])
-  const { session, isLoading } = useSupabaseSession()
+  const { me, isLoading } = useMe()
 
   // マイページへの遷移
   const handleNavigateMypage = () => {
@@ -69,10 +72,21 @@ export const Header = () => {
     router.push("/mypage/bookmarks")
   }
 
+  // ログインページへの遷移（ログイン後に元のページへ戻れるよう現在地を渡す）
+  const handleNavigateLogin = () => {
+    const { pathname, search } = window.location
+
+    const query = AUTH_PATHS.includes(pathname)
+      ? ""
+      : `?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(`${pathname}${search}`)}`
+
+    router.push(`${LOGIN_PATH}${query}`)
+  }
+
   // ログアウト処理
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    toast.success("ログアウトしました。")
+    await logoutHandler()
+    router.replace("/")
   }
 
   return (
@@ -84,9 +98,10 @@ export const Header = () => {
 
         {!isLoading && (
           <AuthNav
-            session={session}
+            me={me}
             onNavigateMypage={handleNavigateMypage}
             onNavigateBookmark={handleNavigateBookmark}
+            onNavigateLogin={handleNavigateLogin}
             onLogout={handleLogout}
           />
         )}

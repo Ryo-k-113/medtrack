@@ -3,14 +3,16 @@
 import { useForm, FormProvider } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createClient } from "@/lib/supabase/client"
+import { mutate as globalMutate } from "swr"
 import { fetcher } from "@/utils/fetcher"
+import { logoutHandler } from "@/lib/supabase-auth/logoutHandler"
+import { ME_API_PATH } from "@/hooks/useMe"
 import { toast } from "sonner"
 import { LogIn } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import { FormInput } from "@/components/Form/FormInput"
 import { PasswordInput } from "@/components/Form/PasswordInput"
-import { authSchema, type AuthFormData } from "@/types/auth"
+import { authSchema, type AuthFormData, type CurrentUser } from "@/types/auth"
 
 
 export const AdminLoginForm = () => {
@@ -30,45 +32,36 @@ export const AdminLoginForm = () => {
 
   // フォーム送信
   const onSubmit = async (data: AuthFormData) => {
-    const supabase = createClient()
+    try {
+      // ログイン
+      const currentUser: CurrentUser = await fetcher({
+        url: "/api/auth/login",
+        method: "POST",
+        body: { ...data },
+      })
 
-    // ログイン
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    })
+      // ログイン直後の状態を反映する
+      await globalMutate(ME_API_PATH, currentUser, { revalidate: false })
 
-    if (error) {
-      toast.error("メールアドレスまたはパスワードが正しくありません")
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "ログイン処理中にエラーが発生しました"
+      )
       return
     }
 
     try {
-      // セッションからトークンを取得
-      const { data: { session } } = await supabase.auth.getSession()
-      const token = session?.access_token
+      // 管理者以外はログイン状態を残さない
+      await fetcher({ url: "/api/admin/auth/role-check" })
 
-      if (!token) throw new Error()
-
-      // ADMINロールチェック
-      await fetcher({
-        url: "/api/admin/auth/role-check",
-        token, 
-      })
-
-      // 管理画面へリダイレクト
       router.replace("/admin")
       toast.success("ログインしました")
 
     } catch (error) {
-      // サインアウト処理を実行
-      await supabase.auth.signOut()
-      
-      if (error instanceof Error) {
-        toast.error(error.message)
-        return
-      }
-      toast.error("ログイン処理中にエラーが発生しました")
+      await logoutHandler()
+      toast.error(
+        error instanceof Error ? error.message : "ログイン処理中にエラーが発生しました"
+      )
     }
   }
 

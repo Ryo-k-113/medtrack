@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
 import { SearchBar } from "@/app/(public)/_components/SearchBar"
 import { SearchResults } from "./SearchResults"
 
@@ -12,9 +12,9 @@ const MAX_KEYWORDS_MEMBER = 3
 
 export const SearchPageContent = () => {
   const searchParams = useSearchParams()
-  const { session } = useSupabaseSession()
+  const { isLoggedIn } = useMe()
 
-  const maxKeywords = session ? MAX_KEYWORDS_MEMBER : MAX_KEYWORDS_GUEST
+  const maxKeywords = isLoggedIn ? MAX_KEYWORDS_MEMBER : MAX_KEYWORDS_GUEST
 
   const keywords = (searchParams.get("query") ?? "")
     .split(",")

@@ -8,7 +8,6 @@ import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { FormSelectBox } from "@/components/Form/FormSelectBox"
 import { SHIPPING_STATUS_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import {
   inactivateAnnounceFormSchema,
@@ -28,7 +27,6 @@ export const InactivateAnnounceDialog = ({
   onClose,
   announceId,
 }: InactivateAnnounceDialogProps) => {
-  const { token } = useSupabaseSession()
   const { drugId, packageUnitId, packageUnit, mutate } = useAdminPackageUnit()
 
 
@@ -54,7 +52,6 @@ export const InactivateAnnounceDialog = ({
         url: `/api/admin/drugs/${drugId}/packages/${packageUnitId}/announce/${announceId}/inactive`,
         method: "POST",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()

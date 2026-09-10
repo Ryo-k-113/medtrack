@@ -11,7 +11,7 @@ export const GET = async (
   { params }: { params: { drugId: string; packageUnitId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   const { packageUnitId, drugId } = params;
@@ -84,7 +84,7 @@ export const PUT = async (
   { params }: { params: { drugId: string; packageUnitId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   // 製品IDと包装IDを取得
@@ -138,7 +138,7 @@ export const DELETE = async (
   { params }: { params: { drugId: string; packageUnitId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   const { packageUnitId } = params;

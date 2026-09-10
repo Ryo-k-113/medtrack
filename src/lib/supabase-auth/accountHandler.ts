@@ -1,7 +1,7 @@
 "use client"
 
 import { toast } from "sonner"
-import { createClient } from "@/lib/supabase/client"
+import { fetcher } from "@/utils/fetcher"
 
 /**
  * メールアドレスの変更
@@ -10,27 +10,20 @@ import { createClient } from "@/lib/supabase/client"
  * @returns 送信に成功したかどうか
  */
 export const updateEmailHandler = async (email: string): Promise<boolean> => {
-  const supabase = createClient()
+  try {
+    const { message } = await fetcher({
+      url: "/api/me/email",
+      method: "PUT",
+      body: { email },
+    })
 
-  const { error } = await supabase.auth.updateUser(
-    { email },
-    { emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/mypage/account` }
-  )
+    toast.success(message, { duration: 8000 })
+    return true
 
-  if (error) {
-
-    const message = error.message.includes("already")
-      ? "すでに使用されているメールアドレスです。"
-      : "メールアドレスの変更に失敗しました。"
-
-    toast.error(message)
+  } catch {
+    toast.error("メールアドレスの変更に失敗しました。")
     return false
   }
-  toast.success(
-    "確認メールを送信しました。メール内のリンクを開くと変更が完了します。", 
-    { duration: 8000 }
-  )
-  return true
 }
 
 /**
@@ -39,21 +32,18 @@ export const updateEmailHandler = async (email: string): Promise<boolean> => {
  * @returns 変更に成功したかどうか
  */
 export const updatePasswordHandler = async (password: string): Promise<boolean> => {
-  const supabase = createClient()
+  try {
+    const { message } = await fetcher({
+      url: "/api/me/password",
+      method: "PUT",
+      body: { password },
+    })
 
-  const { error } = await supabase.auth.updateUser({ password })
+    toast.success(message)
+    return true
 
-  if (error) {
-    console.error("パスワードの変更に失敗しました", error)
-
-    const message = error.message.includes("different from the old password")
-      ? "現在のパスワードとは異なるパスワードを入力してください。"
-      : "パスワードの変更に失敗しました。"
-
-    toast.error(message)
+  } catch  {
+    toast.error( "パスワードの変更に失敗しました。")
     return false
   }
-
-  toast.success("パスワードを変更しました。")
-  return true
 }

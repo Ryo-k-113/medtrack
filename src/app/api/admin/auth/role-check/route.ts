@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 
 
@@ -7,9 +7,9 @@ type AdminCheckRoleResponse = {
 }
 
 /** 管理者ロールチェック */
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
 
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   return NextResponse.json<AdminCheckRoleResponse>({ status: "OK" }, { status: 200 })

@@ -4,7 +4,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { SearchBox } from "@/components/Form/SearchBox"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
 
 type SearchFormData = {
   keyword: string
@@ -20,9 +20,9 @@ type SearchBarProps = {
 
 export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
   const router = useRouter()
-  const { session } = useSupabaseSession()
+  const { isLoggedIn } = useMe()
 
-  const maxKeywords = session ? MAX_KEYWORDS_MEMBER : MAX_KEYWORDS_GUEST
+  const maxKeywords = isLoggedIn ? MAX_KEYWORDS_MEMBER : MAX_KEYWORDS_GUEST
 
   const searchForm = useForm<SearchFormData>({
     values: { keyword: defaultKeyword },
@@ -37,7 +37,7 @@ export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
 
     if (keywords.length > maxKeywords) {
       toast.error(
-        session
+        isLoggedIn
           ? `検索キーワードは${maxKeywords}件までです`
           : `未ログインの場合、検索は1件までです。複数同時検索するにはログインしてください`
       )

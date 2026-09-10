@@ -1,7 +1,7 @@
 "use client"
 
 import { useDataFetch } from "@/hooks/useDataFetch"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
 import type { BookmarksResponse } from "@/types/bookmark"
 
 
@@ -11,11 +11,11 @@ import type { BookmarksResponse } from "@/types/bookmark"
  */
 
 export const useBookmarkedDrugs = () => {
-  const { session } = useSupabaseSession()
+  const { isLoggedIn } = useMe()
 
   // 未ログイン時はリクエストしない
   const { data, isLoading, error, mutate } = useDataFetch<BookmarksResponse>(
-    session ? "/api/me/bookmarks" : null
+    isLoggedIn ? "/api/me/bookmarks" : null
   )
 
   return {

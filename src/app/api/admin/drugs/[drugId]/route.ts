@@ -16,7 +16,7 @@ import type {
 /** 医薬品情報と包装情報一覧を取得 */ 
 export const GET = async (request: NextRequest, { params }: { params: { drugId: string } }) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   const { drugId } = params;
@@ -81,7 +81,7 @@ export const PUT = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
    
   const { drugId } = params;
@@ -153,7 +153,7 @@ export const DELETE = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
    
   const { drugId } = params;
@@ -182,7 +182,7 @@ export const POST = async (
   { params }: { params: { drugId: string } }
 ) => {
   // 認証チェック
-  const { errorResponse } = await getAdminUser(request)
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   const { drugId } = params;

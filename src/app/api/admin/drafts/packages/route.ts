@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import type { GetDraftPackageUnitsResponse } from "@/types/admin/draft"
 
 
 /** GET: 下書き包装一覧取得 */
-export const GET = async (request: NextRequest) => {
-  const { errorResponse } = await getAdminUser(request)
+export const GET = async () => {
+  const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {

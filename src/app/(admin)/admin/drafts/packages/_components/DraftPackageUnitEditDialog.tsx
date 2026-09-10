@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
 import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { packageUnitEditFormSchema, type PackageUnitEditFormData, type PackageUnitEditFormInput } from "@/types/admin/drug"
 import type { DraftPackageUnit } from "@/types/admin/draft"
 
@@ -27,7 +26,6 @@ export const DraftPackageUnitEditDialog = ({
   packageUnit,
   onSuccess,
 }: Props) => {
-  const { token } = useSupabaseSession()
 
   const form = useForm<PackageUnitEditFormInput, unknown, PackageUnitEditFormData>({
     mode: "onBlur",
@@ -63,7 +61,6 @@ export const DraftPackageUnitEditDialog = ({
         url: `/api/admin/drugs/${packageUnit.drugId}/packages/${packageUnit.id}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       onSuccess()

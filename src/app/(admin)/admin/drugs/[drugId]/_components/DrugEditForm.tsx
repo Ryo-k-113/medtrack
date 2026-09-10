@@ -9,7 +9,6 @@ import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormPr
 import { DrugEditActions } from "./DrugEditActions"
 import { DrugEditFormSkeleton } from "./DrugEditFormSkeleton"
 import { fetcher } from "@/utils/fetcher"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
 import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
 import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/types/admin/drug";
@@ -17,7 +16,6 @@ import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } fro
 
 
 export const DrugEditForm = () => {
-  const { token } = useSupabaseSession();
   const router = useRouter()
 
   const [isDeleting, setIsDeleting] = useState(false)
@@ -62,7 +60,6 @@ export const DrugEditForm = () => {
         url: `/api/admin/drugs/${drugId}`,
         method: "PUT",
         body: data,
-        token,
       })
       toast.success(res.message)
       await mutate()
@@ -79,7 +76,6 @@ export const DrugEditForm = () => {
       const res = await fetcher({
         url: `/api/admin/drugs/${drugId}`,
         method: "DELETE",
-        token,
       })
 
       toast.success(res.message)
