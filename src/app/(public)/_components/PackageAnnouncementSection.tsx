@@ -26,11 +26,26 @@ const getYesterday = () => {
 // 現在は告知日のみ表示。
 const ACTIVE_TAB: AnnouncementDateType = "ANNOUNCED"
 
+/** 初期表示するカードの件数 */
+const INITIAL_DISPLAY_COUNT = 5
+
 export const PackageAnnouncementSection = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(getYesterday)
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [selectedTypes, setSelectedTypes] = useState<AnnounceType[]>([])
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  // 表示対象が変わったら、展開状態を初期に戻す
+  const handleSelectDate = (date: Date) => {
+    setSelectedDate(date)
+    setIsExpanded(false)
+  }
+
+  const handleChangeTypes = (types: AnnounceType[]) => {
+    setSelectedTypes(types)
+    setIsExpanded(false)
+  }
 
   const dateParam = format(selectedDate, "yyyy-MM-dd")
 
@@ -77,9 +92,32 @@ export const PackageAnnouncementSection = () => {
       )
     }
 
-    return filteredItems.map((item) => (
-      <PackageAnnouncementCard key={item.id} item={item} />
-    ))
+    // 初期表示は先頭のみとし、残りはボタンで展開する
+    const displayItems = isExpanded
+      ? filteredItems
+      : filteredItems.slice(0, INITIAL_DISPLAY_COUNT)
+
+    const hiddenCount = filteredItems.length - displayItems.length
+
+    return (
+      <>
+        {displayItems.map((item) => (
+          <PackageAnnouncementCard key={item.id} item={item} />
+        ))}
+
+        {hiddenCount > 0 && (
+          <div className="flex justify-center pt-2">
+            <Button
+              variant="surface"
+              onClick={() => setIsExpanded(true)}
+              className="w-full max-w-xs hover:bg-white hover:border-primary/60"
+            >
+              もっと見る（あと{hiddenCount}件）
+            </Button>
+          </div>
+        )}
+      </>
+    )
   }
 
   return (
@@ -94,7 +132,7 @@ export const PackageAnnouncementSection = () => {
           {/* 告知タイプの絞り込み */}
           <AnnounceTypeFilter
             selected={selectedTypes}
-            onChange={setSelectedTypes}
+            onChange={handleChangeTypes}
             className="justify-start md:justify-end pb-4"
           />
 
@@ -114,12 +152,12 @@ export const PackageAnnouncementSection = () => {
         </div>
 
         {/* 右側：カレンダー */}
-        <aside className="lg:col-span-4 order-first lg:order-none">
+        <aside className="order-first lg:order-none lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
 
           {/* カレンダー表示(デスクトップ) */}
           <BaseCalendar
             selected={selectedDate} 
-            onSelect={setSelectedDate}
+            onSelect={handleSelectDate}
             className="hidden lg:flex bg-white border rounded-lg shadow-sm p-0  w-full justify-center lg:py-6"
           />
 
@@ -139,7 +177,7 @@ export const PackageAnnouncementSection = () => {
                 <BaseCalendar
                   selected={selectedDate}
                   onSelect={(date) => {
-                    setSelectedDate(date)
+                    handleSelectDate(date)
                     setIsCalendarOpen(false)
                   }}
                 />
