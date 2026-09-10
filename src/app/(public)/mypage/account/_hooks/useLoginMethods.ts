@@ -1,32 +1,28 @@
 "use client"
 
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useDataFetch } from "@/hooks/useDataFetch"
+import { useMe } from "@/hooks/useMe"
+import type { LoginMethods } from "@/types/auth"
 
-/** Supabaseが返すプロバイダ名 */
-const PROVIDER = {
-  google: "google",
-  email: "email",
-} as const
+/** ログイン方法の取得先 */
+const LOGIN_METHODS_API_PATH = "/api/me/login-methods"
 
 /**
  * ログイン中のユーザーが持つログイン方法を判定するカスタムフック
- * Supabaseは認証手段ごとにidentityを持つため、利用中の方法を取り出す
  * @returns ログイン方法ごとのメールアドレス、ログイン状態
  */
 export const useLoginMethods = () => {
-  const { session, isLoading } = useSupabaseSession()
+  const { isLoggedIn, isLoading: isUserLoading } = useMe()
 
-  const identities = session?.user.identities ?? []
-
-  // 各ログイン方法に紐づくメールアドレス（未設定の場合はnull）
-  const findEmail = (provider: string) =>
-    identities.find((identity) => identity.provider === provider)
-      ?.identity_data?.email ?? null
+  // 未ログイン時はリクエストしない
+  const { data, isLoading } = useDataFetch<LoginMethods>(
+    isLoggedIn ? LOGIN_METHODS_API_PATH : null
+  )
 
   return {
-    isLoading,
-    isLoggedIn: !!session,
-    googleEmail: findEmail(PROVIDER.google) as string | null,
-    loginEmail: findEmail(PROVIDER.email) as string | null,
+    isLoading: isUserLoading || isLoading,
+    isLoggedIn,
+    googleEmail: data?.googleEmail ?? null,
+    loginEmail: data?.loginEmail ?? null,
   }
 }

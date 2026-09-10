@@ -29,6 +29,13 @@ export const authSchema = z.object({
 export type AuthFormData = z.infer<typeof authSchema>
 
 
+/** ログイン方法ごとのメールアドレス（未設定はnull） */
+export type LoginMethods = {
+  googleEmail: string | null
+  loginEmail: string | null
+}
+
+
 /** ログイン中のユーザー */
 export type CurrentUser = {
   id: number

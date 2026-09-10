@@ -2,7 +2,7 @@
 
 import { mutate as globalMutate } from "swr"
 import { useDataFetch } from "@/hooks/useDataFetch"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
 import { fetcher } from "@/utils/fetcher"
 import type {
   BookmarkIdsResponse,
@@ -33,11 +33,11 @@ const revalidateBookmarks = () =>
  * @returns ブックマーク一覧、bookmark状態判定、追加・解除、ログイン状態
  */
 export const useBookmarks = () => {
-  const { session } = useSupabaseSession()
+  const { isLoggedIn } = useMe()
 
   // 未ログイン時はリクエストしない
   const { data, isLoading } = useDataFetch<BookmarkIdsResponse>(
-    session ? `${BOOKMARKS_API_PATH}/ids` : null
+    isLoggedIn ? `${BOOKMARKS_API_PATH}/ids` : null
   )
 
   const bookmarks = data?.bookmarks ?? []
@@ -130,7 +130,7 @@ export const useBookmarks = () => {
     addBookmark,
     removeBookmark,
     toggleBookmark,
-    isLoggedIn: !!session,
+    isLoggedIn,
     isLoading,
   }
 }
