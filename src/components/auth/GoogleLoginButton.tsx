@@ -1,6 +1,5 @@
 "use client"
 
-import { createClient } from '@/lib/supabase/client'
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -10,14 +9,9 @@ type GoogleLoginButtonProps = {
 
 export const GoogleLoginButton = ({ className }: GoogleLoginButtonProps) => {
 
-  const signInWithGoogle = async () => {
-    const supabase = await createClient()
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback/google`,
-      },
-    })
+  // 認証はサーバー側で開始するため、遷移するだけにする
+  const signInWithGoogle = () => {
+    window.location.assign("/api/auth/google")
   }
 
   return (
