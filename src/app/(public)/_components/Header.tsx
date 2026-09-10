@@ -1,12 +1,10 @@
 "use client"
 
-import { useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import type { Session } from "@supabase/supabase-js"
-import { createClient } from "@/lib/supabase/client"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
+import { logoutHandler } from "@/lib/supabase-auth/logoutHandler"
+import type { CurrentUser } from "@/types/auth"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { BaseDropdown } from "@/components/Dropdown/BaseDropdown"
@@ -14,17 +12,17 @@ import { UserMenuItems } from "./userMenuItems"
 import { LogIn } from "lucide-react"
 
 type AuthNavProps = {
-  session: Session | null | undefined
+  me: CurrentUser | null
   onNavigateMypage: () => void
   onNavigateBookmark: () => void
   onLogout: () => void
 }
 
 // ログイン状態に応じたヘッダーアイコンの表示
-const AuthNav = ({ session, onNavigateMypage, onNavigateBookmark, onLogout }: AuthNavProps) => {
-  if (session) {
+const AuthNav = ({ me, onNavigateMypage, onNavigateBookmark, onLogout }: AuthNavProps) => {
+  if (me) {
     // メールアドレスの頭文字（アイコン表示用）
-    const emailInitial = session.user.email?.charAt(0).toUpperCase() ?? "?"
+    const emailInitial = me.email.charAt(0).toUpperCase()
 
     return (
       <BaseDropdown
@@ -57,8 +55,7 @@ const AuthNav = ({ session, onNavigateMypage, onNavigateBookmark, onLogout }: Au
 
 export const Header = () => {
   const router = useRouter()
-  const supabase = useMemo(() => createClient(), [])
-  const { session, isLoading } = useSupabaseSession()
+  const { me, isLoading } = useMe()
 
   // マイページへの遷移
   const handleNavigateMypage = () => {
@@ -71,8 +68,8 @@ export const Header = () => {
 
   // ログアウト処理
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    toast.success("ログアウトしました。")
+    await logoutHandler()
+    router.replace("/")
   }
 
   return (
@@ -84,7 +81,7 @@ export const Header = () => {
 
         {!isLoading && (
           <AuthNav
-            session={session}
+            me={me}
             onNavigateMypage={handleNavigateMypage}
             onNavigateBookmark={handleNavigateBookmark}
             onLogout={handleLogout}

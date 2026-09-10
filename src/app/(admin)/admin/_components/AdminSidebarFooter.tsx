@@ -2,9 +2,8 @@
 
 import { LogOut, MoreVertical  } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { createClient } from "@/lib/supabase/client"
-import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { useMe } from "@/hooks/useMe"
+import { logoutHandler } from "@/lib/supabase-auth/logoutHandler"
 import { BaseDropdown, DropdownMenuItem } from "@/components/Dropdown/BaseDropdown"
 import { SidebarFooter, useSidebar } from "@/components/ui/sidebar"
 import { AdminSidebarFooterSkeleton } from "./AdminSidebarFooterSkeleton"
@@ -23,18 +22,16 @@ const SidebarFooterItems = (
 ]
 
 export const AdminSidebarFooter = () => {
-  const { session, isLoading } = useSupabaseSession()
+  const { me, isLoading } = useMe()
   const router = useRouter()
   const { open } = useSidebar()
 
-  const email = session?.user?.email ?? ""
+  const email = me?.email ?? ""
   const initial = email.charAt(0).toUpperCase() 
 
   // ログアウト
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    toast.success("ログアウトしました")
+    await logoutHandler()
     router.replace("/admin/login")
   }
 
