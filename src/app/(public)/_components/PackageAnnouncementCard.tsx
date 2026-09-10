@@ -21,7 +21,7 @@ export const PackageAnnouncementCard = ({ item }: PackageAnnouncementCardProps) 
 
   if(!announceType) return
   return (
-    <Link href={`/drugs/${drug.id}/packages/${packageUnit.id}`}>
+    <Link href={`/drugs/${drug.id}/packages/${packageUnit.id}`} className="block">
       <Card className="shadow transition-colors hover:border-primary">
         <CardContent className="space-y-3 px-6 py-4">
 
