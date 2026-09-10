@@ -3,6 +3,9 @@
 import useSWR from "swr"
 import type { CurrentUser } from "@/types/auth"
 
+/** ログイン中のユーザー情報の取得先 */
+export const ME_API_PATH = "/api/me"
+
 
 
 /**
@@ -24,7 +27,7 @@ const fetchMe = async (url: string): Promise<CurrentUser | null> => {
  * @returns ユーザー情報、ログイン状態、ローディング状態、エラー、再取得関数
  */
 export const useMe = () => {
-  const { data, isLoading, error, mutate } = useSWR<CurrentUser | null>("/api/me", fetchMe)
+  const { data, isLoading, error, mutate } = useSWR<CurrentUser | null>(ME_API_PATH, fetchMe)
 
   return {
     me: data ?? null,
