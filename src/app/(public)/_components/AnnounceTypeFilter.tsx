@@ -36,9 +36,9 @@ const ANNOUNCE_TYPE_OPTIONS: {
   },
 ]
 
-// チップ共通のスタイル
+// チップ共通のスタイル（横スクロール時に縮まないようshrink-0を持たせる）
 const CHIP_CLASS =
-  "rounded-full border px-3 py-1 text-xs font-semibold transition-colors"
+  "shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors"
 
 // 未選択時のスタイル
 const CHIP_INACTIVE_CLASS = "border-border bg-background text-weak hover:bg-surface"
@@ -65,7 +65,13 @@ export const AnnounceTypeFilter = ({
   }
 
   return (
-    <div className={cn("flex flex-wrap items-center gap-2", className)}>
+    // モバイルは折り返さず横スクロール、md以上は折り返して表示する
+    <div
+      className={cn(
+        "flex items-center gap-2 overflow-x-auto md:flex-wrap md:overflow-x-visible",
+        className
+      )}
+    >
 
       {/* すべて：絞り込みの解除 */}
       <button
