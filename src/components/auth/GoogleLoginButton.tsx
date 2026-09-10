@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { REDIRECT_TO_QUERY_KEY } from "@/constants/auth"
 import { cn } from "@/lib/utils"
 
 type GoogleLoginButtonProps = {
@@ -9,9 +10,17 @@ type GoogleLoginButtonProps = {
 
 export const GoogleLoginButton = ({ className }: GoogleLoginButtonProps) => {
 
-  // 認証はサーバー側で開始するため、遷移するだけにする
+  // 認証はサーバー側で開始するため、戻り先を引き継いで遷移するだけにする
   const signInWithGoogle = () => {
-    window.location.assign("/api/auth/google")
+    const redirectTo = new URLSearchParams(window.location.search).get(
+      REDIRECT_TO_QUERY_KEY
+    )
+
+    const query = redirectTo
+      ? `?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(redirectTo)}`
+      : ""
+
+    window.location.assign(`/api/auth/google${query}`)
   }
 
   return (

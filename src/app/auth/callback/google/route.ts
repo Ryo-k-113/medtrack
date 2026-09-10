@@ -2,9 +2,7 @@ import type { NextRequest } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { upsertUser } from "@/app/api/_lib/upsertUser"
 import { redirectWithNotice } from "@/app/api/_lib/redirectWithNotice"
-
-/** ログイン後の遷移先 */
-const TOP_PATH = "/"
+import { OAUTH_REDIRECT_COOKIE, resolveRedirectPath } from "@/constants/auth"
 
 /** ログインに失敗した場合の遷移先 */
 const LOGIN_PATH = "/login"
@@ -31,5 +29,13 @@ export const GET = async (request: NextRequest) => {
 
   await upsertUser(data.user.id, data.user.email)
 
-  return redirectWithNotice(TOP_PATH, "loginSucceeded")
+  // ログイン開始時に預けた戻り先へ遷移し、役目を終えたCookieは削除する
+  const redirectPath = resolveRedirectPath(
+    request.cookies.get(OAUTH_REDIRECT_COOKIE)?.value
+  )
+
+  const response = redirectWithNotice(redirectPath, "loginSucceeded")
+  response.cookies.delete(OAUTH_REDIRECT_COOKIE)
+
+  return response
 }

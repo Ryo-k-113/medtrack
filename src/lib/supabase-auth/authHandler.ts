@@ -5,6 +5,7 @@ import { mutate as globalMutate } from "swr";
 import { toast } from "sonner";
 import { fetcher } from "@/utils/fetcher";
 import { ME_API_PATH } from "@/hooks/useMe";
+import { REDIRECT_TO_QUERY_KEY, resolveRedirectPath } from "@/constants/auth";
 import type { AuthFormData, CurrentUser } from "@/types/auth";
 
 /**
@@ -25,7 +26,12 @@ export const loginHandler = async (
     // ログイン直後の状態を反映する
     await globalMutate(ME_API_PATH, currentUser, { revalidate: false })
 
-    router.replace("/")
+    // ミドルウェアが付与した戻り先へ遷移する
+    const redirectPath = resolveRedirectPath(
+      new URLSearchParams(window.location.search).get(REDIRECT_TO_QUERY_KEY)
+    )
+
+    router.replace(redirectPath)
     toast.success("ログインに成功しました。")
 
   } catch (error) {
