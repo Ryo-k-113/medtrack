@@ -5,7 +5,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LogIn, UserPlus } from "lucide-react"
-import { FormData, authSchema } from "@/app/(public)/(auth)/_schemas/authSchema"
+import { authSchema, type AuthFormData } from "@/types/auth"
 import { GoogleLoginButton } from "@/components/auth/GoogleLoginButton"
 import { loginHandler, signupHandler } from "@/lib/supabase-auth/authHandler"
 import { Button } from "@/components/ui/button"
@@ -34,7 +34,7 @@ export const AuthForm = ({
 
   const router = useRouter()
 
-  const form = useForm<FormData>({
+  const form = useForm<AuthFormData>({
     resolver: zodResolver(authSchema),
     mode: "onBlur",
     defaultValues: {
@@ -49,7 +49,7 @@ export const AuthForm = ({
   const SubmitIcon = formType === "signup" ? UserPlus : LogIn
 
   // フォーム送信（新規登録・ログインで処理を分岐）
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = async (formData: AuthFormData) => {
     if (formType === "signup") {
       await signupHandler(formData, reset)
       return
