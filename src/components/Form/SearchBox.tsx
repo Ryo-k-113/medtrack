@@ -30,7 +30,7 @@ export const SearchBox = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <InputGroup className={cn("h-10 w-full overflow-hidden", className)}>
+        <InputGroup className={cn("h-10 w-full overflow-hidden bg-white", className)}>
           <InputGroupInput
             {...field}
             placeholder={placeholder}
