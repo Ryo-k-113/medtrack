@@ -50,7 +50,7 @@ const AuthNav = ({ me, onNavigateMypage, onNavigateBookmark, onNavigateLogin, on
   return (
     <Button
       variant="default"
-      className="h-9 rounded-full px-4 text-sm font-bold md:h-10 md:px-6 md:text-base"
+      className="h-9 rounded-lg px-4 text-sm font-bold md:h-10 md:px-6 "
       onClick={onNavigateLogin}
     >
       <LogIn className="h-3.5 w-3.5 md:h-4 md:w-4" />
