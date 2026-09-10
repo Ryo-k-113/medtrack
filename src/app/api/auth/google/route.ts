@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import { redirectWithNotice } from "@/app/api/_lib/redirectWithNotice"
 
 /** 認証後の戻り先 */
 const CALLBACK_URL = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback/google`
@@ -17,7 +18,9 @@ export const GET = async () => {
   })
 
   if (error || !data.url) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/login`)
+    console.error("Googleログインに失敗しました", error)
+
+    return redirectWithNotice("/login", "loginFailed")
   }
 
   return NextResponse.redirect(data.url)

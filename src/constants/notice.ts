@@ -3,9 +3,11 @@ export const NOTICE_QUERY_KEY = "notice"
 
 /**
  * 通知の内容
- * URLではキーのみを受け渡し、文言はここで持つ
+ * URLではキーのみを受け渡し
  */
 export const NOTICE = {
+  loginSucceeded: { type: "success", message: "ログインに成功しました。" },
+  loginFailed: { type: "error", message: "ログインに失敗しました。" },
   signupConfirmed: { type: "success", message: "登録が完了しました。" },
   emailChanged: { type: "success", message: "メールアドレスを変更しました。" },
   confirmFailed: {
