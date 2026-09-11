@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -22,6 +23,9 @@ export type DropdownMenuItem = {
 type BaseDropdownProps = {
   items: DropdownMenuItem[] 
   trigger: React.ReactNode  
+  header?: React.ReactNode
+  headerClassName?: string
+  itemClassName?: string
   disabled?: boolean
   align?: "start" | "center" | "end"
   side?: "top" | "bottom" | "left" | "right" 
@@ -31,6 +35,9 @@ type BaseDropdownProps = {
 export const BaseDropdown = ({
   items,
   trigger,
+  header,
+  headerClassName,
+  itemClassName,
   align = "end",
   side,
   className,
@@ -47,6 +54,14 @@ export const BaseDropdown = ({
         side={side}
         className={cn("flex flex-col gap-1", className)}
       >
+        {/* 見出し */}
+        {header && (
+          <>
+            <DropdownMenuLabel className={headerClassName}>{header}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
         {items.map((item, index) => (
           <React.Fragment key={index}>
             {/* セパレーターがあれば表示 */}
@@ -57,6 +72,7 @@ export const BaseDropdown = ({
               onClick={item.onClick}
               className={cn(
                 "focus:bg-surface focus:text-foreground gap-2",
+                itemClassName,
                 item.className,
               )}
             >
