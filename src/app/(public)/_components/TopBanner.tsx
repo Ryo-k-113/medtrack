@@ -46,9 +46,8 @@ export const TopBanner = () => {
   if (isLoading || isLoggedIn || isDismissed) return null
 
   return (
-    <div className="relative bg-primary/80 px-10 py-4 font-semibold text-center text-xs text-surface">
-      アカウント登録すると医薬品の複数同時検索が可能に！ログインボタンから新規登録をお願いします。
-
+    <div className="relative bg-primary/80 px-10 py-4 font-semibold text-center text-xs text-surface md:text-sm">
+      アカウント登録すると医薬品の「複数同時検索」や「ブックマーク機能」等が開放されます！
       <button
         type="button"
         onClick={handleDismiss}
