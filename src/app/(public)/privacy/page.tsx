@@ -9,22 +9,20 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="flex-1 bg-gray-50">
-      <PageContainer className="max-w-3xl space-y-8 py-10">
-        <h1 className="text-xl font-bold md:text-2xl">プライバシーポリシー</h1>
+    <PageContainer className="max-w-3xl space-y-8 py-10">
+      <h1 className="text-xl font-bold md:text-2xl">プライバシーポリシー</h1>
 
-        <div className="space-y-8">
-          {PRIVACY_SECTIONS.map((section) => (
-            <LegalSection key={section.title} title={section.title}>
-              {section.body.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </LegalSection>
-          ))}
-        </div>
+      <div className="space-y-8">
+        {PRIVACY_SECTIONS.map((section) => (
+          <LegalSection key={section.title} title={section.title}>
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </LegalSection>
+        ))}
+      </div>
 
-        <p className="text-xs text-weak">制定日: {LEGAL_ESTABLISHED_DATE}</p>
-      </PageContainer>
-    </div>
+      <p className="text-xs text-weak">制定日: {LEGAL_ESTABLISHED_DATE}</p>
+    </PageContainer>
   )
 }

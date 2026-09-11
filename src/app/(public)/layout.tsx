@@ -18,7 +18,8 @@ export default function PublicLayout({
       </Suspense>
 
       <Header />
-      <main className="flex flex-1 flex-col">
+      {/* 背景は公開ページ共通（カードや入力欄は白で浮かせる） */}
+      <main className="flex flex-1 flex-col bg-gray-50">
         {children}
       </main>
       <Footer />

@@ -8,7 +8,7 @@ import { PackageAnnouncementSection } from "./_components/PackageAnnouncementSec
 
 export default function TopPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
 
       {/* お知らせバナー */}
       <TopBanner />
