@@ -1,6 +1,7 @@
 "use client"
 
 import { notFound } from "next/navigation"
+import { PageContainer } from "@/components/Layout/PageContainer"
 import { usePackageDetail } from "@/hooks/usePackageDetail"
 import { DrugSummary } from "./_components/DrugSummary"
 import { SelectedPackageSection } from "./_components/SelectedPackageSection"
@@ -16,7 +17,7 @@ export default function PackageDetailPage() {
   if (!isLoading && !packageUnit) notFound()
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 md:px-6 md:py-10">
+    <PageContainer className="space-y-6">
 
       {/* 医薬品の基本情報 */}
       <DrugSummary />
@@ -32,6 +33,6 @@ export default function PackageDetailPage() {
 
       {/* 包装の告知履歴 */}
       <PackageShippingAnnouncements />
-    </div>
+    </PageContainer>
   )
 }

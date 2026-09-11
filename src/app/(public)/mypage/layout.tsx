@@ -24,7 +24,7 @@ export default function MyPageLayout({
 
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col pt-4 md:flex-row md:gap-8 md:px-6 md:py-10">
+    <div className="mx-auto flex w-full max-w-5xl flex-col pt-4 md:flex-row md:gap-8 md:px-6 md:py-10">
 
       {/* サイドメニュー（md以上） */}
       <aside className="hidden shrink-0 md:block md:w-56">
