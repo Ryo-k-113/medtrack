@@ -2,9 +2,14 @@ import { Prisma } from "@prisma/client"
 
 /**
  * 一意制約ごとの重複時のメッセージ
- * P2002 の meta.target にはDBのカラム名が入る（例: ["gs1_sales_code"]）
+ * P2002 の meta.target にはDBのカラム名、meta.modelName にはモデル名が入る
+ * （例: target ["gs1_sales_code"] / modelName "PackageUnit"）
+ * name のように複数のテーブルで同じ列名があるものは、model でも判定する
  */
-const UNIQUE_ERROR_MESSAGES: { columns: string[]; message: string }[] = [
+const UNIQUE_ERROR_MESSAGES: { model?: string; columns: string[]; message: string }[] = [
+  { model: "Unit", columns: ["name"], message: "同じ名前の規格単位が既に登録されています" },
+  { model: "GenericName", columns: ["name"], message: "同じ名前の一般名が既に登録されています" },
+  { model: "PharmaceuticalCompany", columns: ["name"], message: "同じ名前の製薬会社が既に登録されています" },
   { columns: ["yj_code", "sales_company_id"], message: "同じYJコードと販売会社の組み合わせが既に登録されています" },
   { columns: ["gs1_sales_code"], message: "同じ販売GS1コードの包装が既に登録されています" },
   { columns: ["gs1_dispensing_code"], message: "同じ調剤GS1コードの包装が既に登録されています" },
@@ -25,13 +30,16 @@ export const getUniqueErrorMessage = (error: unknown): string | null => {
     return null
   }
 
+  const modelName = error.meta?.modelName
   const target = error.meta?.target
   const columns = Array.isArray(target)
     ? target.filter((column): column is string => typeof column === "string")
     : []
 
-  const matched = UNIQUE_ERROR_MESSAGES.find((rule) =>
-    rule.columns.every((column) => columns.includes(column))
+  const matched = UNIQUE_ERROR_MESSAGES.find(
+    (rule) =>
+      (!rule.model || rule.model === modelName) &&
+      rule.columns.every((column) => columns.includes(column))
   )
 
   return matched?.message ?? DEFAULT_UNIQUE_ERROR_MESSAGE
