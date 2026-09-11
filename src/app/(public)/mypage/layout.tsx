@@ -28,22 +28,29 @@ export default function MyPageLayout({
 
       {/* サイドメニュー（md以上） */}
       <aside className="hidden shrink-0 md:block md:w-56">
-        <nav className="flex flex-col gap-1">
-          {MENU_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                isActive(item.href)
-                  ? "bg-secondary text-foreground"
-                  : "text-weak hover:bg-surface hover:text-foreground"
-              )}
-            >
-              <item.icon className="h-4 w-4 shrink-0" />
-              {item.label}
-            </Link>
-          ))}
+        {/* ページの灰色の背景と見分けられるよう、白いカードにのせる */}
+        <nav className="flex flex-col gap-1 rounded-xl border bg-background p-2 shadow-sm">
+          {MENU_ITEMS.map((item) => {
+            const active = isActive(item.href)
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-colors",
+                  active
+                    ? "bg-primary/10 text-foreground"
+                    : "text-weak hover:bg-surface hover:text-foreground"
+                )}
+              >
+                {/* 選択中の項目はアイコンを青にして、現在地を分かりやすくする */}
+                <item.icon className={cn("h-4 w-4 shrink-0", active && "text-primary")} />
+                {item.label}
+              </Link>
+            )
+          })}
         </nav>
       </aside>
 
