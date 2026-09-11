@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ExternalLink } from "lucide-react"
 
 /** お問い合わせ先（Googleフォーム） */
 const CONTACT_FORM_URL = "https://forms.gle/bez83YenoKxbWNrV9"
@@ -10,37 +11,44 @@ const FOOTER_LINKS = [
   { href: CONTACT_FORM_URL, label: "お問い合わせ", isExternal: true },
 ]
 
+/** フッター */
 export const Footer = () => {
   return (
-    <footer className="mt-auto border-t border-primary/80 bg-primary/80">
-      {/* モバイル幅ではリンクを上、サービス名と著作権表示を下に配置する */}
-      <div className="mx-auto flex max-w-7xl flex-col-reverse gap-6 px-4 py-4 md:flex-row md:justify-between md:gap-8 md:px-6">
+    <footer className="mt-auto bg-primary/90 text-white">
+      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
+        {/* 上段：サービス名とリンク（モバイル幅ではリンクを上、サービス名を下に配置する） */}
+        <div className="flex flex-col-reverse gap-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-lg font-bold md:text-2xl">MedTrack</p>
 
-        {/* 左：サービス名と著作権表示（下寄せ） */}
-        <div className="flex flex-col justify-between gap-2">
-          <p className="text-lg font-bold text-white md:text-2xl">MedTrack</p>
-
-          <p className="text-xs text-white/80 sm:text-sm">
-            Copyright © {new Date().getFullYear()} MedTrack
-          </p>
-        </div>
-
-        {/* 右：リンクと、その下に情報の位置づけ */}
-        <div className="flex items-center space-y-4 md:text-right">
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 md:justify-end">
+          <nav className="flex flex-wrap items-center gap-x-6 md:justify-end">
             {FOOTER_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 // 外部サイトは別タブで開き、参照元情報を渡さない
                 {...(link.isExternal && { target: "_blank", rel: "noopener noreferrer" })}
-                className="text-xs text-white/90 underline-offset-4 transition-colors hover:text-white hover:underline
-                sm:text-sm"
+                // タップしやすいよう、文字の上下にも押せる範囲を確保する
+                className="inline-flex items-center gap-1 py-2 text-xs underline-offset-4 hover:underline sm:text-sm"
               >
                 {link.label}
+
+                {/* サイトの外に出ることが分かるようにする */}
+                {link.isExternal && (
+                  <>
+                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                    <span className="sr-only">（新しいタブで開きます）</span>
+                  </>
+                )}
               </Link>
             ))}
           </nav>
+        </div>
+
+        {/* 下段：区切り線と著作権表示 */}
+        <div className="mt-6 border-t border-white/20 pt-4">
+          <p className="text-xs">
+            Copyright © {new Date().getFullYear()} MedTrack
+          </p>
         </div>
       </div>
     </footer>
