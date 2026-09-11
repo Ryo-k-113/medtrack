@@ -1,9 +1,9 @@
 import { FileText } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { IconTooltipLink } from "@/components/Tooltip/IconTooltipLink"
 import { PackageStatusTagList } from "./PackageStatusTagList"
 import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
+import { CompanyTag } from "@/components/Badge/CompanyTag"
 import { BookmarkButton } from "@/components/Button/BookmarkButton"
 import type { SearchDrugResult } from "@/types/search"
 
@@ -22,9 +22,7 @@ export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <ProductTypeTag type={drug.productType} />
-            <Badge variant="secondary" className="rounded-md">
-              {drug.SalesCompany.name}
-            </Badge>
+            <CompanyTag name={drug.SalesCompany.name} />
           </div>
 
           {drug.packageInsertUrl && (  

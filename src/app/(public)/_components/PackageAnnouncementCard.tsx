@@ -1,9 +1,8 @@
 import Link from "next/link"
-import { Building2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
 import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
+import { CompanyTag } from "@/components/Badge/CompanyTag"
 import { formatDate } from "@/utils/format"
 import type { PackageAnnouncementItem } from "@/types/user/drug"
 
@@ -28,10 +27,7 @@ export const PackageAnnouncementCard = ({ item }: PackageAnnouncementCardProps) 
           {/* 上段: 製品区分 + 販売会社 */}
           <div className="flex items-center gap-2">
             <ProductTypeTag type={productType} className="px-2 py-1" />
-            <Badge variant="secondary" className="py-1 gap-1 rounded-md border-border">
-              <Building2 className="h-3 w-3" />
-              {salesCompany.name}
-            </Badge>
+            <CompanyTag name={salesCompany.name} className="py-1" />
           </div>
 
           {/* 中段: 医薬品名・包装名 */}
