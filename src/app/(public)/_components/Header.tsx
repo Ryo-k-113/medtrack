@@ -104,7 +104,7 @@ const AuthNav = ({
         </Button>
 
         <Button
-          variant="default"
+          variant="accent"
           className="h-10 rounded-lg px-4 text-sm font-bold"
           onClick={onNavigateSignup}
         >
