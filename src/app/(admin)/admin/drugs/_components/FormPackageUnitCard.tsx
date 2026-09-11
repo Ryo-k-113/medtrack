@@ -66,13 +66,13 @@ export const FormPackageUnitCard = ({
       {/* コード情報 */}
       <div className="p-4 grid grid-cols-1 md:grid-cols-5 gap-4">
         <FormInput
-          name={`packageUnits.${index}.unifiedCode`}
-          label="統一商品コード"
+          name={`packageUnits.${index}.gs1SalesCode`}
+          label="販売GS1コード"
           required
         />
         <FormInput
-          name={`packageUnits.${index}.gs1SalesCode`}
-          label="販売GS1コード"
+          name={`packageUnits.${index}.unifiedCode`}
+          label="統一商品コード"
         />
         <FormInput
           name={`packageUnits.${index}.gs1DispensingCode`}
@@ -81,10 +81,6 @@ export const FormPackageUnitCard = ({
         <FormInput
           name={`packageUnits.${index}.hotCode`}
           label="HOTコード"
-        />
-        <FormInput
-          name={`packageUnits.${index}.janCode`}
-          label="JANコード"
         />
       </div>
 

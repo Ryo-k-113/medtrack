@@ -5,7 +5,7 @@ import type { GenericName, PharmaceuticalCompany, Unit } from "@prisma/client"
 /** 包装詳細ページの型 */
 export type PackageDetailResult = Pick<
   PackageUnit,
-  | "id" | "name" | "gs1SalesCode" | "gs1DispensingCode" | "hotCode" | "janCode" | "unifiedCode"
+  | "id" | "name" | "gs1SalesCode" | "gs1DispensingCode" | "hotCode" | "unifiedCode"
   | "currentShippingStatus" | "salesTransferDate" | "discontinuedDate"
 > & {
   Drug: Pick<

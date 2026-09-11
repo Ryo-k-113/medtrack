@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
+import { getUniqueErrorMessage } from "@/app/api/admin/_lib/getUniqueErrorMessage"
 import  { CreateDrugRequest, CreateDrugResponse,GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
 import { Prisma } from "@prisma/client"
 
@@ -132,11 +133,10 @@ export const POST = async (request: NextRequest) => {
         PackageUnits: { 
           create: packageUnits.map((pkg) => ({
             name: pkg.name,
-            gs1SalesCode: pkg.gs1SalesCode || null,
+            gs1SalesCode: pkg.gs1SalesCode,
             gs1DispensingCode: pkg.gs1DispensingCode || null,
             hotCode: pkg.hotCode || null,
-            janCode: pkg.janCode || null,
-            unifiedCode: pkg.unifiedCode,
+            unifiedCode: pkg.unifiedCode || null,
             currentShippingStatus: pkg.currentShippingStatus,
             publishStatus: pkg.publishStatus,
           })),
@@ -154,14 +154,12 @@ export const POST = async (request: NextRequest) => {
     );
 
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return NextResponse.json(
-          { message: "同じYJコードと販売会社の組み合わせが既に登録されています" },
-          { status: 409 } 
-        )
-      }
+    // 一意制約の違反は、重複した項目が分かるメッセージを返す
+    const uniqueErrorMessage = getUniqueErrorMessage(error)
+    if (uniqueErrorMessage) {
+      return NextResponse.json({ message: uniqueErrorMessage }, { status: 409 })
     }
+
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 400 })
     }

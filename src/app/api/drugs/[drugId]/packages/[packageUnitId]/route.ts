@@ -23,7 +23,6 @@ export const GET = async (
         gs1SalesCode: true,
         gs1DispensingCode: true,
         hotCode: true,
-        janCode: true,
         unifiedCode: true,
         currentShippingStatus: true,
         salesTransferDate: true,

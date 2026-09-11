@@ -108,11 +108,10 @@ enum ProductType {
 model PackageUnit {
   id                    Int       @id @default(autoincrement())
   name                  String
-  gs1SalesCode          String?   @unique @map("gs1_sales_code") // 販売包装単位GS1コード
+  gs1SalesCode          String    @unique @map("gs1_sales_code") // 販売包装単位GS1コード
   gs1DispensingCode     String?   @unique @map("gs1_dispensing_code") // 調剤包装単位GS1コード
   hotCode               String?   @unique @map("hot_code") // HOTコード (基準番号)
-  janCode               String?   @unique @map("jan_code") // JANコード
-  unifiedCode           String    @unique @map("unified_code") // 統一商品コード
+  unifiedCode           String?   @unique @map("unified_code") // 統一商品コード
 
   currentShippingStatus CurrentShippingStatus  @map("current_shipping_status")
   salesTransferDate     DateTime?  @map("sales_transfer_date") // 販売移管日

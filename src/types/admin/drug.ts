@@ -172,7 +172,6 @@ export const packageUnitEditFormSchema = packageUnitFormSchema.pick({
   gs1DispensingCode: true,
   unifiedCode: true,
   hotCode: true,
-  janCode: true,
 })
 
 

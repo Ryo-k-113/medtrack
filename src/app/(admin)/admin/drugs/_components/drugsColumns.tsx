@@ -60,8 +60,8 @@ export const drugsColumns = ({
     size: 140, 
     header: () => <p className="text-center">統一商品コード</p>, 
     cell: ({ row }) => (
-      <p className="text-center">
-        {row.original.unifiedCode}
+      <p className={`text-center ${!row.original.unifiedCode && "text-weak"}`}>
+        {row.original.unifiedCode ?? "未登録"}
       </p>
     ),
   },

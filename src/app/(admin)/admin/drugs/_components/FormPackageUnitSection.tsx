@@ -17,7 +17,6 @@ const emptyPackageUnit = {
   gs1SalesCode: "",
   unifiedCode: "",
   hotCode: "",
-  janCode: "",
   salesTransferDate: null,
   discontinuedDate: null,
   transitionalDate: null,

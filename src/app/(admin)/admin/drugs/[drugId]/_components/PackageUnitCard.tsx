@@ -27,7 +27,7 @@ export const PackageUnitCard = ({ pkg, drugId }: PackageUnitCardProps) => {
             
             {/* カード内容 */}
             <p className="text-sm">
-              GS1販売コード: {pkg.gs1SalesCode} / 統一商品コード: {pkg.unifiedCode}
+              GS1販売コード: {pkg.gs1SalesCode} / 統一商品コード: {pkg.unifiedCode ?? "未登録"}
             </p>
           </div>
           <PublishStatusBadge status={pkg.publishStatus} />
