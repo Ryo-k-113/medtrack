@@ -22,7 +22,7 @@ export const PackageAnnouncementCard = ({ item }: PackageAnnouncementCardProps) 
   return (
     <Link href={`/drugs/${drug.id}/packages/${packageUnit.id}`} className="block">
       <Card className="shadow transition-colors hover:border-primary">
-        <CardContent className="space-y-3 px-6 py-4">
+        <CardContent className="space-y-3 px-4 py-4 md:px-6">
 
           {/* 上段: 製品区分 + 販売会社 */}
           <div className="flex items-center gap-2">

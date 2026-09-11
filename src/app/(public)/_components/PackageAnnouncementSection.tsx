@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { format } from "date-fns"
+import { format, parse } from "date-fns"
 import { ja } from "date-fns/locale"
 import { Calendar as CalendarIcon } from "lucide-react"
 import type { AnnounceType } from "@prisma/client"
@@ -16,11 +16,22 @@ import { AnnounceTypeFilter } from "./AnnounceTypeFilter"
 import type { AnnouncementDateType } from "@/types/user/drug"
 import { BaseCalendar } from "@/components/Calendar/BaseCalender"
 
-// デフォルトは前日の日付
-const getYesterday = () => {
-  const date = new Date()
-  date.setDate(date.getDate() - 1)
-  return date
+/** APIとやり取りする日付の形式 */
+const DATE_PARAM_FORMAT = "yyyy-MM-dd"
+
+/** 画面に表示する日付の形式 */
+const DATE_LABEL_FORMAT = "yyyy/MM/dd"
+
+/**
+ * タイトル下のガイド文言（表示中の日付）
+ * @param isLatest - 日付を選んでおらず、直近の更新日を表示しているか
+ */
+const buildGuideText = (date: Date, isLatest: boolean) => {
+  const label = format(date, DATE_LABEL_FORMAT)
+
+  return isLatest
+    ? `直近の更新日（${label}）を表示しています`
+    : `${label} の更新情報を表示しています`
 }
 
 // 現在は告知日のみ表示。
@@ -30,7 +41,8 @@ const ACTIVE_TAB: AnnouncementDateType = "ANNOUNCED"
 const INITIAL_DISPLAY_COUNT = 5
 
 export const PackageAnnouncementSection = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(getYesterday)
+  // 日付を選ぶまで（null）は、直近の更新日を表示する
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [selectedTypes, setSelectedTypes] = useState<AnnounceType[]>([])
@@ -47,9 +59,19 @@ export const PackageAnnouncementSection = () => {
     setIsExpanded(false)
   }
 
-  const dateParam = format(selectedDate, "yyyy-MM-dd")
+  const dateParam = selectedDate ? format(selectedDate, DATE_PARAM_FORMAT) : null
 
-  const { items, announcedCount, isLoading, error } = usePackageAnnouncements(dateParam)
+  const { items, announcedCount, date, isLoading, error } = usePackageAnnouncements(dateParam)
+
+  // 画面に表示する日付（未選択の間はAPIが返した直近の更新日。告知が1件もなければ今日）
+  const latestDate = date ? parse(date, DATE_PARAM_FORMAT, new Date()) : null
+  const displayDate = selectedDate ?? latestDate ?? (isLoading ? null : new Date())
+
+  // 直近の更新日を表示中で、告知が1件もない場合はガイドを出さない
+  const guideText =
+    !isLoading && displayDate && (selectedDate || latestDate)
+      ? buildGuideText(displayDate, !selectedDate)
+      : null
 
   // 告知タイプによる絞り込み（未選択時は全件表示）
   const filteredItems = selectedTypes.length === 0
@@ -57,7 +79,7 @@ export const PackageAnnouncementSection = () => {
     : items.filter((item) => item.announceType && selectedTypes.includes(item.announceType))
 
 
-  // タブコンテンツ内の描画ロジックを if 分岐で整理
+  // タブコンテンツ内の描画ロジックをif分岐で整理
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -79,7 +101,7 @@ export const PackageAnnouncementSection = () => {
     if (items.length === 0) {
       return (
         <p className="py-12 text-center text-weak">
-          {format(selectedDate, "yyyy/MM/dd")}の告知情報はありません
+          {displayDate ? `${format(displayDate, DATE_LABEL_FORMAT)}の告知情報はありません` : "告知情報はありません"}
         </p>
       )
     }
@@ -122,8 +144,12 @@ export const PackageAnnouncementSection = () => {
 
   return (
     <section className="py-4 space-y-4 lg:space-y-8">
-      {/* セクションタイトル */}
-      <h2 className="text-xl font-bold pb-2 border-b">医薬品の更新情報</h2>
+      {/* セクションタイトルと、表示中の日付のガイド */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold pb-2 border-b">医薬品の更新情報</h2>
+        {/* 読み込み中も高さを維持 */}
+        <p className="min-h-5 text-sm text-weak">{guideText}</p>
+      </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-8">
 
@@ -154,12 +180,17 @@ export const PackageAnnouncementSection = () => {
         {/* 右側：カレンダー */}
         <aside className="order-first lg:order-none lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
 
-          {/* カレンダー表示(デスクトップ) */}
-          <BaseCalendar
-            selected={selectedDate} 
-            onSelect={handleSelectDate}
-            className="hidden lg:flex bg-white border rounded-lg shadow-sm p-0  w-full justify-center lg:py-6"
-          />
+          {/* カレンダー表示(デスクトップ)
+              表示する月は最初に描画した日付で決まるため、日付が決まってから描画する */}
+          {displayDate ? (
+            <BaseCalendar
+              selected={displayDate}
+              onSelect={handleSelectDate}
+              className="hidden lg:flex bg-white border rounded-lg shadow-sm p-0  w-full justify-center lg:py-6"
+            />
+          ) : (
+            <Skeleton className="hidden h-[360px] w-full rounded-lg lg:block" />
+          )}
 
           {/* カレンダーをpopoverで展開(モバイル) */}
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
@@ -168,19 +199,22 @@ export const PackageAnnouncementSection = () => {
                   variant="surface" 
                   size="sm"
                   className="w-full max-w-[160px] justify-center  hover:bg-white lg:hidden"
+                  disabled={!displayDate}
                 >
                   <CalendarIcon className="h-4 w-4" />
-                  {format(selectedDate, "yyyy/MM/dd", { locale: ja })}
+                  {displayDate ? format(displayDate, DATE_LABEL_FORMAT, { locale: ja }) : "読み込み中"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
+                {displayDate && (
                 <BaseCalendar
-                  selected={selectedDate}
+                  selected={displayDate}
                   onSelect={(date) => {
                     handleSelectDate(date)
                     setIsCalendarOpen(false)
                   }}
                 />
+                )}
               </PopoverContent>
             </Popover>
         </aside>

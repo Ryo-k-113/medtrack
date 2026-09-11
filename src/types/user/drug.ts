@@ -29,4 +29,6 @@ export type PackageAnnouncementItem = {
 export type PackageAnnouncementResponse = {
   items: PackageAnnouncementItem[]
   announcedCount: number
+  /** 表示した告知日（yyyy-MM-dd）。日付の指定がなく、告知が1件もない場合はnull */
+  date: string | null
 }

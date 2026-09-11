@@ -1,29 +1,54 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@prisma/client"
-import { toUTCDate } from "@/utils/date"
+import { getJstToday, toUTCDate } from "@/utils/date"
 import type { PackageAnnouncementResponse } from "@/types/user/drug"
 
-/** 医薬品の更新情報（告知日）に基づく包装の一覧取得 */
+/** 公開中の告知情報・包装のみを対象にする条件 */
+const PUBLISHED_WHERE: Prisma.ShippingAnnouncementWhereInput = {
+  publishStatus: "PUBLISHED",
+  PackageUnit: { publishStatus: "PUBLISHED" },
+}
+
+/**
+ * 今日（日本時間）以前で、最も新しい告知日を取得する
+ * 未来日の告知は「直近の更新」として扱わない
+ */
+const findLatestAnnouncedDate = async () => {
+  const latest = await prisma.shippingAnnouncement.findFirst({
+    where: { ...PUBLISHED_WHERE, announcedDate: { lte: getJstToday() } },
+    orderBy: { announcedDate: "desc" },
+    select: { announcedDate: true },
+  })
+
+  return latest?.announcedDate ?? null
+}
+
+/**
+ * 医薬品の更新情報（告知日）に基づく包装の一覧取得
+ * dateを省略した場合は、直近の告知日の一覧を返す
+ */
 export const GET = async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
 
-    // 対象日
+    // 対象日（省略時は直近の告知日）
     const date = searchParams.get("date")
-    const targetDate = toUTCDate(date)
+    const targetDate = date ? toUTCDate(date) : await findLatestAnnouncedDate()
 
+    // 告知がまだ1件もない場合
     if (!targetDate) {
-      return NextResponse.json({ message: "dateは必須です" }, { status: 400 })
+      return NextResponse.json<PackageAnnouncementResponse>(
+        { items: [], announcedCount: 0, date: null },
+        { status: 200 }
+      )
     }
 
     const nextDate = new Date(targetDate)
     nextDate.setUTCDate(nextDate.getUTCDate() + 1)
 
-    // 公開中の告知情報・包装のみを対象
     const baseWhere: Prisma.ShippingAnnouncementWhereInput = {
-      publishStatus: "PUBLISHED",
-      PackageUnit: { publishStatus: "PUBLISHED" },
+      ...PUBLISHED_WHERE,
       announcedDate: { gte: targetDate, lt: nextDate },
     }
 
@@ -66,8 +91,9 @@ export const GET = async (request: NextRequest) => {
     }))
 
     // レスポンスを返す
+    // 対象日はUTCの0時で持つため、ISO形式の日付部分がそのまま日本時間の日付になる
     return NextResponse.json<PackageAnnouncementResponse>(
-      { items, announcedCount },
+      { items, announcedCount, date: targetDate.toISOString().slice(0, 10) },
       { status: 200 }
     )
 
