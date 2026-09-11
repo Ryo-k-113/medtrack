@@ -2,41 +2,18 @@
 
 import type { AnnounceType } from "@prisma/client"
 import { cn } from "@/lib/utils"
+import { STATUS_CHIP_CLASS } from "@/constants/statusChip"
 
 // 告知タイプの選択肢
-const ANNOUNCE_TYPE_OPTIONS: {
-  value: AnnounceType
-  label: string
-  activeClassName: string
-}[] = [
-  {
-    value: "NORMAL_SHIPMENT",
-    label: "通常出荷",
-    activeClassName: "border-status-normal bg-status-normal/20 text-status-normal-foreground",
-  },
-  {
-    value: "LIMITED_SHIPMENT",
-    label: "限定出荷",
-    activeClassName: "border-amber-200 bg-status-limited/20 text-status-limited-foreground",
-  },
-  {
-    value: "SHIPMENT_SUSPENDED",
-    label: "出荷停止",
-    activeClassName: "border-status-stop/70 bg-status-stop/20 text-status-stop-foreground",
-  },
-  {
-    value: "DISCONTINUED_SALE",
-    label: "販売中止",
-    activeClassName: "border-status-discontinued/50 bg-status-discontinued/20 text-status-discontinued",
-  },
-  {
-    value: "TRANSFER_OF_SALE",
-    label: "販売移管",
-    activeClassName: "border-blue-300 bg-status-transfer/20 text-status-transfer-foreground",
-  },
+const ANNOUNCE_TYPE_OPTIONS: { value: AnnounceType; label: string }[] = [
+  { value: "NORMAL_SHIPMENT", label: "通常出荷" },
+  { value: "LIMITED_SHIPMENT", label: "限定出荷" },
+  { value: "SHIPMENT_SUSPENDED", label: "出荷停止" },
+  { value: "DISCONTINUED_SALE", label: "販売中止" },
+  { value: "TRANSFER_OF_SALE", label: "販売移管" },
 ]
 
-// チップ共通のスタイル（横スクロール時に縮まないようshrink-0を持たせる）
+// チップ共通のスタイル
 const CHIP_CLASS =
   "shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors"
 
@@ -100,7 +77,7 @@ export const AnnounceTypeFilter = ({
             aria-pressed={isSelected}
             className={cn(
               CHIP_CLASS,
-              isSelected ? option.activeClassName : CHIP_INACTIVE_CLASS
+              isSelected ? STATUS_CHIP_CLASS[option.value] : CHIP_INACTIVE_CLASS
             )}
           >
             {option.label}
