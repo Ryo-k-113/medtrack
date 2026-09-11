@@ -16,7 +16,10 @@ export const usePackageAnnouncements = (date: string | null) => {
     ? `${ANNOUNCES_API_PATH}?${new URLSearchParams({ date }).toString()}`
     : ANNOUNCES_API_PATH
 
-  const { data, isLoading, error } = useDataFetch<PackageAnnouncementResponse>(url)
+  // 更新は1日1回の定期実行のみのため、画面にフォーカスが戻るたびには取り直さない
+  const { data, isLoading, error } = useDataFetch<PackageAnnouncementResponse>(url, {
+    revalidateOnFocus: false,
+  })
 
   return {
     items: data?.items ?? [],

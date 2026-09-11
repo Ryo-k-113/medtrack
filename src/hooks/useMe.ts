@@ -6,6 +6,8 @@ import type { CurrentUser } from "@/types/auth"
 /** ログイン中のユーザー情報の取得先 */
 export const ME_API_PATH = "/api/me"
 
+/** 画面にフォーカスが戻った際に再取得する最短の間隔 */
+const FOCUS_THROTTLE_MS = 60 * 1000
 
 
 /**
@@ -27,7 +29,9 @@ const fetchMe = async (url: string): Promise<CurrentUser | null> => {
  * @returns ユーザー情報、ログイン状態、ローディング状態、エラー、再取得関数
  */
 export const useMe = () => {
-  const { data, isLoading, error, mutate } = useSWR<CurrentUser | null>(ME_API_PATH, fetchMe)
+  const { data, isLoading, error, mutate } = useSWR<CurrentUser | null>(ME_API_PATH, fetchMe, {
+    focusThrottleInterval: FOCUS_THROTTLE_MS,
+  })
 
   return {
     me: data ?? null,
