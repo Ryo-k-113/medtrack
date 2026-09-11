@@ -1,6 +1,7 @@
 "use client"
 
 import { SearchBar } from "./_components/SearchBar"
+import { TopBanner } from "./_components/TopBanner"
 import { PackageAnnouncementSection } from "./_components/PackageAnnouncementSection"
 
 
@@ -9,9 +10,7 @@ export default function TopPage() {
     <div className="min-h-screen bg-gray-50">
 
       {/* お知らせバナー */}
-      <div className="bg-surface text-primary text-xs text-center p-4">
-        アカウント登録すると医薬品の複数同時検索が可能に！ ログインボタンから新規登録をお願いします。
-      </div>
+      <TopBanner />
 
       {/* 2. メインコンテンツエリア (2カラムレイアウト) */}
       <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
