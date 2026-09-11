@@ -38,13 +38,18 @@ export const PackageAnnouncementCard = ({ item }: PackageAnnouncementCardProps) 
 
           {/* 下段: 告知内容・日付 */}
           <div className="flex items-center gap-4 pt-3 border-t">
-            <AnnounceTypeBadge status={announceType} className="rounded-md" />
-            <span className="text-sm text-weak">
-              告知日: {formatDate(announcedDate)}
-            </span>
-            <span className="text-sm text-weak">
-              適用日: {formatDate(effectiveDate)}
-            </span>
+            
+            <AnnounceTypeBadge status={announceType} className="shrink-0 whitespace-nowrap rounded-md" />
+
+            {/* モバイルでは縦に並べる */}
+            <div className="flex flex-col gap-0.5 text-sm text-weak sm:flex-row sm:gap-4">
+              <span className="whitespace-nowrap">
+                告知日: {formatDate(announcedDate)}
+              </span>
+              <span className="whitespace-nowrap">
+                適用日: {formatDate(effectiveDate)}
+              </span>
+            </div>
           </div>
         </CardContent>
       </Card>
