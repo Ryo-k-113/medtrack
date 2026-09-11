@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${notoSansJP.variable} antialiased`}
       >
-        <Toaster richColors position="top-right"/>
+        <Toaster richColors closeButton position="top-right"/>
         <NuqsAdapter>
           {children}
         </NuqsAdapter>
