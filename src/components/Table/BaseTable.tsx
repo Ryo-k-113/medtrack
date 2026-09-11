@@ -28,6 +28,8 @@ type BaseTableProps<TData> = {
   }
   emptyContent?: React.ReactNode
   headerClassName?: string
+  /** ヘッダー・ボディの全セルに共通のクラス（余白の調整などに使う） */
+  cellClassName?: string
   className?: string
 }
 
@@ -37,6 +39,7 @@ export const BaseTable = <TData,>({
   pinnedColumns,
   emptyContent = "データがありません",
   headerClassName,
+  cellClassName,
   className,
 }: BaseTableProps<TData>) => {
 
@@ -70,7 +73,7 @@ export const BaseTable = <TData,>({
                   <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
-                    className={cn("text-primary-foreground", headerClassName)}
+                    className={cn("text-primary-foreground", cellClassName, headerClassName)}
                     style={{
                       width: header.getSize(),
                       position: isPinned ? "sticky" : undefined,
@@ -121,6 +124,7 @@ export const BaseTable = <TData,>({
                       }}
                       className={cn(
                         "transition-colors duration-150",
+                        cellClassName,
                         isPinned && [
                           "bg-background",
                           "group-hover/row:bg-surface",
