@@ -89,16 +89,6 @@ export const DraftPackageUnitColumns = ({
     ),
   },
   {
-    accessorKey: "janCode",
-    header: () => <p className="text-center">JANコード</p>,
-    size: 120,
-    cell: ({ row }) => (
-      <p className={`text-xs text-center ${!row.original.janCode && "text-weak"}`}>
-        {row.original.janCode ?? "未入力"}
-      </p>
-    ),
-  },
-  {
     accessorKey: "discontinuedDate",
     header: () => <p className="text-center">販売中止日</p>,
     size: 110,

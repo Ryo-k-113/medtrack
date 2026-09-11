@@ -26,7 +26,6 @@ export const PackageUnitInfo = () => {
     { label: "調剤GS1コード", value: packageUnit.gs1DispensingCode },
     { label: "統一商品コード", value: packageUnit.unifiedCode },
     { label: "HOTコード", value: packageUnit.hotCode },
-    { label: "JANコード", value: packageUnit.janCode },
 
     // 区切り線
     { label: "divider-under-code", value: null, isDivider: true },

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
+import { getUniqueErrorMessage } from "@/app/api/admin/_lib/getUniqueErrorMessage"
 import { toUTCDate } from "@/utils/date";
 import type {
   GetDrugEditResponse,
@@ -134,14 +134,12 @@ export const PUT = async (
     )
 
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return NextResponse.json(
-          { message: "同じYJコードと販売会社の組み合わせが既に登録されています" },
-          { status: 409 }
-        )
-      }
+    // 一意制約の違反は、重複した項目が分かるメッセージを返す
+    const uniqueErrorMessage = getUniqueErrorMessage(error)
+    if (uniqueErrorMessage) {
+      return NextResponse.json({ message: uniqueErrorMessage }, { status: 409 })
     }
+
     return NextResponse.json({ message: "データの処理中にエラーが発生しました。"}, { status: 500 })
   }
 }
@@ -195,7 +193,6 @@ export const POST = async (
       gs1SalesCode,
       gs1DispensingCode,
       hotCode,
-      janCode,
       unifiedCode,
       currentShippingStatus,
       publishStatus,
@@ -207,11 +204,10 @@ export const POST = async (
     const newPackageUnit = await prisma.packageUnit.create({
       data: {
         name,
-        gs1SalesCode: gs1SalesCode || null,
+        gs1SalesCode,
         gs1DispensingCode: gs1DispensingCode || null,
         hotCode: hotCode || null,
-        janCode: janCode || null,
-        unifiedCode: unifiedCode,
+        unifiedCode: unifiedCode || null,
         currentShippingStatus,
         publishStatus,
         salesTransferDate: toUTCDate(salesTransferDate),
@@ -226,7 +222,13 @@ export const POST = async (
       { status: 201 }
     )
 
-  } catch {
+  } catch (error) {
+    // 一意制約の違反は、重複した項目が分かるメッセージを返す
+    const uniqueErrorMessage = getUniqueErrorMessage(error)
+    if (uniqueErrorMessage) {
+      return NextResponse.json({ message: uniqueErrorMessage }, { status: 409 })
+    }
+
     return NextResponse.json(
       { message: "データの処理中にエラーが発生しました。"}, 
       { status: 500 }

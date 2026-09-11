@@ -21,7 +21,6 @@ export const GET = async () => {
         gs1DispensingCode: true,
         unifiedCode: true,
         hotCode: true,
-        janCode: true,
         discontinuedDate: true,
         salesTransferDate: true,
         createdAt: true,

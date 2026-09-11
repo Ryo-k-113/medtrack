@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
+import { getUniqueErrorMessage } from "@/app/api/admin/_lib/getUniqueErrorMessage"
 import type { PackageUnitDetailResponse, UpdatePackageUnitRequest,
   UpdatePackageUnitResponse, DeletePackageUnitResponse } from "@/types/admin/drug"
 
@@ -100,7 +101,6 @@ export const PUT = async (
       gs1SalesCode,
       gs1DispensingCode,
       hotCode,
-      janCode,
       unifiedCode,
     } = body
     
@@ -113,11 +113,10 @@ export const PUT = async (
       data: {
         name,
         publishStatus,
-        gs1SalesCode: gs1SalesCode || null,
+        gs1SalesCode,
         gs1DispensingCode: gs1DispensingCode || null,
         hotCode: hotCode || null,
-        janCode: janCode || null,
-        unifiedCode: unifiedCode,
+        unifiedCode: unifiedCode || null,
       }
     })
 
@@ -127,7 +126,13 @@ export const PUT = async (
       { status: 200 }
     )
 
-  } catch {
+  } catch (error) {
+    // 一意制約の違反は、重複した項目が分かるメッセージを返す
+    const uniqueErrorMessage = getUniqueErrorMessage(error)
+    if (uniqueErrorMessage) {
+      return NextResponse.json({ message: uniqueErrorMessage }, { status: 409 })
+    }
+
     return NextResponse.json({ message: "更新中にエラーが発生しました"}, { status: 400 })
   }
 }

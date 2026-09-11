@@ -42,7 +42,6 @@ export const SelectedPackageSection = () => {
         <CodeBox label="調剤GS1コード" value={packageUnit.gs1DispensingCode} />
         <CodeBox label="統一商品コード" value={packageUnit.unifiedCode} />
         <CodeBox label="HOTコード" value={packageUnit.hotCode} />
-        <CodeBox label="JANコード" value={packageUnit.janCode} />
       </div>
     </SectionCard>
   )

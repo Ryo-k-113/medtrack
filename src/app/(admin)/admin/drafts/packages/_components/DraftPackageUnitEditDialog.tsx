@@ -37,7 +37,6 @@ export const DraftPackageUnitEditDialog = ({
       gs1DispensingCode: packageUnit?.gs1DispensingCode ?? "",
       unifiedCode: packageUnit?.unifiedCode ?? "",
       hotCode: packageUnit?.hotCode ?? "",
-      janCode: packageUnit?.janCode ?? "",
     } 
   })
 

@@ -39,7 +39,6 @@ export const DEFAULT_PACKAGE_UNIT: CreatePackageUnitFormInput = {
   gs1DispensingCode: "",
   gs1SalesCode: "",
   hotCode: "",
-  janCode: "",
   salesTransferDate: null,
   discontinuedDate: null,
 }

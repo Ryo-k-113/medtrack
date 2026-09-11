@@ -40,16 +40,15 @@ export const packageUnitFormSchema = z.object({
       message: "出荷状況を選択してください",
     }),
 
-  unifiedCode: z
-  .string()
-  .min(1, "統一コードを入力してください") 
-  .length(9, "9桁で入力してください"),
+  gs1SalesCode: z
+    .string()
+    .min(1, "販売GS1コードを入力してください")
+    .length(14, "14桁で入力してください"),
 
   // 任意項目
+  unifiedCode: optionalCodeField(9),
   gs1DispensingCode: optionalCodeField(14), 
-  gs1SalesCode: optionalCodeField(14), 
   hotCode: optionalCodeField(13), 
-  janCode: optionalCodeField(13), 
   discontinuedDate: z.date().nullable().optional(),
   salesTransferDate: z.date().nullable().optional(),
 });
