@@ -2,7 +2,7 @@ import { FileText } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { IconTooltipLink } from "@/components/Tooltip/IconTooltipLink"
-import { PackageStatusTag } from "./PackageStatusTag"
+import { PackageStatusTagList } from "./PackageStatusTagList"
 import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
 import { BookmarkButton } from "@/components/Button/BookmarkButton"
 import type { SearchDrugResult } from "@/types/search"
@@ -16,7 +16,7 @@ type DrugCardProps = {
 export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) => {
   return (
     <Card className="shadow">
-      <CardContent className="px-6 py-4 space-y-4">
+      <CardContent className="px-4 py-4 space-y-4 md:px-6">
 
         {/* 上段：区分タグ、販売会社タグ、添付文書リンク */}
         <div className="flex items-center justify-between">
@@ -57,16 +57,7 @@ export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) 
 
 
         {/* 下段：包装単位ごとの出荷状況タグ */}
-        <div className="flex flex-wrap gap-2">
-          {drug.PackageUnits.map((pkg) => (
-            <PackageStatusTag
-              key={pkg.id}
-              href={`/drugs/${drug.id}/packages/${pkg.id}`}
-              label={pkg.name}
-              status={pkg.currentShippingStatus}
-            />
-          ))}
-        </div>
+        <PackageStatusTagList drugId={drug.id} packageUnits={drug.PackageUnits} />
       </CardContent>
     </Card>
   )
