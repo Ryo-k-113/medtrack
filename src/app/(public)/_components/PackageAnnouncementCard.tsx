@@ -1,9 +1,8 @@
 import Link from "next/link"
-import { Building2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
 import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
+import { CompanyTag } from "@/components/Badge/CompanyTag"
 import { formatDate } from "@/utils/format"
 import type { PackageAnnouncementItem } from "@/types/user/drug"
 
@@ -21,17 +20,14 @@ export const PackageAnnouncementCard = ({ item }: PackageAnnouncementCardProps) 
 
   if(!announceType) return
   return (
-    <Link href={`/drugs/${drug.id}/packages/${packageUnit.id}`}>
+    <Link href={`/drugs/${drug.id}/packages/${packageUnit.id}`} className="block">
       <Card className="shadow transition-colors hover:border-primary">
-        <CardContent className="space-y-3 px-6 py-4">
+        <CardContent className="space-y-3 px-4 py-4 md:px-6">
 
           {/* 上段: 製品区分 + 販売会社 */}
           <div className="flex items-center gap-2">
             <ProductTypeTag type={productType} className="px-2 py-1" />
-            <Badge variant="secondary" className="py-1 gap-1 rounded-md border-border">
-              <Building2 className="h-3 w-3" />
-              {salesCompany.name}
-            </Badge>
+            <CompanyTag name={salesCompany.name} className="py-1" />
           </div>
 
           {/* 中段: 医薬品名・包装名 */}
@@ -42,13 +38,18 @@ export const PackageAnnouncementCard = ({ item }: PackageAnnouncementCardProps) 
 
           {/* 下段: 告知内容・日付 */}
           <div className="flex items-center gap-4 pt-3 border-t">
-            <AnnounceTypeBadge status={announceType} className="rounded-md" />
-            <span className="text-sm text-weak">
-              告知日: {formatDate(announcedDate)}
-            </span>
-            <span className="text-sm text-weak">
-              適用日: {formatDate(effectiveDate)}
-            </span>
+            
+            <AnnounceTypeBadge status={announceType} className="shrink-0 whitespace-nowrap rounded-md" />
+
+            {/* モバイルでは縦に並べる */}
+            <div className="flex flex-col gap-0.5 text-sm text-weak sm:flex-row sm:gap-4">
+              <span className="whitespace-nowrap">
+                告知日: {formatDate(announcedDate)}
+              </span>
+              <span className="whitespace-nowrap">
+                適用日: {formatDate(effectiveDate)}
+              </span>
+            </div>
           </div>
         </CardContent>
       </Card>

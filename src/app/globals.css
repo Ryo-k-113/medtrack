@@ -32,8 +32,11 @@
     --muted: 0 1% 43%;  /* #6E6C6C  グレー */
     --muted-foreground: 210 40% 98%; /* #f7fafc ほぼホワイト */
 
-    --accent: 142 71% 45%;             /* #21b560 グリーン */
-    --accent-foreground:  210 40% 98%; /* #f7fafc ほぼホワイト */
+    /* 明るめの緑に白文字（デザインの指定色）
+       白文字とのコントラスト比は 3.52 で、小さい文字の WCAG AA（4.5 以上）は満たさない
+       基準を満たす必要が出た場合は、明るさを 30%（#16833e・4.83）まで下げる */
+    --accent: 142 71% 36%;             /* #1b9d4a グリーン */
+    --accent-foreground: 0 0% 100%;    /* #ffffff ホワイト */
 
 
     --destructive: 0 84.2% 60.2%;      /* #f87171 レッド */
@@ -71,18 +74,17 @@
     --status-transfer: 210 85% 88%;
     --status-transfer-foreground: 212 80% 25%;
 
-    /* 医薬品区分タグ  */
-    /* 先発品（パステルレッド） */
-    --tag-brand: 0 75% 85%;
-    --tag-brand-foreground: 0 65% 30%;
+    /* 医薬品区分タグ(レッド) */
+    --tag-brand: 355 65% 46%;
+    --tag-brand-foreground: 0 0% 100%;
 
-    /* 準先発品（パステルイエロー） */
-    --tag-quasi-brand: 48 90% 82%;
-    --tag-quasi-brand-foreground: 40 75% 25%;
+    /* 準先発品（オーカー #aa610e）白文字が読める濃さにする */
+    --tag-quasi-brand: 32 85% 36%;
+    --tag-quasi-brand-foreground: 0 0% 100%;
 
-    /* 後発品（パステルブルー） */
-    --tag-generic: 210 80% 85%;
-    --tag-generic-foreground: 212 70% 28%;
+    /* 後発品（ブルー #3162c4）ボタンの primary（色相206）と区別するため、藍寄り */
+    --tag-generic: 220 60% 48%;
+    --tag-generic-foreground: 0 0% 100%;
 
     --radius: 0.5rem;
 

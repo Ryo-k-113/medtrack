@@ -1,3 +1,4 @@
+import { PageContainer } from "@/components/Layout/PageContainer"
 import { DrugSummarySkeleton } from "./_components/DrugSummarySkeleton"
 import { SelectedPackageSectionSkeleton } from "./_components/SelectedPackageSectionSkeleton"
 import { DrugInfoSectionSkeleton } from "./_components/DrugInfoSectionSkeleton"
@@ -6,12 +7,12 @@ import { PackageShippingAnnouncementsSkeleton } from "./_components/PackageShipp
 
 export default function PackageDetailLoading() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 md:px-6 md:py-10">
+    <PageContainer className="space-y-6">
       <DrugSummarySkeleton />
       <SelectedPackageSectionSkeleton />
       <DrugInfoSectionSkeleton />
       <OtherPackageListSkeleton />
       <PackageShippingAnnouncementsSkeleton />
-    </div>
+    </PageContainer>
   )
 }

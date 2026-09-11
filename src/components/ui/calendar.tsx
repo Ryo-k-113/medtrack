@@ -108,7 +108,8 @@ function Calendar({
           defaultClassNames.week_number
         ),
         day: cn(
-          "group/day relative aspect-square h-full w-full select-none p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md",
+          // 週の端の角丸は範囲選択の中間日のみに適用する（単一選択では円が欠けるため）
+          "group/day relative aspect-square h-full w-full select-none p-0 text-center [&:first-child[data-selected=true]_button[data-range-middle=true]]:rounded-l-md [&:last-child[data-selected=true]_button[data-range-middle=true]]:rounded-r-md",
           defaultClassNames.day
         ),
         range_start: cn(

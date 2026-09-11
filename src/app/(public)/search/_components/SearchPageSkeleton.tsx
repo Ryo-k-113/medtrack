@@ -1,8 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import { PageContainer } from "@/components/Layout/PageContainer"
 
 export const SearchPageSkeleton = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <PageContainer className="max-w-5xl space-y-12">
       {/* 検索バー */}
       <Skeleton className="h-12 w-full rounded-lg" />
 
@@ -21,6 +22,6 @@ export const SearchPageSkeleton = () => {
           ))}
         </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }

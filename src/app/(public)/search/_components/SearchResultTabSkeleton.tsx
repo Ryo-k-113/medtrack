@@ -4,9 +4,9 @@ export const SearchResultTabSkeleton = () => {
   return (
     <div className="space-y-4 pt-4">
       {/* 出荷ステータスガイド・表示件数 */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <Skeleton className="h-5 w-40" />
-        <Skeleton className="h-9 w-24" />
+        <Skeleton className="h-9 w-24 self-end md:self-auto" />
       </div>
 
       {/* 医薬品カード一覧 */}

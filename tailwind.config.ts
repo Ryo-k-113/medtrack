@@ -6,6 +6,8 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    // 配色などのクラスを定数として持つため、生成対象に含める
+    "./src/constants/**/*.{js,ts}",
   ],
   theme: {
   	extend: {

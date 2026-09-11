@@ -96,7 +96,10 @@ export const AuthForm = ({
             </form>
 
             {/* Googleログイン */}
-            <FieldSeparator className="my-0">または</FieldSeparator>
+            
+            <FieldSeparator className="my-0 [&_[data-slot=field-separator-content]]:bg-gray-50">
+              または
+            </FieldSeparator>
             <GoogleLoginButton className="h-10 sm:h-12"/>
 
             {/* ログイン・新規登録の切り替え */}

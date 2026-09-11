@@ -1,6 +1,7 @@
 import { Package } from "lucide-react"
 import type { CurrentShippingStatus } from "@prisma/client"
 import { cn } from "@/lib/utils"
+import { STATUS_CHIP_CLASS } from "@/constants/statusChip"
 
 type StatusGuideItem = {
   label: string
@@ -15,14 +16,6 @@ const STATUS_GUIDE_ITEMS: StatusGuideItem[] = [
   { label: "販売中止", status: "DISCONTINUED_SALE" },
 ]
 
-// PackageStatusTag と揃えたカラー定義
-const STATUS_COLOR_CLASS: Record<CurrentShippingStatus, string> = {
-  NORMAL_SHIPMENT: "bg-status-normal text-status-normal-foreground",
-  LIMITED_SHIPMENT: "bg-status-limited text-status-limited-foreground",
-  SHIPMENT_SUSPENDED: "bg-status-stop text-status-stop-foreground",
-  DISCONTINUED_SALE: "bg-status-discontinued text-status-discontinued-foreground",
-}
-
 type ShippingStatusGuideProps = {
   className?: string
 }
@@ -31,15 +24,22 @@ export const ShippingStatusGuide = ({
   className 
 }: ShippingStatusGuideProps) => {
   return (
-    <div className={cn("flex flex-wrap items-center gap-2 text-xs text-weak", className)}>
-      <span>出荷状況:</span>
-      <div className="flex flex-wrap items-center gap-1.5">
+    // モバイルは折り返さず横スクロール（スクロールバーの分の余白も確保する）、md以上は折り返す
+    <div
+      className={cn(
+        "flex items-center gap-2 overflow-x-auto pb-3 text-xs text-weak md:flex-wrap md:overflow-x-visible md:pb-0",
+        className
+      )}
+    >
+      <span className="shrink-0">出荷状況:</span>
+      <div className="flex items-center gap-1.5 md:flex-wrap">
         {STATUS_GUIDE_ITEMS.map((item) => (
           <span
             key={item.status}
             className={cn(
-              "inline-flex items-center gap-1 rounded-full px-2 py-1 font-semibold select-none",
-              STATUS_COLOR_CLASS[item.status]
+              // 横スクロール時に縮まないようshrink-0を持たせる
+              "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-2 py-1 font-semibold select-none",
+              STATUS_CHIP_CLASS[item.status]
             )}
           >
             <Package className="h-3 w-3" />

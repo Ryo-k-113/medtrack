@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { useMe } from "@/hooks/useMe"
+import { PageContainer } from "@/components/Layout/PageContainer"
 import { SearchBar } from "@/app/(public)/_components/SearchBar"
 import { SearchResults } from "./SearchResults"
 
@@ -23,12 +24,12 @@ export const SearchPageContent = () => {
     .slice(0, maxKeywords)
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PageContainer className="max-w-5xl space-y-8">
       {/* 検索バー */}
       <SearchBar defaultKeyword={keywords.join(",")} />
 
       {/* 検索結果のタブ表示 */}
       <SearchResults keywords={keywords} />
-    </div>
+    </PageContainer>
   )
 }

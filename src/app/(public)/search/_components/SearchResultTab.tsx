@@ -52,14 +52,17 @@ export const SearchResultTab = ({ keyword, result }: Props) => {
   return (
     <TabsContent value={keyword} className="space-y-4 pt-4">
 
-      <div className="flex justify-between items-center">
+      {/* モバイルは縦に並べ、md以上は左右に並べる */}
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         {/* 出荷ステータスガイド */}
         <ShippingStatusGuide className="justify-start" />
         {/* 1ページあたりの表示件数 */}
-        <PaginationPageSize
-          limit={pageSize}
-          onLimitChange={changePageSize}
-        />
+        <div className="shrink-0 self-end md:self-auto">
+          <PaginationPageSize
+            limit={pageSize}
+            onLimitChange={changePageSize}
+          />
+        </div>
       </div>
 
       {/* 医薬品カード一覧 */}

@@ -19,7 +19,7 @@ const buttonVariants = cva(
         surface:
           "bg-background text-foreground border hover:bg-surface/50",
         accent:
-          "bg-accent text-accent-foreground hover:bg-accent/80",
+          "bg-accent text-accent-foreground hover:brightness-90",
         ghost: "hover:bg-primary hover:text-primary-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
