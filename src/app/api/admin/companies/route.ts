@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type {  GetCompaniesResponse, CreateCompanyRequest, CreateCompanyResponse } from "@/types/admin/company"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
+import { getUniqueErrorMessage } from "@/app/api/admin/_lib/getUniqueErrorMessage"
 
 
 /** 製薬会社一覧の取得 */
@@ -48,7 +49,13 @@ export const POST = async (request: NextRequest) => {
       { message: `${company.name}を作成しました`, data: company },
       { status: 200 }
     )
-  } catch {
+  } catch (error) {
+    // 同じ名前が既に登録されている場合は、その旨を返す
+    const uniqueErrorMessage = getUniqueErrorMessage(error)
+    if (uniqueErrorMessage) {
+      return NextResponse.json({ message: uniqueErrorMessage }, { status: 409 })
+    }
+
     return NextResponse.json(
       { message: "データの作成中にエラーが発生しました" },
       { status: 400 }
