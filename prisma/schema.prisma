@@ -109,7 +109,8 @@ model PackageUnit {
   id                    Int       @id @default(autoincrement())
   name                  String
   gs1SalesCode          String    @unique @map("gs1_sales_code") // 販売包装単位GS1コード
-  gs1DispensingCode     String?   @unique @map("gs1_dispensing_code") // 調剤包装単位GS1コード
+  // 調剤包装単位GS1コード。同じ調剤包装が複数の販売包装で使われるため一意にはならない
+  gs1DispensingCode     String?   @map("gs1_dispensing_code")
   hotCode               String?   @unique @map("hot_code") // HOTコード (基準番号)
   unifiedCode           String?   @unique @map("unified_code") // 統一商品コード
 
