@@ -13,17 +13,17 @@ export const AnnounceFormFields = ({ className }: AnnounceFormFieldsProps) => {
     <div className={cn("grid grid-cols-1 md:grid-cols-3 gap-4", className)}>
       <FormDatePicker
         name="announcedDate"
-        label="告示日"
+        label="告知日"
         required
       />
       <FormDatePicker
         name="effectiveDate"
-        label="実施日"
+        label="適用日"
         required
       />
       <FormSelectBox
         name="announceType"
-        label="告示種別"
+        label="告知種別"
         options={ANNOUNCE_TYPE_OPTIONS}
         required
       />

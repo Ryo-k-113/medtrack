@@ -54,7 +54,7 @@ export const AnnounceForm = () => {
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-          {/* 告示種別・告示日・実施日 */}
+          {/* 告知種別・告知日・適用日 */}
           <AnnounceFormFields />
 
           {/* ボタン */}
