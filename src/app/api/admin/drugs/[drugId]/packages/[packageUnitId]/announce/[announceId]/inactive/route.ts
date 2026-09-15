@@ -5,7 +5,7 @@ import type { InactivateAnnounceRequest, InactivateAnnounceResponse } from "@/ty
 
 
 
-/** POST: 適用日を迎えた告示の非表示（INACTIVE化）*/
+/** POST: 告示の非表示（INACTIVE化）（processStatusがCOMPLETED、かつ非表示化されていない場合）*/
 export const POST = async (
   request: NextRequest,
   { params }: { params: { drugId: string; packageUnitId: string; announceId: string; }}
@@ -24,7 +24,7 @@ export const POST = async (
     const { currentShippingStatus } = body
 
     await prisma.$transaction(async (tx) => {
-      // 対象の告示をINACTIVEに
+      // バッチで出荷状況に反映済み（COMPLETED）、かつ非表示化されていない告示のみINACTIVEに
       const result = await tx.shippingAnnouncement.updateMany({
         where: {
           id: Number(announceId),
@@ -32,11 +32,13 @@ export const POST = async (
           PackageUnit: {
             drugId: Number(drugId)
           },
+          processStatus: "COMPLETED",
+          publishStatus: { not: "INACTIVE" },
         },
         data: { publishStatus: "INACTIVE" }
       })
 
-      // 指定された条件に一致するレコードが存在しない（URLのID組み合わせが不整合）場合はエラー
+      // 条件に一致する告示がない（IDの組み合わせが不整合、未処理、非表示化済み）場合はエラー
       if (result.count === 0) {
         throw new Error("NOT_FOUND")
       }
@@ -60,7 +62,7 @@ export const POST = async (
 
   } catch (error) {
     if (error instanceof Error && error.message === "NOT_FOUND") {
-      return NextResponse.json({ message: "対象の告示が見つかりません" }, { status: 404 })
+      return NextResponse.json({ message: "対象の告示は非表示にできません" }, { status: 404 })
     }
     if (error) {
       return NextResponse.json({ message: "エラーが発生しました" }, { status: 400 })
