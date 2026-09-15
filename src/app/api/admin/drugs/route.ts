@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import { getUniqueErrorMessage } from "@/app/api/admin/_lib/getUniqueErrorMessage"
+import { buildPackageUnitSearchCondition } from "@/app/api/admin/_lib/buildPackageUnitSearchCondition"
 import  { CreateDrugRequest, CreateDrugResponse,GetPublishedPackageUnitsResponse  } from '@/types/admin/drug';
 import { Prisma } from "@prisma/client"
 
@@ -22,18 +23,10 @@ export const GET = async (request: NextRequest) => {
     // 1ページの表示件数
     const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit")) || 10))
 
-    // 検索キーワード（医薬品名・成分名で検索）
-    const search = searchParams.get("search")?.trim()
-
-    // 基本のwhere条件
+    // 公開中の包装のうち、検索キーワード（医薬品名・成分名・各コード）に一致するもの
     const where : Prisma.PackageUnitWhereInput = {
       publishStatus: "PUBLISHED",
-      ...(search && {
-        OR: [
-          { Drug: { name: { contains: search, mode: "insensitive" } } },
-          { Drug: { GenericName: { name: { contains: search, mode: "insensitive" } } } },
-        ],
-      }),
+      ...buildPackageUnitSearchCondition(searchParams.get("search")),
     }
 
     const [packageUnits, totalCount] = await Promise.all([

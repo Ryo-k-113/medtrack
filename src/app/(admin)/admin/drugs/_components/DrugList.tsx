@@ -66,7 +66,7 @@ export const DrugList = () => {
           <form onSubmit={handleSearch} className="flex-1">
             <SearchBox 
               name="keyword" 
-              placeholder="医薬品名・成分名で検索" 
+              placeholder="医薬品名・成分名・コードで検索"
               className="max-w-sm"
             />
           </form>
