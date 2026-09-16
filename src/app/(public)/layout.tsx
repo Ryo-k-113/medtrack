@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Header } from "./_components/Header";
 import { Footer } from "./_components/Footer";
 import { NoticeMessage } from "@/components/Notice/NoticeMessage";
+import { ClarityAnalytics } from "@/components/Analytics/ClarityAnalytics";
 
 export default function PublicLayout({
   children,
@@ -17,9 +18,10 @@ export default function PublicLayout({
         <NoticeMessage />
       </Suspense>
 
+      {/* Clarityの計測（公開ページのみ） */}
+      <ClarityAnalytics />
+
       <Header />
-      {/* 背景は公開ページ共通（カードや入力欄は白で浮かせる）
-          コンテンツの量に関係なくフッターとの間を空けるため、下に余白を取る */}
       <main className="flex flex-1 flex-col bg-gray-50 pb-10 md:pb-16">
         {children}
       </main>
