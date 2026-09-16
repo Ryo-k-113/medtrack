@@ -1,25 +1,24 @@
 import type { Prisma } from "@prisma/client"
-import { toHalfWidth } from "@/utils/text"
-
-/**
- * コードとしても検索する単語の形
- * 「60」「1000」のような規格の数字が、長いコードの一部に一致して
- * 関係ない医薬品が混ざらないよう、5文字以上の英数字に限る
- */
-const CODE_KEYWORD_PATTERN = /^[0-9A-Za-z]{5,}$/
+import { getNameKeywordVariants, isCodeKeyword, splitSearchKeywords } from "@/utils/search"
 
 /**
  * 1つの単語について、医薬品名・成分名・コードのいずれかに部分一致する条件
  */
 const buildKeywordCondition = (keyword: string): Prisma.PackageUnitWhereInput => {
+  // ひらがな・カタカナのどちらで入力しても一致するよう、表記ごとに条件を作る
+  const nameConditions = getNameKeywordVariants(keyword).flatMap(
+    (variant): Prisma.PackageUnitWhereInput[] => {
+      const contains = { contains: variant, mode: "insensitive" } as const
+      return [
+        { Drug: { name: contains } },
+        { Drug: { GenericName: { name: contains } } },
+      ]
+    }
+  )
+
+  if (!isCodeKeyword(keyword)) return { OR: nameConditions }
+
   const contains = { contains: keyword, mode: "insensitive" } as const
-
-  const nameConditions: Prisma.PackageUnitWhereInput[] = [
-    { Drug: { name: contains } },
-    { Drug: { GenericName: { name: contains } } },
-  ]
-
-  if (!CODE_KEYWORD_PATTERN.test(keyword)) return { OR: nameConditions }
 
   return {
     OR: [
@@ -48,8 +47,7 @@ const buildKeywordCondition = (keyword: string): Prisma.PackageUnitWhereInput =>
 export const buildPackageUnitSearchCondition = (
   search: string | null | undefined
 ): Prisma.PackageUnitWhereInput => {
-  // 全角スペースで区切られていても分けられるよう、半角に揃えてから分割する
-  const keywords = toHalfWidth(search ?? "").trim().split(/\s+/).filter(Boolean)
+  const keywords = splitSearchKeywords(search)
   if (keywords.length === 0) return {}
 
   return { AND: keywords.map(buildKeywordCondition) }
