@@ -1,4 +1,6 @@
 
+import { useState } from "react"
+import type { ProductType } from "@prisma/client"
 import { BaseTabs } from "@/components/Tabs/BaseTabs"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { SearchResultTab } from "./SearchResultTab"
@@ -9,9 +11,12 @@ type Props = {
 }
 
 export const SearchResults = ({ keywords }: Props) => {
-  const result0 = useDrugSearch(keywords[0] ?? "")
-  const result1 = useDrugSearch(keywords[1] ?? "")
-  const result2 = useDrugSearch(keywords[2] ?? "")
+  // 製品区分の絞り込み（すべてのキーワードのタブに共通で適用する）
+  const [productTypes, setProductTypes] = useState<ProductType[]>([])
+
+  const result0 = useDrugSearch(keywords[0] ?? "", productTypes)
+  const result1 = useDrugSearch(keywords[1] ?? "", productTypes)
+  const result2 = useDrugSearch(keywords[2] ?? "", productTypes)
   const results = [result0, result1, result2].slice(0, keywords.length)
 
   if (keywords.length === 0) {
@@ -40,6 +45,8 @@ export const SearchResults = ({ keywords }: Props) => {
           key={keyword}
           keyword={keyword}
           result={results[index]}
+          productTypes={productTypes}
+          onChangeProductTypes={setProductTypes}
         />
       ))}
     </BaseTabs>

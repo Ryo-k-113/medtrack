@@ -1,7 +1,7 @@
 "use client"
 
 import { useFormContext, Controller } from "react-hook-form"
-import { Search } from "lucide-react"
+import { Search, X } from "lucide-react"
 import {
   InputGroup,
   InputGroupInput,
@@ -23,7 +23,7 @@ export const SearchBox = ({
   className,
   buttonClassName,
 }: SearchBoxProps) => {
-  const { control } = useFormContext()
+  const { control, setFocus } = useFormContext()
 
   return (
     <Controller
@@ -39,6 +39,24 @@ export const SearchBox = ({
             align="inline-end"
             className="p-1.5" 
           >
+            {/* 入力があるときだけ、文字を消すボタンを表示する */}
+            {field.value ? (
+              <InputGroupButton
+                type="button"
+                variant="surface"
+                size="icon-sm"
+                aria-label="入力を消去"
+                className="text-weak hover:bg-gray-100 "
+                onClick={() => {
+                  field.onChange("")
+                  // 続けて入力できるよう、入力欄にフォーカスを戻す
+                  setFocus(name)
+                }}
+              >
+                <X className="h-4 w-4" />
+              </InputGroupButton>
+            ) : null}
+
             <InputGroupButton
               type="submit"
               variant="default"

@@ -58,7 +58,7 @@ export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
         <form onSubmit={handleSearch}>
           <SearchBox
             name="keyword"
-            placeholder="キーワードを入力..."
+            placeholder="例) ロキソ ６０ サワイ"
             className="h-12"
             buttonClassName="h-12 w-12"
           />
