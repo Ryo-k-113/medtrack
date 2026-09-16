@@ -4,6 +4,11 @@ import { Suspense } from "react";
 import { Header } from "./_components/Header";
 import { Footer } from "./_components/Footer";
 import { NoticeMessage } from "@/components/Notice/NoticeMessage";
+import { ClarityAnalytics } from "@/components/Analytics/ClarityAnalytics";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
+/** GA4の測定ID */
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID
 
 export default function PublicLayout({
   children,
@@ -17,9 +22,11 @@ export default function PublicLayout({
         <NoticeMessage />
       </Suspense>
 
+      <ClarityAnalytics />
+      {/* GA4の計測（公開ページのみ） */}
+      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
+
       <Header />
-      {/* 背景は公開ページ共通（カードや入力欄は白で浮かせる）
-          コンテンツの量に関係なくフッターとの間を空けるため、下に余白を取る */}
       <main className="flex flex-1 flex-col bg-gray-50 pb-10 md:pb-16">
         {children}
       </main>

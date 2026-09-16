@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
- 
+
 const notoSansJP = Noto_Sans_JP({
   weight: ['400', '700'],
   subsets: ['latin'],
@@ -39,4 +39,3 @@ export default function RootLayout({
     </html>
   );
 }
-

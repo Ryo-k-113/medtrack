@@ -50,3 +50,6 @@ dev.db
 
 # seed の元データ（ライセンス確認前・サイズが大きいため）
 /prisma/seed/raw/
+
+# Sentry Config File
+.env.sentry-build-plugin
