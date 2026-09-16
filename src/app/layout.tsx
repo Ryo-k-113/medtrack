@@ -16,6 +16,8 @@ const notoSansJP = Noto_Sans_JP({
 export const metadata: Metadata = {
   title: "MedTrack",
   description: "出荷情報を管理できる医薬品データベースアプリです",
+  // モバイルでコードなどの長い数字が電話番号としてリンクにならないようにする
+  formatDetection: { telephone: false },
 };
 
 
