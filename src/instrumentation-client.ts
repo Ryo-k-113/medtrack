@@ -12,8 +12,15 @@ Sentry.init({
   // Sentry上で環境を区別するための名前
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "development",
 
-  // パフォーマンス計測は10件に1件のみ（無料枠を使い切らないため）
-  tracesSampleRate: 0.1,
+  // パフォーマンス計測は行わない（エラーの記録のみに絞り、送信量を抑える）
+  tracesSampleRate: 0,
+
+  // エラーが無くても送信される、計測・セッションの機能を外す
+  integrations: (defaults) =>
+    defaults.filter(
+      (integration) =>
+        integration.name !== "BrowserTracing" && integration.name !== "BrowserSession"
+    ),
 
   dataCollection: {
     // 利用者の情報とHTTPのリクエスト内容は送らない
