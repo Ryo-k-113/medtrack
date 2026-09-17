@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { PageContainer } from "@/components/Layout/PageContainer"
 import { LegalSection } from "../_components/LegalSection"
-import { LEGAL_ESTABLISHED_DATE, PRIVACY_SECTIONS } from "../_constants/legal"
+import { LEGAL_ESTABLISHED_DATE, PRIVACY_REVISED_DATE, PRIVACY_SECTIONS } from "../_constants/legal"
 
 export const metadata: Metadata = {
   title: "プライバシーポリシー | MedTrack",
@@ -22,7 +22,9 @@ export default function PrivacyPage() {
         ))}
       </div>
 
-      <p className="text-xs text-weak">制定日: {LEGAL_ESTABLISHED_DATE}</p>
+      <p className="text-xs text-weak">
+        制定日: {LEGAL_ESTABLISHED_DATE}　改定日: {PRIVACY_REVISED_DATE}
+      </p>
     </PageContainer>
   )
 }
