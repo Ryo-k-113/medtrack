@@ -5,6 +5,7 @@ import { Header } from "./_components/Header";
 import { Footer } from "./_components/Footer";
 import { NoticeMessage } from "@/components/Notice/NoticeMessage";
 import { ClarityAnalytics } from "@/components/Analytics/ClarityAnalytics";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 /** GA4の測定ID */
@@ -25,6 +26,8 @@ export default function PublicLayout({
       <ClarityAnalytics />
       {/* GA4の計測（公開ページのみ） */}
       {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
+      {/* ページの表示速度の計測 */}
+      <SpeedInsights />
 
       <Header />
       <main className="flex flex-1 flex-col bg-gray-50 pb-10 md:pb-16">

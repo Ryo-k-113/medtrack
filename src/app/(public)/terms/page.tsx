@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { PageContainer } from "@/components/Layout/PageContainer"
 import { LegalSection } from "../_components/LegalSection"
-import { LEGAL_ESTABLISHED_DATE, TERMS_SECTIONS } from "../_constants/legal"
+import { LEGAL_ESTABLISHED_DATE, TERMS_REVISED_DATE, TERMS_SECTIONS } from "../_constants/legal"
 
 export const metadata: Metadata = {
   title: "利用規約・免責事項 | MedTrack",
@@ -23,7 +23,9 @@ export default function TermsPage() {
         ))}
       </div>
 
-      <p className="text-xs text-weak">制定日: {LEGAL_ESTABLISHED_DATE}</p>
+      <p className="text-xs text-weak">
+        制定日: {LEGAL_ESTABLISHED_DATE}　改定日: {TERMS_REVISED_DATE}
+      </p>
     </PageContainer>
   )
 }
