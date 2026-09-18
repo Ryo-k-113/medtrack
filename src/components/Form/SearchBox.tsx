@@ -46,7 +46,8 @@ export const SearchBox = ({
                 variant="surface"
                 size="icon-sm"
                 aria-label="入力を消去"
-                className="text-weak hover:bg-gray-100 "
+                // 枠線と背景を付けず、アイコンだけを表示する
+                className="border-0 bg-transparent text-weak hover:bg-transparent"
                 onClick={() => {
                   field.onChange("")
                   // 続けて入力できるよう、入力欄にフォーカスを戻す
