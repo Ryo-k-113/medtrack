@@ -5,25 +5,46 @@
  *   医薬品供給1.csv        厚労省の供給状況一覧表。医薬品の基本情報と出荷状況
  *   HOTコード一覧表1.csv    MEDISのHOTコード。製造会社・販売会社と、包装同士の突合キー
  *   gs1コード一覧表1.csv    GS1コード。包装の情報
+ *   price/*.csv            厚労省の薬価基準収載品目リスト。薬価（任意。無ければ薬価は空）
  *
  * 実行: npm run seed:build
  */
 import { createHash } from "node:crypto"
-import { readFileSync, writeFileSync } from "node:fs"
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { gzipSync } from "node:zlib"
 
 import { parse } from "csv-parse/sync"
 
+import { writeReviewCsv } from "./review-csv"
+
 const RAW_DIR = path.join(process.cwd(), "prisma/seed/raw")
 const OUT_FILE = path.join(process.cwd(), "prisma/seed/seed-data.json.gz")
+// 剤形を名前で判定した医薬品の確認用一覧（gitの管理外）
+const DOSAGE_FORM_REVIEW_FILE = path.join(RAW_DIR, "match/剤形の判定.csv")
 
 // 元データのファイル名
 const SUPPLY_FILE = "医薬品供給1.csv"
 const HOT_FILE = "HOTコード一覧表1.csv"
 const GS1_FILE = "gs1コード一覧表1.csv"
+// 薬価のファイルを置くフォルダ（区分ごとに複数ファイルを置ける）
+const PRICE_DIR = "price"
 
 type ProductType = "BRAND_NAME" | "QUASI_BRAND_NAME" | "GENERIC" | "OTHER"
+type DrugCategory = "INTERNAL" | "INJECTION" | "EXTERNAL" | "DENTAL"
+type DosageForm =
+  | "TABLET"
+  | "OD_TABLET"
+  | "CAPSULE"
+  | "POWDER"
+  | "LIQUID"
+  | "SKIN_APPLICATION"
+  | "EYE_EAR_NOSE"
+  | "PATCH"
+  | "SUPPOSITORY"
+  | "INHALANT"
+  | "INJECTION"
+  | "OTHER"
 type ShippingStatus =
   | "NORMAL_SHIPMENT"
   | "LIMITED_SHIPMENT"
@@ -35,6 +56,7 @@ type SeedPackage = {
   gs1SalesCode: string
   gs1DispensingCode: string | null
   hotCode: string
+  unifiedCode: string | null
   currentShippingStatus: ShippingStatus
   discontinuedDate: string | null
 }
@@ -43,7 +65,10 @@ type SeedDrug = {
   name: string
   yjCode: string
   drugPriceListingCode: string | null
+  price: number | null
   productType: ProductType
+  category: DrugCategory | null
+  dosageForm: DosageForm | null
   transitionalMeasuresDate: string | null
   unit: string
   genericName: string
@@ -119,6 +144,138 @@ const toProductType = (value: string): ProductType => {
   return "OTHER"
 }
 
+/** GS1コード一覧表の「区分名」をスキーマの区分に対応させる */
+const toDrugCategory = (value: string): DrugCategory | null => {
+  if (value.includes("内用")) return "INTERNAL"
+  if (value.includes("注射")) return "INJECTION"
+  if (value.includes("外用")) return "EXTERNAL"
+  if (value.includes("歯科")) return "DENTAL"
+  return null
+}
+
+// ---------------------------------------------------------------- 剤形
+
+/** 口腔内で崩壊・溶解する錠剤の名前（OD錠、ガスターD錠、ゾーミッグRM錠、ジプレキサザイディス錠、ODフィルム） */
+const OD_TABLET_PATTERN = /OD錠|ODフィルム|(?<![A-Za-z])D錠|RM錠|ザイディス/
+
+/** 吸入器の名前。名前に「吸入」を含まない吸入薬を拾う（呼吸器系の薬に限って使う） */
+const INHALER_DEVICE_PATTERN =
+  /インヘラー|ディスカス|エリプタ|タービュヘイラー|レスピマット|エアロスフィア|スイングヘラー|ブリーズヘラー|ジェニュエア|エアゾール|エロゾル/
+
+/** 呼吸器系の薬効分類（YJコードの先頭3桁。225 気管支拡張剤、229 その他の呼吸器官用薬） */
+const RESPIRATORY_CLASSES = ["225", "229"]
+
+/**
+ * GS1の剤形が「その他」「液剤」になっている外用薬を、名前で正しい分類へ戻す規則
+ * GS1が明確に分類している場合は使わない（上から順に判定する）
+ */
+const EXTERNAL_NAME_RULES: { form: DosageForm; pattern: RegExp }[] = [
+  { form: "EYE_EAR_NOSE", pattern: /点眼|点鼻|点耳|耳科|眼軟膏|眼科用/ },
+  { form: "PATCH", pattern: /テープ|パップ|貼付|プラスター/ },
+  { form: "SUPPOSITORY", pattern: /坐剤|坐薬|浣腸|[膣腟]錠|[膣腟]坐剤/ },
+  { form: "SKIN_APPLICATION", pattern: /軟膏|クリーム|ゲル|ローション/ },
+]
+
+/**
+ * GS1の剤形が「その他」「空欄」になっている内用薬を、名前で正しい分類へ戻す規則
+ * （上から順に判定する。「シロップ用細粒」は散剤とするため、散剤を液剤より先に置く）
+ */
+const INTERNAL_NAME_RULES: { form: DosageForm; pattern: RegExp }[] = [
+  { form: "CAPSULE", pattern: /カプセル/ },
+  { form: "POWDER", pattern: /散|顆粒|細粒|ドライシロップ|原末/ },
+  { form: "LIQUID", pattern: /液|シロップ/ },
+  { form: "TABLET", pattern: /錠/ },
+]
+
+/** 剤形の判定結果と、その根拠（確認用の一覧に出す） */
+type DosageFormResult = { form: DosageForm; reason: string; byName: boolean }
+
+/**
+ * 剤形を判定する
+ * 基本はGS1の「区分名」と「剤形」の組み合わせで決め、GS1では埋もれるOD錠と吸入薬、
+ * GS1の分類が明らかに誤っている外用薬だけを、医薬品名と薬効分類で補う
+ */
+const toDosageForm = (drug: {
+  name: string
+  yjCode: string
+  category: DrugCategory | null
+  gs1Form: string
+}): DosageFormResult => {
+  const { name, yjCode, category, gs1Form } = drug
+  const fromGs1 = (form: DosageForm): DosageFormResult => ({ form, reason: `GS1: ${gs1Form}`, byName: false })
+  const byName = (form: DosageForm, reason: string): DosageFormResult => ({ form, reason, byName: true })
+
+  if (category === "INJECTION") return fromGs1("INJECTION")
+
+  if (category === "INTERNAL") {
+    // OD錠はGS1では錠剤・散剤・その他に分かれるため、名前を優先する
+    if (OD_TABLET_PATTERN.test(name)) return byName("OD_TABLET", "名前: OD錠など")
+    if (gs1Form.includes("錠")) return fromGs1("TABLET")
+    if (gs1Form.includes("カプセル")) return fromGs1("CAPSULE")
+    if (gs1Form.includes("散")) return fromGs1("POWDER")
+    if (gs1Form.includes("液")) return fromGs1("LIQUID")
+
+    // GS1が分類していないものは、名前で補う
+    const rule = INTERNAL_NAME_RULES.find(({ pattern }) => pattern.test(name))
+    if (rule) return byName(rule.form, `名前: GS1の「${gs1Form || "空欄"}」を補正`)
+    return fromGs1("OTHER")
+  }
+
+  if (category === "EXTERNAL") {
+    // 吸入薬はGS1ではその他・液剤・診断用に分かれるため、最初に判定する
+    const isRespiratory = RESPIRATORY_CLASSES.includes(yjCode.slice(0, 3))
+    if (name.includes("吸入")) return byName("INHALANT", "名前: 吸入")
+    if (INHALER_DEVICE_PATTERN.test(name) && yjCode.startsWith("22")) {
+      return byName("INHALANT", "名前: 吸入器＋呼吸器系")
+    }
+    if (isRespiratory && (gs1Form.includes("液") || gs1Form.includes("その他"))) {
+      return byName("INHALANT", "薬効分類: 呼吸器系の液剤・その他")
+    }
+
+    if (gs1Form.includes("皮膚")) return fromGs1("SKIN_APPLICATION")
+    if (gs1Form.includes("眼") || gs1Form.includes("耳鼻")) return fromGs1("EYE_EAR_NOSE")
+    if (gs1Form.includes("貼付")) return fromGs1("PATCH")
+    if (gs1Form.includes("挿入")) return fromGs1("SUPPOSITORY")
+
+    // 口腔用の軟膏などは皮膚に塗る薬ではないため、名前での補正から外す
+    if (!name.includes("口腔")) {
+      const rule = EXTERNAL_NAME_RULES.find(({ pattern }) => pattern.test(name))
+      if (rule) return byName(rule.form, `名前: GS1の「${gs1Form || "空欄"}」を補正`)
+    }
+    return fromGs1("OTHER")
+  }
+
+  // 歯科用薬剤・区分が無いもの
+  return fromGs1("OTHER")
+}
+
+/**
+ * 同じ製品（YJコード）の剤形を1つにそろえる
+ * GS1の剤形は販売会社ごとに登録されるため、併売品で判定が割れることがある
+ * 1. 「その他」以外があればそちらを採る  2. 割れた場合は多い方  3. 同数なら名前の規則に合う方
+ * @returns そろえた剤形（そろえる必要が無い場合は null）
+ */
+const unifyDosageForm = (drugs: { name: string; category: DrugCategory | null; form: DosageForm }[]): DosageForm | null => {
+  const forms = new Set(drugs.map((drug) => drug.form))
+  if (forms.size <= 1) return null
+
+  const counts = new Map<DosageForm, number>()
+  drugs.forEach(({ form }) => {
+    if (form !== "OTHER") counts.set(form, (counts.get(form) ?? 0) + 1)
+  })
+  if (counts.size === 0) return null
+
+  const max = Math.max(...Array.from(counts.values()))
+  const candidates = Array.from(counts).filter(([, count]) => count === max).map(([form]) => form)
+  if (candidates.length === 1) return candidates[0]
+
+  // 同数の場合は、医薬品名が名前の規則に合う剤形を採る（ドライシロップ → 散剤など）
+  const { name, category } = drugs[0]
+  const rules = category === "INTERNAL" ? INTERNAL_NAME_RULES : EXTERNAL_NAME_RULES
+  const byName = rules.find(({ form, pattern }) => candidates.includes(form) && pattern.test(name))
+  return byName?.form ?? candidates[0]
+}
+
 /** 供給状況一覧表の「⑫出荷対応の状況」をスキーマの出荷状況に対応させる */
 const toShippingStatus = (value: string): ShippingStatus => {
   if (value.includes("限定出荷")) return "LIMITED_SHIPMENT"
@@ -141,8 +298,125 @@ const restoreDispensingCode = (value: string): string | null => {
 const buildPackageName = (form: string, amount: string, unit: string): string =>
   toHalfWidth(`${form}${amount}${unit}`).replace(/\s+/g, "")
 
+/**
+ * 販売包装単位コード（GS1の14桁）から統一商品コード（9桁）を作る
+ * 6〜13桁目の8桁に、2〜13桁目の12桁から計算したチェックデジットを付ける
+ * （12桁を左から1倍・3倍と交互に掛けて合計し、10から1の位を引いた値。1の位が0なら0）
+ * @example 14987185807149 → 185807142
+ */
+const toUnifiedCode = (gs1SalesCode: string): string | null => {
+  if (!/^\d{14}$/.test(gs1SalesCode)) return null
+  const body = gs1SalesCode.slice(1, 13)
+  const sum = Array.from(body).reduce(
+    (total, digit, index) => total + Number(digit) * (index % 2 === 0 ? 1 : 3),
+    0
+  )
+  return `${gs1SalesCode.slice(5, 13)}${(10 - (sum % 10)) % 10}`
+}
+
 /** HOTコードの8〜9桁目の会社識別用番号。販売移管の順に増える */
 const companySequence = (hotCode: string): number => Number(hotCode.slice(7, 9)) || 0
+
+// ---------------------------------------------------------------- 薬価
+
+/** 薬価基準収載医薬品コードの形式（半角英数の12桁） */
+const PRICE_CODE_PATTERN = /^[0-9A-Z]{12}$/
+
+/** 薬価の読み込み結果 */
+type PriceReadResult = {
+  prices: Map<string, number>
+  files: string[]
+  /** 取り出せなかった件数と、その例 */
+  errors: string[]
+  /** 同じコードに違う薬価があった件数（後のファイル・行の薬価を採用） */
+  conflicts: number
+}
+
+/** 「1,812.60」のような薬価を数値にする */
+const toPrice = (value: string): number | null => {
+  const price = Number(value.replace(/,/g, ""))
+  return Number.isFinite(price) && price >= 0 ? price : null
+}
+
+/**
+ * 見出しの行がある形式（厚労省のExcelをCSVに保存したもの）を読む
+ * 見出しが見つからない場合は null を返し、PDFを変換した形式として読み直す
+ */
+const readPriceWithHeader = (rows: string[][]): [string, string][] | null => {
+  const normalize = (cell: string) => toHalfWidth(cell).replace(/\s/g, "")
+  const headerIndex = rows
+    .slice(0, 20)
+    .findIndex((row) => row.map(normalize).includes("薬価基準収載医薬品コード"))
+  if (headerIndex === -1) return null
+
+  const header = rows[headerIndex].map(normalize)
+  const codeIndex = header.indexOf("薬価基準収載医薬品コード")
+  const priceIndex = header.indexOf("薬価")
+  if (priceIndex === -1) return null
+
+  return rows
+    .slice(headerIndex + 1)
+    .map((row): [string, string] => [row[codeIndex] ?? "", row[priceIndex] ?? ""])
+}
+
+/**
+ * PDFを変換した形式を読む
+ * 12桁のコードが「区分＋前半8桁」と「後半4桁＋品名など」の2列に分かれ、
+ * 品名が長い行は次の行へ折り返されているため、1件ずつつなぎ直してから取り出す
+ * 例: "内用薬8219001T","1023フェンタニル…帝國製薬先発品1,812.60"
+ */
+const readPriceFromPdfLayout = (rows: string[][]): [string, string][] => {
+  const recordStart = /^(内用薬|注射薬|外用薬|歯科用薬剤?)([0-9A-Z]{8})$/
+  // 経過措置の期限（9.3.31まで）や収載日（8.6.12収載）は薬価と取り違えないよう除く
+  const dateCell = /^\d+\.\d+\.\d+(まで|収載)?$/
+  // 品名などは全角、薬価は半角で書かれているため、末尾の半角の数値を薬価とする
+  const priceAtEnd = /(\d{1,3}(?:,\d{3})*\.\d{2})\s*R?\s*$/
+
+  const records: { head: string; cells: string[] }[] = []
+  for (const row of rows) {
+    const match = recordStart.exec((row[0] ?? "").trim())
+    if (match) records.push({ head: match[2], cells: row.slice(1) })
+    // 次の件が始まるまでは、折り返された続きの行として扱う
+    else if (records.length > 0) records[records.length - 1].cells.push(...row)
+  }
+
+  return records.map(({ head, cells }): [string, string] => {
+    const texts = cells.map((cell) => cell.trim()).filter((cell) => cell && !dateCell.test(cell))
+    const tail = /^([0-9A-Z]{4})/.exec(texts[0] ?? "")?.[1] ?? ""
+    const priceCell = texts.slice().reverse().find((cell) => priceAtEnd.test(cell)) ?? ""
+    const price = priceAtEnd.exec(priceCell)?.[1] ?? ""
+    return [`${head}${tail}`, price]
+  })
+}
+
+/** price フォルダの全ファイルから、薬価基準収載医薬品コードごとの薬価を読む */
+const readPrices = (): PriceReadResult => {
+  const dir = path.join(RAW_DIR, PRICE_DIR)
+  const result: PriceReadResult = { prices: new Map(), files: [], errors: [], conflicts: 0 }
+  if (!existsSync(dir)) return result
+
+  result.files = readdirSync(dir).filter((file) => file.toLowerCase().endsWith(".csv")).sort()
+
+  for (const file of result.files) {
+    const rows = readCsv(path.join(PRICE_DIR, file))
+    const entries = readPriceWithHeader(rows) ?? readPriceFromPdfLayout(rows)
+
+    for (const [rawCode, rawPrice] of entries) {
+      const code = toHalfWidth(rawCode).toUpperCase()
+      const price = toPrice(toHalfWidth(rawPrice))
+      if (!code && !rawPrice.trim()) continue
+
+      if (!PRICE_CODE_PATTERN.test(code) || price === null) {
+        result.errors.push(`${file}: ${rawCode} / ${rawPrice}`)
+        continue
+      }
+      const existing = result.prices.get(code)
+      if (existing !== undefined && existing !== price) result.conflicts += 1
+      result.prices.set(code, price)
+    }
+  }
+  return result
+}
 
 // ---------------------------------------------------------------- 本体
 
@@ -189,6 +463,9 @@ const main = () => {
   const usedSalesCodes = new Set<string>()
   const hotRowsByDrug = new Map<string, Record<string, string>[]>()
   let transitionalConflicts = 0
+  let categoryConflicts = 0
+  // 剤形の判定に使うGS1の剤形（医薬品の最初の包装の値を採る）
+  const gs1FormByDrug = new Map<string, string>()
 
   for (const gs1 of readCsvAsRecords(GS1_FILE)) {
     const salesCode = gs1["販売包装単位コード"]
@@ -228,13 +505,19 @@ const main = () => {
       gs1SalesCode: salesCode,
       gs1DispensingCode: restoreDispensingCode(gs1["調剤包装単位コード"]),
       hotCode: hot["HOTコード"],
+      unifiedCode: toUnifiedCode(salesCode),
       currentShippingStatus: isDiscontinued ? "DISCONTINUED_SALE" : status,
       discontinuedDate,
     }
 
+    const category = toDrugCategory(gs1["区分名"])
+
     const existing = drugs.get(drugKey)
     if (existing) {
       existing.packages.push(pkg)
+      // 区分は医薬品単位の情報。包装間で違う場合は最初の包装の区分を採り、件数を報告する
+      if (!existing.category) existing.category = category
+      else if (category && category !== existing.category) categoryConflicts += 1
       if (!existing.drugPriceListingCode) {
         existing.drugPriceListingCode = hot["薬価基準コード"] || gs1["薬価収載コード"] || null
       }
@@ -254,7 +537,12 @@ const main = () => {
         name: toHalfWidth(supply[col.name] ?? ""),
         yjCode,
         drugPriceListingCode: hot["薬価基準コード"] || gs1["薬価収載コード"] || null,
+        // 薬価はすべての包装を読み終えてから、薬価基準収載医薬品コードで付ける
+        price: null,
         productType: toProductType((supply[col.productType] ?? "").trim()),
+        category,
+        // 剤形はすべての包装を読み終えてから判定する
+        dosageForm: null,
         transitionalMeasuresDate: parseCompactDate(gs1["経過措置日"]),
         unit: toHalfWidth(supply[col.unit] ?? ""),
         genericName: toHalfWidth(supply[col.genericName] ?? ""),
@@ -263,6 +551,8 @@ const main = () => {
         packages: [pkg],
       })
     }
+
+    if (!gs1FormByDrug.has(drugKey)) gs1FormByDrug.set(drugKey, toHalfWidth(gs1["剤形"]))
 
     const rows = hotRowsByDrug.get(drugKey)
     if (rows) rows.push(hot)
@@ -283,6 +573,59 @@ const main = () => {
     }
   }
 
+  // 薬価を薬価基準収載医薬品コードで付ける（同じコードの医薬品には同じ薬価）
+  const priceResult = readPrices()
+  for (const drug of Array.from(drugs.values())) {
+    if (drug.drugPriceListingCode) {
+      drug.price = priceResult.prices.get(drug.drugPriceListingCode) ?? null
+    }
+  }
+
+  // 剤形を判定し、名前で判定したもの・その他になったものを確認用の一覧に出す
+  const dosageFormReasons = new Map<string, number>()
+  const results = new Map<string, DosageFormResult>()
+  for (const [drugKey, drug] of Array.from(drugs)) {
+    const result = toDosageForm({ ...drug, gs1Form: gs1FormByDrug.get(drugKey) ?? "" })
+    results.set(drugKey, result)
+    drug.dosageForm = result.form
+  }
+
+  // 併売品などで同じYJコードの剤形が割れた場合は、1つにそろえる
+  const drugKeysByYj = new Map<string, string[]>()
+  for (const [drugKey, drug] of Array.from(drugs)) {
+    drugKeysByYj.set(drug.yjCode, [...(drugKeysByYj.get(drug.yjCode) ?? []), drugKey])
+  }
+  let unifiedDosageForms = 0
+  for (const drugKeys of Array.from(drugKeysByYj.values())) {
+    const group = drugKeys.map((drugKey) => {
+      const drug = drugs.get(drugKey) as SeedDrug
+      return { drugKey, name: drug.name, category: drug.category, form: drug.dosageForm as DosageForm }
+    })
+    const form = unifyDosageForm(group)
+    if (!form) continue
+    unifiedDosageForms += 1
+    for (const { drugKey, form: before } of group) {
+      if (before === form) continue
+      ;(drugs.get(drugKey) as SeedDrug).dosageForm = form
+      results.set(drugKey, { form, reason: `YJコードでそろえた（元は${before}）`, byName: true })
+    }
+  }
+
+  const reviewRows: string[][] = []
+  for (const [drugKey, drug] of Array.from(drugs)) {
+    const result = results.get(drugKey) as DosageFormResult
+    const gs1Form = gs1FormByDrug.get(drugKey) ?? ""
+    dosageFormReasons.set(result.reason, (dosageFormReasons.get(result.reason) ?? 0) + 1)
+    if (result.byName || result.form === "OTHER") {
+      reviewRows.push([result.form, result.reason, drug.category ?? "", gs1Form, drug.yjCode, drug.name, drug.salesCompany])
+    }
+  }
+  writeReviewCsv(
+    DOSAGE_FORM_REVIEW_FILE,
+    ["剤形", "判定の根拠", "区分", "GS1の剤形", "YJコード", "医薬品名", "販売会社"],
+    reviewRows.sort((a, b) => a[0].localeCompare(b[0]) || a[5].localeCompare(b[5]))
+  )
+
   const drugList = Array.from(drugs.values()).filter(
     (drug) =>
       drug.name && drug.unit && drug.genericName && drug.manufacturingCompany && drug.salesCompany
@@ -296,9 +639,18 @@ const main = () => {
   ).sort()
 
   const packageCount = drugList.reduce((sum, d) => sum + d.packages.length, 0)
+  const unifiedCodes = drugList.flatMap((d) => d.packages.map((p) => p.unifiedCode))
+  const unifiedCodeCount = unifiedCodes.filter(Boolean).length
+  const unifiedCodeDuplicates = unifiedCodeCount - new Set(unifiedCodes.filter(Boolean)).size
+  const pricedCount = drugList.filter((d) => d.price !== null).length
+  const categoryCounts = drugList.reduce<Record<string, number>>((counts, d) => {
+    const key = d.category ?? "なし"
+    counts[key] = (counts[key] ?? 0) + 1
+    return counts
+  }, {})
   const payload = {
     generatedAt: new Date().toISOString(),
-    source: [SUPPLY_FILE, HOT_FILE, GS1_FILE],
+    source: [SUPPLY_FILE, HOT_FILE, GS1_FILE, ...priceResult.files.map((file) => `${PRICE_DIR}/${file}`)],
     units,
     genericNames,
     companies,
@@ -321,6 +673,41 @@ const main = () => {
   console.log(`  製造会社を新しい方で解決: ${manufacturerConflicts.toLocaleString()}`)
   console.log(`  経過措置日が包装間で不一致: ${transitionalConflicts.toLocaleString()}`)
   console.log(`  必須項目が欠けて除外   : ${incomplete.toLocaleString()}`)
+  console.log(`  統一商品コードあり     : ${unifiedCodeCount.toLocaleString()}（重複 ${unifiedCodeDuplicates}）`)
+  console.log(`  薬価あり               : ${pricedCount.toLocaleString()}`)
+  console.log(
+    `  区分                   : ${Object.entries(categoryCounts)
+      .map(([key, count]) => `${key} ${count.toLocaleString()}`)
+      .join(" / ")}`
+  )
+  console.log(`  区分が包装間で不一致   : ${categoryConflicts.toLocaleString()}`)
+
+  const dosageFormCounts = drugList.reduce<Record<string, number>>((counts, d) => {
+    const key = d.dosageForm ?? "なし"
+    counts[key] = (counts[key] ?? 0) + 1
+    return counts
+  }, {})
+  console.log("\n--- 剤形")
+  Object.entries(dosageFormCounts)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([form, count]) => console.log(`  ${form.padEnd(17)}: ${count.toLocaleString()}`))
+  console.log("  判定の根拠:")
+  Array.from(dosageFormReasons)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([reason, count]) => console.log(`    ${reason}: ${count.toLocaleString()}`))
+  console.log(`  同じYJコードでそろえた製品: ${unifiedDosageForms.toLocaleString()}`)
+  console.log(`  確認用の一覧: ${path.relative(process.cwd(), DOSAGE_FORM_REVIEW_FILE)}（${reviewRows.length.toLocaleString()}件）`)
+
+  console.log("\n--- 薬価の読み込み")
+  if (priceResult.files.length === 0) {
+    console.log(`  ${PRICE_DIR}/ にファイルが無いため、薬価は空で生成しました`)
+  } else {
+    console.log(`  ファイル          : ${priceResult.files.join(", ")}`)
+    console.log(`  読み込んだコード  : ${priceResult.prices.size.toLocaleString()}`)
+    console.log(`  取り出せなかった行: ${priceResult.errors.length.toLocaleString()}`)
+    priceResult.errors.slice(0, 5).forEach((error) => console.log(`    ${error}`))
+    console.log(`  同じコードで薬価が違う: ${priceResult.conflicts.toLocaleString()}`)
+  }
   console.log(
     `\n  ${path.relative(process.cwd(), OUT_FILE)} ` +
       `(${(gzipSync(json, { level: 9 }).length / 1024 / 1024).toFixed(1)}MB, ` +

@@ -12,7 +12,13 @@ import { readFileSync } from "node:fs"
 import path from "node:path"
 import { gunzipSync } from "node:zlib"
 
-import { PrismaClient, type ProductType, type CurrentShippingStatus } from "@prisma/client"
+import {
+  PrismaClient,
+  type ProductType,
+  type CurrentShippingStatus,
+  type DrugCategory,
+  type DosageForm,
+} from "@prisma/client"
 
 const prisma = new PrismaClient()
 
@@ -25,6 +31,7 @@ type SeedPackage = {
   gs1SalesCode: string
   gs1DispensingCode: string | null
   hotCode: string
+  unifiedCode: string | null
   currentShippingStatus: CurrentShippingStatus
   discontinuedDate: string | null
 }
@@ -33,7 +40,10 @@ type SeedDrug = {
   name: string
   yjCode: string
   drugPriceListingCode: string | null
+  price: number | null
   productType: ProductType
+  category: DrugCategory | null
+  dosageForm: DosageForm | null
   transitionalMeasuresDate: string | null
   unit: string
   genericName: string
@@ -161,7 +171,10 @@ const main = async () => {
     name: drug.name,
     yjCode: drug.yjCode,
     drugPriceListingCode: drug.drugPriceListingCode,
+    price: drug.price,
     productType: drug.productType,
+    category: drug.category,
+    dosageForm: drug.dosageForm,
     transitionalMeasuresDate: drug.transitionalMeasuresDate
       ? new Date(drug.transitionalMeasuresDate)
       : null,
@@ -202,6 +215,7 @@ const main = async () => {
       gs1SalesCode: pkg.gs1SalesCode,
       gs1DispensingCode: pkg.gs1DispensingCode,
       hotCode: pkg.hotCode,
+      unifiedCode: pkg.unifiedCode,
       currentShippingStatus: pkg.currentShippingStatus,
       discontinuedDate: pkg.discontinuedDate ? new Date(pkg.discontinuedDate) : null,
       publishStatus: "PUBLISHED" as const,
