@@ -63,6 +63,8 @@ model Drug {
   isAuthorizedGeneric      Boolean? @map("is_authorized_generic") 
   packageInsertUrl         String?  @map("package_insert_url") //添付文書URL
   productType              ProductType  @map("product_type") 
+  category                 DrugCategory? @map("category") // 区分（内用薬・注射薬・外用薬・歯科用薬剤）
+  dosageForm               DosageForm?   @map("dosage_form") // 剤形
   transitionalMeasuresDate DateTime?  @map("transitional_measures_date") // 経過措置日 
   createdAt                DateTime   @default(now()) @map("created_at")
   updatedAt                DateTime   @updatedAt @map("updated_at")
@@ -90,6 +92,34 @@ model Drug {
   
   BookmarkDrugs           BookmarkDrug[]
   PackageUnits            PackageUnit[]
+}
+
+// 区分
+enum DrugCategory {
+  INTERNAL   // 内用薬
+  INJECTION  // 注射薬
+  EXTERNAL   // 外用薬
+  DENTAL     // 歯科用薬剤
+
+  @@map("drug_category")
+}
+
+// 剤形
+enum DosageForm {
+  TABLET            // 錠剤
+  OD_TABLET         // OD錠（ODフィルムなど口腔内で崩壊・溶解するものを含む）
+  CAPSULE           // カプセル
+  POWDER            // 散剤・顆粒剤（ドライシロップを含む）
+  LIQUID            // 液剤・シロップ
+  SKIN_APPLICATION  // 皮膚塗布剤
+  EYE_EAR_NOSE      // 眼・耳鼻用剤
+  PATCH             // 貼付剤
+  SUPPOSITORY       // 坐剤・挿入剤（浣腸を含む）
+  INHALANT          // 吸入薬
+  INJECTION         // 注射剤
+  OTHER             // その他
+
+  @@map("dosage_form")
 }
 
 // 製品区分
