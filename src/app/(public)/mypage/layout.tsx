@@ -55,7 +55,7 @@ export default function MyPageLayout({
       </aside>
 
       {/* タブメニュー（md未満・横スクロール） */}
-      <nav className="relative mx-4 flex gap-6 overflow-x-auto border-b md:hidden">
+      <nav className="relative mx-5 flex gap-6 overflow-x-auto border-b md:hidden">
       {MENU_ITEMS.map((item) => {
         const active = isActive(item.href);
 
@@ -88,7 +88,7 @@ export default function MyPageLayout({
       </nav>
 
       {/* コンテンツ */}
-      <main className="min-w-0 flex-1 px-4 py-6 md:px-0 md:py-0">
+      <main className="min-w-0 flex-1 px-5 py-6 md:px-0 md:py-0">
         {children}
       </main>
     </div>

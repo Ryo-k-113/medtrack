@@ -152,7 +152,7 @@ export const Header = () => {
 
   return (
     <header className="sticky left-0 right-0 top-0 z-50 border-b  backdrop-blur-sm transition-all">
-      <div className="flex size-full items-center justify-between px-4 py-3 md:px-6 md:py-4">
+      <div className="flex size-full items-center justify-between px-5 py-3 md:px-10 md:py-4">
         <h1 className="text-xl font-bold text-primary md:text-3xl">
           <Link href="/">MedTrack</Link>
         </h1>

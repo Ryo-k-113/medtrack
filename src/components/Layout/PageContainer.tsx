@@ -12,7 +12,7 @@ type PageContainerProps = {
 export const PageContainer = ({ children, className }: PageContainerProps) => (
   <div
     className={cn(
-      "mx-auto w-full max-w-6xl px-4 py-8 md:px-6 md:py-10",
+      "mx-auto w-full max-w-6xl px-5 py-8 md:px-6 md:py-10",
       className
     )}
   >
