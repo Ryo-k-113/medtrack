@@ -25,6 +25,9 @@ export const SearchPageContent = () => {
 
   return (
     <PageContainer className="max-w-5xl space-y-8">
+      {/* 画面には出さず、読み上げと検索エンジンにページの主題を伝える */}
+      <h1 className="sr-only">医薬品の検索結果</h1>
+
       {/* 検索バー */}
       <SearchBar defaultKeyword={keywords.join(",")} />
 

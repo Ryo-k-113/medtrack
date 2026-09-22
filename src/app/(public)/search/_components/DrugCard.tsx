@@ -43,7 +43,7 @@ export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) 
               className="mt-1"
             />
             <div>
-              <h3 className="text-lg font-bold">{drug.name}</h3>
+              <h2 className="text-lg font-bold">{drug.name}</h2>
               {/* 成分名 */}
               <p className="text-sm text-weak">{drug.GenericName.name}</p>
             </div>
