@@ -15,6 +15,8 @@ export const GET = async () => {
       select: {
         id: true,
         name: true,
+        breakdown: true,
+        variant: true,
         currentShippingStatus: true,
         publishStatus: true,
         gs1SalesCode: true,
