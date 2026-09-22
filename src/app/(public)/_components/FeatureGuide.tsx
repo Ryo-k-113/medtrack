@@ -11,9 +11,10 @@ const COLLAPSED_KEY = "FeatureGuideCollapsed"
 /** ブラウザの設定で保存領域を使えない場合があるため、失敗しても表示を妨げない */
 const readCollapsed = () => {
   try {
-    return localStorage.getItem(COLLAPSED_KEY) === "true"
+    // 保存が無い場合は畳んだまま（一度開いた人にだけ、開いた状態を引き継ぐ）
+    return localStorage.getItem(COLLAPSED_KEY) !== "false"
   } catch {
-    return false
+    return true
   }
 }
 
@@ -39,14 +40,14 @@ const FEATURES = [
     iconClassName: "bg-status-normal/20 text-status-normal-foreground",
     title: "コードからも検索",
     description:
-      "GS1コード（販売・調剤）、HOTコード、統一商品コード、YJコードで検索できます。製品名・成分名は、ひらがなや全角で入力しても一致します。",
+      "GS1コード、統一商品コード、YJコードなど各種コードで検索できます。製品名・成分名は、ひらがなや全角で入力しても一致します。",
   },
   {
     Icon: History,
     iconClassName: "bg-status-transfer/30 text-status-transfer-foreground",
     title: "出荷状況の変更履歴",
     description:
-      "いつ・どの包装が・どう変わったかを履歴で確認できます。カレンダーでは、これからの適用日も分かります。",
+      "包装詳細ページでは告知の履歴を確認できます。更新情報カレンダーでは告知日での検索も可能です。",
   },
   {
     Icon: JapaneseYen,
@@ -62,8 +63,8 @@ const FEATURES = [
  * 畳んだ状態は端末に保存し、次に開いたときも畳んだままにする
  */
 export const FeatureGuide = () => {
-  // サーバーでは保存領域を読めないため、まず開いた状態で描画してから反映する
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  // 更新情報を先に見せるため、初めは畳んでおく（開いた状態は端末に保存して引き継ぐ）
+  const [isCollapsed, setIsCollapsed] = useState(true)
 
   useEffect(() => {
     setIsCollapsed(readCollapsed())
@@ -77,25 +78,29 @@ export const FeatureGuide = () => {
   }
 
   return (
-    <section className="space-y-4 py-4">
-      <div className="flex items-center justify-between border-b pb-2">
-        <h2 className="text-xl font-bold">MedTrackでできること</h2>
+    <section className="space-y-4">
+      {/* 見出しの行ごと開閉のボタンにする（畳んだときも1つのまとまりに見えるようにする） */}
+      <button
+        type="button"
+        onClick={handleToggle}
+        aria-expanded={!isCollapsed}
+        aria-controls="feature-guide-list"
+        className="flex w-full items-center justify-between gap-3 rounded-xl border bg-background px-4 py-3 text-left shadow-sm transition-colors hover:bg-surface md:px-5"
+      >
+        <h2 className="font-bold md:text-lg">MedTrackでできること</h2>
 
-        <button
-          type="button"
-          onClick={handleToggle}
-          aria-expanded={!isCollapsed}
-          aria-controls="feature-guide-list"
-          className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-sm font-semibold text-weak transition-colors hover:bg-surface"
-        >
+        <span className="flex shrink-0 items-center gap-1 text-sm text-weak">
           {isCollapsed ? "開く" : "閉じる"}
           {isCollapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
-        </button>
-      </div>
+        </span>
+      </button>
 
       <div
         id="feature-guide-list"
-        className={cn("grid grid-cols-1 gap-4 md:grid-cols-2", isCollapsed && "hidden")}
+        className={cn(
+          "grid grid-cols-1 gap-4 md:grid-cols-2",
+          isCollapsed && "hidden"
+        )}
       >
         {FEATURES.map(({ Icon, iconClassName, title, description }) => (
           <Card key={title} className="shadow-sm">
