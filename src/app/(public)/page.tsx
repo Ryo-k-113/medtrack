@@ -3,6 +3,7 @@
 import { PageContainer } from "@/components/Layout/PageContainer"
 import { SearchBar } from "./_components/SearchBar"
 import { TopBanner } from "./_components/TopBanner"
+import { FeatureGuide } from "./_components/FeatureGuide"
 import { PackageAnnouncementSection } from "./_components/PackageAnnouncementSection"
 
 
@@ -20,6 +21,9 @@ export default function TopPage() {
         <section className="max-w-2xl mx-auto">
           <SearchBar />
         </section>
+
+        {/* できることの案内（畳める） */}
+        <FeatureGuide />
 
         {/* 下部：医薬品の更新情報（左：カード一覧 / 右：カレンダー） */}
         <PackageAnnouncementSection />
