@@ -7,6 +7,10 @@ import { cn } from "@/lib/utils"
 type PackageStatusCardProps = {
   name:       string
   status:     CurrentShippingStatus
+  /** 内訳（「10錠×10」） */
+  breakdown?: string | null
+  /** 注記（「広口開栓型」）。同じ包装名を見分けるための補足 */
+  variant?:   string | null
   href?:       string
   className?: string
 }
@@ -23,6 +27,8 @@ const STATUS_CARD_CLASS: Record<CurrentShippingStatus, string> = {
 export const PackageStatusCard = ({
   name, 
   status,
+  breakdown,
+  variant,
   href,
   className,
 }: PackageStatusCardProps) => {
@@ -36,9 +42,13 @@ export const PackageStatusCard = ({
   const content = (
     <>
       <ShippingStatusBadge status={status} className="rounded-md" />
-      <p className="group-hover:text-primary">
-        {name}
-      </p>
+      <div className="group-hover:text-primary">
+        <p>{name}</p>
+
+        {/* 注記と内訳（登録があるものだけ表示する） */}
+        {variant && <p className="text-xs font-normal text-weak">{variant}</p>}
+        {breakdown && <p className="text-xs font-normal text-weak">内訳 {breakdown}</p>}
+      </div>
     </>
   )
 

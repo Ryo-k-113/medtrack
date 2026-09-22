@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import type { CurrentShippingStatus } from "@prisma/client"
 import { cn } from "@/lib/utils"
+import { buildTagLabel, findDuplicatedNames } from "@/utils/packageTag"
 import { PackageStatusTag } from "./PackageStatusTag"
 import type { SearchDrugResult } from "@/types/search"
 
@@ -79,6 +80,9 @@ export const PackageStatusTagList = ({ drugId, packageUnits }: PackageStatusTagL
     (a, b) => STATUS_ORDER[a.currentShippingStatus] - STATUS_ORDER[b.currentShippingStatus]
   )
 
+  // 包装名が重複している包装には、見分けられるよう注記を付ける
+  const duplicatedNames = findDuplicatedNames(packageUnits)
+
   // 隠れる件数と内訳は画面幅により変更
   const toggles = [
     {
@@ -99,10 +103,9 @@ export const PackageStatusTagList = ({ drugId, packageUnits }: PackageStatusTagL
         <PackageStatusTag
           key={pkg.id}
           href={`/drugs/${drugId}/packages/${pkg.id}`}
-          label={pkg.name}
+          label={buildTagLabel(pkg, duplicatedNames)}
           status={pkg.currentShippingStatus}
-          // 途中で改行しないようにする
-          className={cn("whitespace-nowrap", !isExpanded && getCollapsedClass(index))}
+          className={cn(!isExpanded && getCollapsedClass(index))}
         />
       ))}
 

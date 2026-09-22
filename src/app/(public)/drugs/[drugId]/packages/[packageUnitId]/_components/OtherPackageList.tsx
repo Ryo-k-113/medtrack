@@ -22,6 +22,8 @@ export const OtherPackageList = () => {
           <PackageStatusCard
             key={pkg.id}
             name={pkg.name}
+            breakdown={pkg.breakdown}
+            variant={pkg.variant}
             status={pkg.currentShippingStatus}
             href={`/drugs/${drug.id}/packages/${pkg.id}`}
           />

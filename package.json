@@ -10,6 +10,8 @@
     "seed:build": "tsx prisma/seed/build-seed-data.ts",
     "seed": "tsx prisma/seed.ts",
     "seed:update": "tsx prisma/seed/update-existing.ts",
+    "seed:delete": "tsx prisma/seed/delete-packages.ts",
+    "seed:restore": "tsx prisma/seed/restore-deleted.ts",
     "vercel-build": "prisma migrate deploy && prisma generate && next build",
     "migrate": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy"

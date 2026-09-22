@@ -33,6 +33,8 @@ export const SelectedPackageSection = () => {
       {/* 現在の包装 */}
       <PackageStatusCard
         name={packageUnit.name}
+        breakdown={packageUnit.breakdown}
+        variant={packageUnit.variant}
         status={packageUnit.currentShippingStatus}
       />
 

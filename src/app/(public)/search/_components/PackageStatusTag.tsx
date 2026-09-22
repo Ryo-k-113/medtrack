@@ -23,7 +23,8 @@ export const PackageStatusTag = ({
       href={href}
       className={cn(
         // 配色は出荷状況ガイドと共通。リンクと分かるよう、ホバーで少し濃くする
-        "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-semibold transition hover:brightness-95",
+        // 注記の付いた長い包装名は折り返す（カードの幅を超えないようにする）
+        "inline-flex max-w-full items-center gap-1 rounded-full border px-2 py-1 text-xs font-semibold transition hover:brightness-95",
         STATUS_CHIP_CLASS[status],
         className
       )}

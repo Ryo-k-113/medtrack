@@ -1,0 +1,1036 @@
+{
+  "reason": "メーカーの資料で現行品と確認できなかった包装（旧包装）",
+  "decidedAt": "2026-09-20",
+  "deleteEmptyDrugs": true,
+  "packages": [
+    {
+      "gs1SalesCode": "14987279161416",
+      "salesCompany": "BMS",
+      "drugName": "ポマリストカプセル1mg",
+      "packageName": "PTP7カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987279161515",
+      "salesCompany": "BMS",
+      "drugName": "ポマリストカプセル2mg",
+      "packageName": "PTP7カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987279161614",
+      "salesCompany": "BMS",
+      "drugName": "ポマリストカプセル3mg",
+      "packageName": "PTP7カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987279161713",
+      "salesCompany": "BMS",
+      "drugName": "ポマリストカプセル4mg",
+      "packageName": "PTP7カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987731145916",
+      "salesCompany": "CSLベーリング",
+      "drugName": "ベリナートP静注用500",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987919102021",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナクリーム0.1%",
+      "packageName": "10g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102199",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナクリーム0.1%",
+      "packageName": "10g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102014",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナクリーム0.1%",
+      "packageName": "5g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102182",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナクリーム0.1%",
+      "packageName": "5g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102083",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナユニバーサルクリーム0.1%",
+      "packageName": "10g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102250",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナユニバーサルクリーム0.1%",
+      "packageName": "10g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102090",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナユニバーサルクリーム0.1%",
+      "packageName": "30g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102267",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナユニバーサルクリーム0.1%",
+      "packageName": "30g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102076",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナユニバーサルクリーム0.1%",
+      "packageName": "5g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102243",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナユニバーサルクリーム0.1%",
+      "packageName": "5g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102045",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "10g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102212",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "10g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102052",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "30g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102229",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "30g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102038",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "5g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102205",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "5g×10"
+    },
+    {
+      "gs1SalesCode": "14987919102069",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "調剤用500g"
+    },
+    {
+      "gs1SalesCode": "14987919102236",
+      "salesCompany": "LTLファーマ",
+      "drugName": "ネリゾナ軟膏0.1%",
+      "packageName": "調剤用500g"
+    },
+    {
+      "gs1SalesCode": "14987185807583",
+      "salesCompany": "MSD",
+      "drugName": "ジャヌビア錠50mg",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987185807590",
+      "salesCompany": "MSD",
+      "drugName": "ジャヌビア錠50mg",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987185807606",
+      "salesCompany": "MSD",
+      "drugName": "ジャヌビア錠50mg",
+      "packageName": "PTP500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987185808320",
+      "salesCompany": "MSD",
+      "drugName": "ジャヌビア錠50mg",
+      "packageName": "PTP700錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987185807613",
+      "salesCompany": "MSD",
+      "drugName": "ジャヌビア錠50mg",
+      "packageName": "バラ500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987222666555",
+      "salesCompany": "MeijiSeikaファルマ",
+      "drugName": "テラルビシン注射用10mg",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987222666630",
+      "salesCompany": "MeijiSeikaファルマ",
+      "drugName": "テラルビシン注射用20mg",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987896010975",
+      "salesCompany": "あゆみ製薬",
+      "drugName": "カロナール錠500",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987896010982",
+      "salesCompany": "あゆみ製薬",
+      "drugName": "カロナール錠500",
+      "packageName": "PTP500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987233103650",
+      "salesCompany": "アステラス製薬",
+      "drugName": "レパーサ皮下注140mgペン",
+      "packageName": "1mL×1キット",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987650692102",
+      "salesCompany": "アストラゼネカ",
+      "drugName": "ビレーズトリエアロスフィア56吸入",
+      "packageName": "1キット",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987886002829",
+      "salesCompany": "アスペンジャパン",
+      "drugName": "キシロカイン注シリンジ0.5%",
+      "packageName": "10mL×10筒"
+    },
+    {
+      "gs1SalesCode": "14987886003222",
+      "salesCompany": "アスペンジャパン",
+      "drugName": "キシロカイン注シリンジ0.5%",
+      "packageName": "10mL×10筒"
+    },
+    {
+      "gs1SalesCode": "14987886002836",
+      "salesCompany": "アスペンジャパン",
+      "drugName": "キシロカイン注シリンジ1%",
+      "packageName": "10mL×10筒"
+    },
+    {
+      "gs1SalesCode": "14987886003239",
+      "salesCompany": "アスペンジャパン",
+      "drugName": "キシロカイン注シリンジ1%",
+      "packageName": "10mL×10筒"
+    },
+    {
+      "gs1SalesCode": "14987857151303",
+      "salesCompany": "アッヴィ",
+      "drugName": "アクイプタ錠60mg",
+      "packageName": "PTP28錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987857150627",
+      "salesCompany": "アッヴィ",
+      "drugName": "ベネクレクスタ錠50mg",
+      "packageName": "PTP7錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987325011115",
+      "salesCompany": "シェリングP",
+      "drugName": "ゲンタシン注10",
+      "packageName": "10管"
+    },
+    {
+      "gs1SalesCode": "14987325011122",
+      "salesCompany": "シェリングP",
+      "drugName": "ゲンタシン注10",
+      "packageName": "10管"
+    },
+    {
+      "gs1SalesCode": "14987325011221",
+      "salesCompany": "シェリングP",
+      "drugName": "ゲンタシン注40",
+      "packageName": "10管"
+    },
+    {
+      "gs1SalesCode": "14987325011238",
+      "salesCompany": "シェリングP",
+      "drugName": "ゲンタシン注40",
+      "packageName": "10管"
+    },
+    {
+      "gs1SalesCode": "14987325011313",
+      "salesCompany": "シェリングP",
+      "drugName": "ゲンタシン注60",
+      "packageName": "10管"
+    },
+    {
+      "gs1SalesCode": "14987325011320",
+      "salesCompany": "シェリングP",
+      "drugName": "ゲンタシン注60",
+      "packageName": "10管"
+    },
+    {
+      "gs1SalesCode": "14987325022425",
+      "salesCompany": "シェリングP",
+      "drugName": "ポララミン注5mg",
+      "packageName": "1mL×10管"
+    },
+    {
+      "gs1SalesCode": "14987325022449",
+      "salesCompany": "シェリングP",
+      "drugName": "ポララミン注5mg",
+      "packageName": "1mL×10管"
+    },
+    {
+      "gs1SalesCode": "14987325022418",
+      "salesCompany": "シェリングP",
+      "drugName": "ポララミン注5mg",
+      "packageName": "1mL×50管"
+    },
+    {
+      "gs1SalesCode": "14987325022432",
+      "salesCompany": "シェリングP",
+      "drugName": "ポララミン注5mg",
+      "packageName": "1mL×50管"
+    },
+    {
+      "gs1SalesCode": "14987399072630",
+      "salesCompany": "テイカ製薬",
+      "drugName": "ラクティオンパップ70mg",
+      "packageName": "280枚",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987350029918",
+      "salesCompany": "テルモ",
+      "drugName": "ソルアセトF輸液",
+      "packageName": "500mL×20袋",
+      "reason": "メーカーのサイトに掲載なし"
+    },
+    {
+      "gs1SalesCode": "14987350142679",
+      "salesCompany": "テルモ",
+      "drugName": "ソルデム1輸液",
+      "packageName": "500mL×20袋",
+      "reason": "メーカーのサイトに掲載なし"
+    },
+    {
+      "gs1SalesCode": "14987350142716",
+      "salesCompany": "テルモ",
+      "drugName": "ソルデム3A輸液",
+      "packageName": "500mL×20袋",
+      "reason": "メーカーのサイトに掲載なし"
+    },
+    {
+      "gs1SalesCode": "14987350142778",
+      "salesCompany": "テルモ",
+      "drugName": "ソルデム3輸液",
+      "packageName": "500mL×20袋",
+      "reason": "メーカーのサイトに掲載なし"
+    },
+    {
+      "gs1SalesCode": "14987350088557",
+      "salesCompany": "テルモ",
+      "drugName": "フルカリック2号輸液",
+      "packageName": "003mL×10キット",
+      "reason": "メーカーのサイトに掲載なし"
+    },
+    {
+      "gs1SalesCode": "14987350088571",
+      "salesCompany": "テルモ",
+      "drugName": "フルカリック3号輸液",
+      "packageName": "103mL×7キット",
+      "reason": "メーカーのサイトに掲載なし"
+    },
+    {
+      "gs1SalesCode": "14987190050851",
+      "salesCompany": "ニプロ",
+      "drugName": "ウエッシュクリーン",
+      "packageName": "調剤用1000mL",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987190047943",
+      "salesCompany": "ニプロ",
+      "drugName": "ヒシファーゲン配合静注",
+      "packageName": "20mL×50管",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987190036411",
+      "salesCompany": "ニプロ",
+      "drugName": "リドカインテープ18mg「NP」",
+      "packageName": "50枚",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458123679",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ50mL「ニプロ」",
+      "packageName": "50mL×5筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987190100211",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458123655",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458123662",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458123693",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125550",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125567",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125598",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125826",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987190101010",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "5mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125505",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "5mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125512",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "5mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125901",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "5mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987458125918",
+      "salesCompany": "ニプロ",
+      "drugName": "生食注シリンジ「NP」",
+      "packageName": "5mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987443352176",
+      "salesCompany": "ノバルティスP",
+      "drugName": "ウルティブロ吸入用カプセル",
+      "packageName": "PTP28カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987443344034",
+      "salesCompany": "ノバルティスP",
+      "drugName": "オンブレス吸入用カプセル150μg",
+      "packageName": "PTP28カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987443325804",
+      "salesCompany": "ノバルティスP",
+      "drugName": "シムレクト小児用静注用10mg",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987443325699",
+      "salesCompany": "ノバルティスP",
+      "drugName": "シムレクト静注用20mg",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987443348049",
+      "salesCompany": "ノバルティスP",
+      "drugName": "シーブリ吸入用カプセル50μg",
+      "packageName": "PTP28カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987463112507",
+      "salesCompany": "ビーブランド・メディコ−デンタル",
+      "drugName": "ミラノール顆粒11%",
+      "packageName": "分包7.2g×200包",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987463112552",
+      "salesCompany": "ビーブランド・メディコ−デンタル",
+      "drugName": "ミラノール顆粒11%",
+      "packageName": "調剤用500g×1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987322515081",
+      "salesCompany": "ヤクハン",
+      "drugName": "消毒用イソプロパノール液50%「ヤクハン」",
+      "packageName": "調剤用18000mL",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987322150626",
+      "salesCompany": "ヤクハン",
+      "drugName": "消毒用エタノール「ヤクハン」",
+      "packageName": "調剤用16000mL",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987901135105",
+      "salesCompany": "ヴィアトリス製薬",
+      "drugName": "フィナステリド錠1mg「VTRS」",
+      "packageName": "PTP28錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987901135303",
+      "salesCompany": "ヴィアトリス製薬",
+      "drugName": "フィナステリド錠1mg「VTRS」",
+      "packageName": "バラ90錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987387591631",
+      "salesCompany": "三笠製薬",
+      "drugName": "ラクティオンパップ70mg",
+      "packageName": "280枚",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987387591730",
+      "salesCompany": "三笠製薬",
+      "drugName": "ラクティオンパップ70mg",
+      "packageName": "560枚",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987211711174",
+      "salesCompany": "丸石製薬",
+      "drugName": "プロポフォール静注1%100mL「マルイシ」",
+      "packageName": "100mL×1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987211711143",
+      "salesCompany": "丸石製薬",
+      "drugName": "プロポフォール静注1%50mL「マルイシ」",
+      "packageName": "50mL×1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987211752238",
+      "salesCompany": "丸石製薬",
+      "drugName": "ポプスカイン0.25%注シリンジ25mg/10mL",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987211752528",
+      "salesCompany": "丸石製薬",
+      "drugName": "ポプスカイン0.5%注シリンジ50mg/10mL",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987211752733",
+      "salesCompany": "丸石製薬",
+      "drugName": "ポプスカイン0.75%注シリンジ75mg/10mL",
+      "packageName": "10mL×10筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058494285",
+      "salesCompany": "共和薬工",
+      "drugName": "アムロジピンOD錠10mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058058036",
+      "salesCompany": "共和薬工",
+      "drugName": "アムロジピンOD錠2.5mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058059033",
+      "salesCompany": "共和薬工",
+      "drugName": "アムロジピンOD錠5mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058028039",
+      "salesCompany": "共和薬工",
+      "drugName": "アロプリノール錠100mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058158033",
+      "salesCompany": "共和薬工",
+      "drugName": "アロプリノール錠50mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058697907",
+      "salesCompany": "共和薬工",
+      "drugName": "イムネース注35",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058699901",
+      "salesCompany": "共和薬工",
+      "drugName": "イムノマックス-γ注100",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058698904",
+      "salesCompany": "共和薬工",
+      "drugName": "イムノマックス-γ注50",
+      "packageName": "1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058784034",
+      "salesCompany": "共和薬工",
+      "drugName": "ビプレッソ徐放錠150mg",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058784539",
+      "salesCompany": "共和薬工",
+      "drugName": "ビプレッソ徐放錠150mg",
+      "packageName": "バラ100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058783037",
+      "salesCompany": "共和薬工",
+      "drugName": "ビプレッソ徐放錠50mg",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058783532",
+      "salesCompany": "共和薬工",
+      "drugName": "ビプレッソ徐放錠50mg",
+      "packageName": "バラ100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058680039",
+      "salesCompany": "共和薬工",
+      "drugName": "モサプリドクエン酸塩錠2.5mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058804039",
+      "salesCompany": "共和薬工",
+      "drugName": "レベチラセタム錠250mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058804053",
+      "salesCompany": "共和薬工",
+      "drugName": "レベチラセタム錠250mg「アメル」",
+      "packageName": "PTP500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058805036",
+      "salesCompany": "共和薬工",
+      "drugName": "レベチラセタム錠500mg「アメル」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987058805050",
+      "salesCompany": "共和薬工",
+      "drugName": "レベチラセタム錠500mg「アメル」",
+      "packageName": "PTP500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987087034322",
+      "salesCompany": "塩野義",
+      "drugName": "サインバルタカプセル20mg",
+      "packageName": "PTP100カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987087034353",
+      "salesCompany": "塩野義",
+      "drugName": "サインバルタカプセル30mg",
+      "packageName": "PTP100カプセル",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987035021022",
+      "salesCompany": "大塚製薬",
+      "drugName": "アミノレバンEN配合散",
+      "packageName": "分包50g×21包",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987371610904",
+      "salesCompany": "小堺製薬",
+      "drugName": "白色ワセリン(小堺)",
+      "packageName": "調剤用15000g",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987371501035",
+      "salesCompany": "小堺製薬",
+      "drugName": "白色ワセリン(小堺)",
+      "packageName": "調剤用500g",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987039437881",
+      "salesCompany": "小野薬品",
+      "drugName": "グラクティブ錠50mg",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987039438000",
+      "salesCompany": "小野薬品",
+      "drugName": "グラクティブ錠50mg",
+      "packageName": "PTP420錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987039437966",
+      "salesCompany": "小野薬品",
+      "drugName": "グラクティブ錠50mg",
+      "packageName": "PTP500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987039438185",
+      "salesCompany": "小野薬品",
+      "drugName": "グラクティブ錠50mg",
+      "packageName": "バラ100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987197986399",
+      "salesCompany": "扶桑薬品",
+      "drugName": "注射用水PL「フソー」",
+      "packageName": "1L×10瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987197638304",
+      "salesCompany": "扶桑薬品",
+      "drugName": "生理食塩液PL「フソー」",
+      "packageName": "500mL×20瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987376055335",
+      "salesCompany": "日医工",
+      "drugName": "アムロジピンOD錠5mg「日医工」",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987376355718",
+      "salesCompany": "日医工",
+      "drugName": "アムロジピン錠5mg「日医工」",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987376119037",
+      "salesCompany": "日医工",
+      "drugName": "セレコキシブ錠100mg「日医工」",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987376037140",
+      "salesCompany": "日医工",
+      "drugName": "ドネペジル塩酸塩OD錠5mg「日医工」",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987376035108",
+      "salesCompany": "日医工",
+      "drugName": "バルサルタン錠40mg「日医工」",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987376035207",
+      "salesCompany": "日医工",
+      "drugName": "バルサルタン錠80mg「日医工」",
+      "packageName": "PTP140錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987173080455",
+      "salesCompany": "日本新薬",
+      "drugName": "オキシドール シオエ",
+      "packageName": "調剤用500mL",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987173081445",
+      "salesCompany": "日本新薬",
+      "drugName": "乳糖水和物「シオエ」",
+      "packageName": "バラ500g",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987290748535",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "バラ500g"
+    },
+    {
+      "gs1SalesCode": "14987290758534",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "バラ500g"
+    },
+    {
+      "gs1SalesCode": "14987290748658",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包0.4g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290758657",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包0.4g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290748610",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包0.6g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290758619",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包0.6g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290748672",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包0.8g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290758671",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包0.8g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290748634",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包1.2g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987290758633",
+      "salesCompany": "日興製販",
+      "drugName": "マグミット細粒83%",
+      "packageName": "分包1.2g×1050包"
+    },
+    {
+      "gs1SalesCode": "14987466311389",
+      "salesCompany": "栃本天海堂",
+      "drugName": "トチモトのカッコン",
+      "packageName": "バラ500g",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987466319064",
+      "salesCompany": "栃本天海堂",
+      "drugName": "トチモトのコウジン末AM",
+      "packageName": "バラ500g",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987466321517",
+      "salesCompany": "栃本天海堂",
+      "drugName": "トチモトのサイチャ(細茶)",
+      "packageName": "バラ500g",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987123145647",
+      "salesCompany": "武田薬品",
+      "drugName": "インフルエンザHAワクチン「生研」",
+      "packageName": "1mL×1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987123159224",
+      "salesCompany": "武田薬品",
+      "drugName": "インフルエンザHAワクチン「生研」",
+      "packageName": "1mL×1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987123004494",
+      "salesCompany": "武田薬品",
+      "drugName": "ヌバキソビッド筋注1mL",
+      "packageName": "1mL×1瓶",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987123156742",
+      "salesCompany": "武田薬品",
+      "drugName": "リュープリンPRO注射用キット22.5mg",
+      "packageName": "1筒",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987080009310",
+      "salesCompany": "沢井製薬",
+      "drugName": "リマプロスト アルファデクス錠5μg「サワイ」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987080009389",
+      "salesCompany": "沢井製薬",
+      "drugName": "リマプロスト アルファデクス錠5μg「サワイ」",
+      "packageName": "PTP1050錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987080009372",
+      "salesCompany": "沢井製薬",
+      "drugName": "リマプロスト アルファデクス錠5μg「サワイ」",
+      "packageName": "PTP210錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987080009341",
+      "salesCompany": "沢井製薬",
+      "drugName": "リマプロスト アルファデクス錠5μg「サワイ」",
+      "packageName": "バラ200錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987080009358",
+      "salesCompany": "沢井製薬",
+      "drugName": "リマプロスト アルファデクス錠5μg「サワイ」",
+      "packageName": "バラ500錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987081183057",
+      "salesCompany": "第一三共",
+      "drugName": "アジスロマイシン錠250mg「DSEP」",
+      "packageName": "PTP60錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987124049210",
+      "salesCompany": "辰巳化学",
+      "drugName": "フルニトラゼパム錠1mg「TCK」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    },
+    {
+      "gs1SalesCode": "14987124047612",
+      "salesCompany": "辰巳化学",
+      "drugName": "フルニトラゼパム錠2mg「TCK」",
+      "packageName": "PTP100錠",
+      "reason": "重複のうち、メーカーの一覧に無い方"
+    }
+  ]
+}

@@ -49,6 +49,19 @@ export const PackageUnitFormFields = ({
             required
           />
         )}
+
+        {/* 内訳・注記（包装名だけで分からない中身と、同名の包装の見分け） */}
+        <FormInput
+          name="breakdown"
+          label="内訳"
+          placeholder="10錠×10"
+        />
+
+        <FormInput
+          name="variant"
+          label="注記"
+          placeholder="広口開栓型"
+        />
       </div>
 
       {/* コード情報 */}

@@ -97,6 +97,8 @@ export const PUT = async (
 
     const {
       name,
+      breakdown,
+      variant,
       publishStatus,
       gs1SalesCode,
       gs1DispensingCode,
@@ -112,6 +114,8 @@ export const PUT = async (
       },
       data: {
         name,
+        breakdown: breakdown || null,
+        variant: variant || null,
         publishStatus,
         gs1SalesCode,
         gs1DispensingCode: gs1DispensingCode || null,

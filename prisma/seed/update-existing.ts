@@ -3,6 +3,9 @@
  * seed.ts は既存の行を読み飛ばすため、後から追加した項目はこのスクリプトで埋める
  *
  * 反映する項目と条件
+ *   包装名          旧規則（包装形態＋総数＋単位）で作った名前のままの包装のみ
+ *                   （管理画面で手直しした名前は上書きしない）
+ *   内訳・注記      空欄の包装のみ
  *   統一商品コード  空欄の包装のみ（管理画面で入力した値は上書きしない）
  *   薬価            公式の値で上書き（薬価基準収載医薬品コードで突き合わせる）
  *   区分・剤形      空欄の医薬品のみ（YJコードで突き合わせる）
@@ -47,7 +50,15 @@ type SeedData = {
     price: number | null
     category: DrugCategory | null
     dosageForm: DosageForm | null
-    packages: { gs1SalesCode: string; unifiedCode: string | null }[]
+    packages: {
+      gs1SalesCode: string
+      name: string
+      breakdown: string | null
+      variant: string | null
+      unifiedCode: string | null
+      /** 旧規則で作った包装名（上書きしてよいかの判定に使う） */
+      legacyName: string
+    }[]
   }[]
 }
 
@@ -79,6 +90,8 @@ const assertColumnsExist = async () => {
     ["drugs", "dosage_form"],
     ["drugs", "price"],
     ["package_units", "unified_code"],
+    ["package_units", "breakdown"],
+    ["package_units", "variant"],
   ]
   const rows = await prisma.$queryRaw<{ table_name: string; column_name: string }[]>`
     SELECT table_name, column_name FROM information_schema.columns
@@ -109,6 +122,7 @@ const main = async () => {
 
   // ------------------------------------------------ シードデータから、突き合わせの表を作る
   const unifiedByGs1 = new Map<string, string>()
+  const packageByGs1 = new Map<string, SeedData["drugs"][number]["packages"][number]>()
   const priceByCode = new Map<string, number>()
   const formByYj = new Map<string, { category: DrugCategory | null; dosageForm: DosageForm | null }>()
   let yjConflicts = 0
@@ -116,6 +130,7 @@ const main = async () => {
   for (const drug of data.drugs) {
     for (const pkg of drug.packages) {
       if (pkg.unifiedCode) unifiedByGs1.set(pkg.gs1SalesCode, pkg.unifiedCode)
+      packageByGs1.set(pkg.gs1SalesCode, pkg)
     }
     if (drug.drugPriceListingCode && drug.price !== null) {
       priceByCode.set(drug.drugPriceListingCode, drug.price)
@@ -131,10 +146,20 @@ const main = async () => {
     if (!existing) formByYj.set(drug.yjCode, { category: drug.category, dosageForm: drug.dosageForm })
   }
 
+  const report: ReportRow[] = []
+
   // ------------------------------------------------ DBの現在の値を読む
   const [packages, drugs] = await Promise.all([
     prisma.packageUnit.findMany({
-      select: { id: true, name: true, gs1SalesCode: true, unifiedCode: true, Drug: { select: { name: true } } },
+      select: {
+        id: true,
+        name: true,
+        breakdown: true,
+        variant: true,
+        gs1SalesCode: true,
+        unifiedCode: true,
+        Drug: { select: { name: true } },
+      },
       orderBy: { id: "asc" },
     }),
     prisma.drug.findMany({
@@ -151,7 +176,52 @@ const main = async () => {
     }),
   ])
 
-  const report: ReportRow[] = []
+  // ------------------------------------------------ 包装名・内訳・注記
+  const packageUpdates: {
+    id: number
+    name: string | null
+    breakdown: string | null
+    variant: string | null
+  }[] = []
+  const nameStats = { 変わる: 0, 同じ値: 0, 手直し済みで残す: 0, シードに無い: 0 }
+  const detailStats = { 内訳を埋める: 0, 注記を埋める: 0, 入力済みで異なる: 0 }
+
+  for (const pkg of packages) {
+    const seed = packageByGs1.get(pkg.gs1SalesCode)
+    const target = `${pkg.Drug.name} ${pkg.name}（${pkg.gs1SalesCode}）`
+    if (!seed) {
+      nameStats.シードに無い += 1
+      continue
+    }
+
+    // 包装名は、DBの値が旧規則で作った名前のままのときだけ差し替える
+    let name: string | null = null
+    if (pkg.name === seed.name) {
+      nameStats.同じ値 += 1
+    } else if (pkg.name === seed.legacyName) {
+      nameStats.変わる += 1
+      name = seed.name
+    } else {
+      nameStats.手直し済みで残す += 1
+      report.push({ item: "包装名", status: "手直し済み（更新しない）", target, current: pkg.name, seed: seed.name })
+    }
+
+    // 内訳・注記は空欄のときだけ埋める
+    const breakdown = pkg.breakdown === null && seed.breakdown !== null ? seed.breakdown : null
+    const variant = pkg.variant === null && seed.variant !== null ? seed.variant : null
+    if (breakdown) detailStats.内訳を埋める += 1
+    if (variant) detailStats.注記を埋める += 1
+    if (pkg.breakdown && seed.breakdown && pkg.breakdown !== seed.breakdown) {
+      detailStats.入力済みで異なる += 1
+      report.push({ item: "内訳", status: "入力済みで異なる（更新しない）", target, current: pkg.breakdown, seed: seed.breakdown })
+    }
+    if (pkg.variant && seed.variant && pkg.variant !== seed.variant) {
+      detailStats.入力済みで異なる += 1
+      report.push({ item: "注記", status: "入力済みで異なる（更新しない）", target, current: pkg.variant, seed: seed.variant })
+    }
+
+    if (name || breakdown || variant) packageUpdates.push({ id: pkg.id, name, breakdown, variant })
+  }
 
   // ------------------------------------------------ 統一商品コード
   // 一意制約があるため、ほかの包装がすでに使っている値は埋めない
@@ -245,6 +315,8 @@ const main = async () => {
     Object.entries(stats).forEach(([label, count]) => console.log(`  ${label}: ${count.toLocaleString()}`))
   }
   console.log(`DB: 包装 ${packages.length.toLocaleString()}件 / 医薬品 ${drugs.length.toLocaleString()}件\n`)
+  printStats("包装名（包装）", nameStats)
+  printStats("内訳・注記（包装）", detailStats)
   printStats("統一商品コード（包装）", unifiedStats)
   printStats("薬価（医薬品）", priceStats)
   printStats("区分・剤形（医薬品）", formStats)
@@ -272,6 +344,27 @@ const main = async () => {
   // 読み取りから反映までの間に管理画面で入力された値を上書きしないよう、UPDATEの条件でも空欄を確かめる
   const updated = await prisma.$transaction(
     async (tx) => {
+      let packageCount = 0
+      for (const rows of chunk(packageUpdates, UPDATE_CHUNK_SIZE)) {
+        const values = rows.map(
+          (row) => Prisma.sql`(${row.id}::int, ${row.name}::text, ${row.breakdown}::text, ${row.variant}::text)`
+        )
+        // 名前は指定があるときだけ差し替え、内訳・注記は空欄のときだけ埋める
+        packageCount += await tx.$executeRaw`
+          UPDATE package_units AS p
+          SET name = COALESCE(v.name, p.name),
+              breakdown = COALESCE(p.breakdown, v.breakdown),
+              variant = COALESCE(p.variant, v.variant),
+              updated_at = NOW()
+          FROM (VALUES ${Prisma.join(values)}) AS v(id, name, breakdown, variant)
+          WHERE p.id = v.id
+            AND (
+              (v.name IS NOT NULL AND p.name IS DISTINCT FROM v.name)
+              OR (v.breakdown IS NOT NULL AND p.breakdown IS NULL)
+              OR (v.variant IS NOT NULL AND p.variant IS NULL)
+            )`
+      }
+
       let unifiedCount = 0
       for (const rows of chunk(unifiedUpdates, UPDATE_CHUNK_SIZE)) {
         const values = rows.map((row) => Prisma.sql`(${row.id}::int, ${row.unifiedCode}::text)`)
@@ -307,12 +400,13 @@ const main = async () => {
           WHERE d.id = v.id AND (d.category IS NULL OR d.dosage_form IS NULL)`
       }
 
-      return { unifiedCount, priceCount, formCount }
+      return { packageCount, unifiedCount, priceCount, formCount }
     },
     { timeout: TRANSACTION_TIMEOUT_MS, maxWait: 10000 }
   )
 
   console.log("\n反映しました")
+  console.log(`  包装名・内訳・注記: ${updated.packageCount.toLocaleString()}件`)
   console.log(`  統一商品コード: ${updated.unifiedCount.toLocaleString()}件`)
   console.log(`  薬価          : ${updated.priceCount.toLocaleString()}件`)
   console.log(`  区分・剤形    : ${updated.formCount.toLocaleString()}件`)

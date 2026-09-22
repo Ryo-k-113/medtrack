@@ -34,6 +34,8 @@ export const ANNOUNCE_TYPE_OPTIONS = [
 export const DEFAULT_PACKAGE_UNIT: CreatePackageUnitFormInput = {
   publishStatus: PublishStatus.DRAFT,
   name: "",
+  breakdown: "",
+  variant: "",
   currentShippingStatus: "",
   unifiedCode: "",
   gs1DispensingCode: "",

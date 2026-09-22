@@ -17,6 +17,8 @@ export const PackageUnitInfo = () => {
   const packageInfoItems = [
     { label: "公開ステータス", value: <PublishStatusBadge status={packageUnit.publishStatus} className="rounded-md"/>},
     { label: "包装名", value: packageUnit.name },
+    { label: "内訳", value: packageUnit.breakdown },
+    { label: "注記", value: packageUnit.variant },
     { label: "出荷ステータス", value: <ShippingStatusBadge status={packageUnit.currentShippingStatus} className="rounded-md" />},
 
     // 区切り線

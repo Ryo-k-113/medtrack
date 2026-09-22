@@ -28,6 +28,8 @@ const CHUNK_SIZE = 1000
 
 type SeedPackage = {
   name: string
+  breakdown: string | null
+  variant: string | null
   gs1SalesCode: string
   gs1DispensingCode: string | null
   hotCode: string
@@ -212,6 +214,8 @@ const main = async () => {
     }
     return drug.packages.map((pkg) => ({
       name: pkg.name,
+      breakdown: pkg.breakdown,
+      variant: pkg.variant,
       gs1SalesCode: pkg.gs1SalesCode,
       gs1DispensingCode: pkg.gs1DispensingCode,
       hotCode: pkg.hotCode,

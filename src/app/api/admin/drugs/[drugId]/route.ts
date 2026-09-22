@@ -32,6 +32,8 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
           select: {
             id: true,
             name: true,
+            breakdown: true,
+            variant: true,
             gs1SalesCode: true,
             unifiedCode: true,
             currentShippingStatus: true,
@@ -191,6 +193,8 @@ export const POST = async (
     const {
       name,
       gs1SalesCode,
+      breakdown,
+      variant,
       gs1DispensingCode,
       hotCode,
       unifiedCode,
@@ -204,6 +208,8 @@ export const POST = async (
     const newPackageUnit = await prisma.packageUnit.create({
       data: {
         name,
+        breakdown: breakdown || null,
+        variant: variant || null,
         gs1SalesCode,
         gs1DispensingCode: gs1DispensingCode || null,
         hotCode: hotCode || null,

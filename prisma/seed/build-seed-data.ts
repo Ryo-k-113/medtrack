@@ -7,6 +7,9 @@
  *   gs1コード一覧表1.csv    GS1コード。包装の情報
  *   price/*.csv            厚労省の薬価基準収載品目リスト。薬価（任意。無ければ薬価は空）
  *
+ * prisma/seed/excluded-packages.json に挙げた包装は、生成の対象から除く
+ * （メーカーのサイトで現行品か確認できず、DBからも削除した包装。投入し直しても復活させない）
+ *
  * 実行: npm run seed:build
  */
 import { createHash } from "node:crypto"
@@ -16,12 +19,22 @@ import { gzipSync } from "node:zlib"
 
 import { parse } from "csv-parse/sync"
 
+import {
+  buildPackageInfo,
+  toHalfWidth,
+  unusedOverrides,
+  type Gs1PackageRow,
+} from "./package-name"
 import { writeReviewCsv } from "./review-csv"
 
 const RAW_DIR = path.join(process.cwd(), "prisma/seed/raw")
 const OUT_FILE = path.join(process.cwd(), "prisma/seed/seed-data.json.gz")
+// 生成の対象から除く包装の指定
+const EXCLUDED_FILE = path.join(process.cwd(), "prisma/seed/excluded-packages.json")
 // 剤形を名前で判定した医薬品の確認用一覧（gitの管理外）
 const DOSAGE_FORM_REVIEW_FILE = path.join(RAW_DIR, "match/剤形の判定.csv")
+// 包装名・内訳・注記の確認用一覧（gitの管理外）
+const PACKAGE_NAME_REVIEW_FILE = path.join(RAW_DIR, "match/包装名と内訳.csv")
 
 // 元データのファイル名
 const SUPPLY_FILE = "医薬品供給1.csv"
@@ -53,6 +66,12 @@ type ShippingStatus =
 
 type SeedPackage = {
   name: string
+  /** 内訳（「10錠×10」）。無い場合は null */
+  breakdown: string | null
+  /** 注記（「広口開栓型」）。無い場合は null */
+  variant: string | null
+  /** 旧規則で作った包装名（投入済みDBの上書き判定に使う。DBには入れない） */
+  legacyName: string
   gs1SalesCode: string
   gs1DispensingCode: string | null
   hotCode: string
@@ -116,12 +135,6 @@ const readCsvAsRecords = (fileName: string): Record<string, string>[] => {
  * かな・漢字・カタカナはそのまま。ローマ数字（第Ⅷ因子など）や ㎡ も変換しないため、
  * NFKC正規化ではなく変換範囲を限定している
  */
-const toHalfWidth = (value: string): string =>
-  value
-    .replace(/[！-～]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0))
-    .replace(/　/g, " ")
-    .trim()
-
 /** 「20260331」形式の日付を ISO 文字列にする。日付として不正なものは null */
 const parseCompactDate = (value: string): string | null => {
   if (!/^\d{8}$/.test(value)) return null
@@ -294,10 +307,6 @@ const restoreDispensingCode = (value: string): string | null => {
   return value.padStart(14, "0")
 }
 
-/** 包装名を「PTP100錠」の形に組み立てる */
-const buildPackageName = (form: string, amount: string, unit: string): string =>
-  toHalfWidth(`${form}${amount}${unit}`).replace(/\s+/g, "")
-
 /**
  * 販売包装単位コード（GS1の14桁）から統一商品コード（9桁）を作る
  * 6〜13桁目の8桁に、2〜13桁目の12桁から計算したチェックデジットを付ける
@@ -451,8 +460,17 @@ const main = () => {
     else hotByPackageCode.set(packageCode, [row])
   }
 
+  // 除外する販売包装単位コード
+  const excludedCodes = new Set<string>(
+    existsSync(EXCLUDED_FILE)
+      ? (JSON.parse(readFileSync(EXCLUDED_FILE, "utf-8")) as { packages: { gs1SalesCode: string }[] })
+          .packages.map((row) => row.gs1SalesCode)
+      : []
+  )
+
   const skipped = {
     hotに販売包装コードが無い: 0,
+    除外リストの包装: 0,
     YJコードが空または複数: 0,
     供給リストに無いYJコード: 0,
     販売GS1コードの重複: 0,
@@ -461,6 +479,8 @@ const main = () => {
   // 医薬品はYJコードと販売会社の組み合わせで一意になる（併売・販売移管があるため）
   const drugs = new Map<string, SeedDrug>()
   const usedSalesCodes = new Set<string>()
+  // 包装名・内訳・注記の確認用（gitの管理外のCSVに書き出す）
+  const packageNameReviewRows: string[][] = []
   const hotRowsByDrug = new Map<string, Record<string, string>[]>()
   let transitionalConflicts = 0
   let categoryConflicts = 0
@@ -469,6 +489,10 @@ const main = () => {
 
   for (const gs1 of readCsvAsRecords(GS1_FILE)) {
     const salesCode = gs1["販売包装単位コード"]
+    if (excludedCodes.has(salesCode)) {
+      skipped.除外リストの包装 += 1
+      continue
+    }
     const hotRows = hotByPackageCode.get(salesCode)
     if (!hotRows) {
       skipped.hotに販売包装コードが無い += 1
@@ -500,8 +524,23 @@ const main = () => {
     // 販売中止日が過去の包装は、製品が出荷中でも販売中止として扱う
     const isDiscontinued = discontinuedDate !== null && new Date(discontinuedDate) <= new Date()
 
+    const info = buildPackageInfo(gs1 as unknown as Gs1PackageRow, salesCode)
+    packageNameReviewRows.push([
+      info.name,
+      info.breakdown ?? "",
+      info.variant ?? "",
+      toHalfWidth(gs1["包装形態"]),
+      toHalfWidth(gs1["規格単位"]),
+      toHalfWidth(supply[col.name] ?? ""),
+      toHalfWidth(hot["販売会社"]),
+      salesCode,
+    ])
+
     const pkg: SeedPackage = {
-      name: buildPackageName(gs1["包装形態"], gs1["総数量数"], gs1["総数量数単位"]),
+      name: info.name,
+      breakdown: info.breakdown,
+      variant: info.variant,
+      legacyName: info.legacyName,
       gs1SalesCode: salesCode,
       gs1DispensingCode: restoreDispensingCode(gs1["調剤包装単位コード"]),
       hotCode: hot["HOTコード"],
@@ -621,6 +660,12 @@ const main = () => {
     }
   }
   writeReviewCsv(
+    PACKAGE_NAME_REVIEW_FILE,
+    ["包装名", "内訳", "注記", "包装形態", "規格単位", "医薬品名", "販売会社", "販売GS1コード"],
+    packageNameReviewRows.sort((a, b) => a[5].localeCompare(b[5]) || a[0].localeCompare(b[0]))
+  )
+
+  writeReviewCsv(
     DOSAGE_FORM_REVIEW_FILE,
     ["剤形", "判定の根拠", "区分", "GS1の剤形", "YJコード", "医薬品名", "販売会社"],
     reviewRows.sort((a, b) => a[0].localeCompare(b[0]) || a[5].localeCompare(b[5]))
@@ -681,6 +726,32 @@ const main = () => {
       .join(" / ")}`
   )
   console.log(`  区分が包装間で不一致   : ${categoryConflicts.toLocaleString()}`)
+
+  const allPackages = drugList.flatMap((drug) => drug.packages)
+  const withBreakdown = allPackages.filter((pkg) => pkg.breakdown).length
+  const withVariant = allPackages.filter((pkg) => pkg.variant).length
+  // 同じ医薬品内で包装名が重複している包装（タグに注記を出す対象）
+  const duplicatedNames = drugList.reduce((total, drug) => {
+    const counts = new Map<string, number>()
+    drug.packages.forEach((pkg) => counts.set(pkg.name, (counts.get(pkg.name) ?? 0) + 1))
+    return total + drug.packages.filter((pkg) => (counts.get(pkg.name) ?? 0) > 1).length
+  }, 0)
+  const leftoverOverrides = unusedOverrides(usedSalesCodes)
+
+  console.log("\n--- 包装名")
+  console.log(`  内訳あり               : ${withBreakdown.toLocaleString()}`)
+  console.log(`  注記あり               : ${withVariant.toLocaleString()}`)
+  console.log(`  包装名が重複            : ${duplicatedNames.toLocaleString()}（うち注記あり ${drugList
+    .flatMap((drug) => {
+      const counts = new Map<string, number>()
+      drug.packages.forEach((pkg) => counts.set(pkg.name, (counts.get(pkg.name) ?? 0) + 1))
+      return drug.packages.filter((pkg) => (counts.get(pkg.name) ?? 0) > 1 && pkg.variant)
+    })
+    .length.toLocaleString()}）`)
+  if (leftoverOverrides.length > 0) {
+    console.log(`  手直しの指定が未使用     : ${leftoverOverrides.join(", ")}`)
+  }
+  console.log(`  確認用の一覧: ${path.relative(process.cwd(), PACKAGE_NAME_REVIEW_FILE)}（${packageNameReviewRows.length.toLocaleString()}件）`)
 
   const dosageFormCounts = drugList.reduce<Record<string, number>>((counts, d) => {
     const key = d.dosageForm ?? "なし"
