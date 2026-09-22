@@ -4,7 +4,8 @@ import { LegalSection } from "../_components/LegalSection"
 import { LEGAL_ESTABLISHED_DATE, PRIVACY_REVISED_DATE, PRIVACY_SECTIONS } from "../_constants/legal"
 
 export const metadata: Metadata = {
-  title: "プライバシーポリシー | MedTrack",
+  // 「%s | MedTrack」の形になるため、ここではページ名だけを指定する
+  title: "プライバシーポリシー",
 }
 
 export default function PrivacyPage() {
