@@ -10,7 +10,10 @@ export type SearchDrugResult = Pick<
   Unit: Pick<Unit, "id" | "name">
   GenericName: Pick<GenericName, "id" | "name">
   SalesCompany: Pick<PharmaceuticalCompany, "id" | "name">
-  PackageUnits: Pick<PackageUnit, "id" | "name" | "currentShippingStatus">[]
+  PackageUnits: Pick<
+    PackageUnit,
+    "id" | "name" | "breakdown" | "variant" | "currentShippingStatus"
+  >[]
 }
 
 /** 医薬品検索のレスポンス型 */

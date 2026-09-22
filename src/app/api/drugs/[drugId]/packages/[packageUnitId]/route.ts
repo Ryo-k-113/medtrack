@@ -20,6 +20,8 @@ export const GET = async (
       select: {
         id: true,
         name: true,
+        breakdown: true,
+        variant: true,
         gs1SalesCode: true,
         gs1DispensingCode: true,
         hotCode: true,
@@ -42,7 +44,13 @@ export const GET = async (
             ManufacturingCompany: { select: { id: true, name: true } },
             PackageUnits: {
               where: { publishStatus: "PUBLISHED" },
-              select: { id: true, name: true, currentShippingStatus: true },
+              select: {
+                id: true,
+                name: true,
+                breakdown: true,
+                variant: true,
+                currentShippingStatus: true,
+              },
               orderBy: { id: "asc" },
             },
           },
