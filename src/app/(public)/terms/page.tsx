@@ -4,7 +4,8 @@ import { LegalSection } from "../_components/LegalSection"
 import { LEGAL_ESTABLISHED_DATE, TERMS_REVISED_DATE, TERMS_SECTIONS } from "../_constants/legal"
 
 export const metadata: Metadata = {
-  title: "利用規約・免責事項 | MedTrack",
+  // 「%s | MedTrack」の形になるため、ここではページ名だけを指定する
+  title: "利用規約・免責事項",
 }
 
 export default function TermsPage() {
