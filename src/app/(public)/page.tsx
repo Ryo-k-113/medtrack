@@ -18,7 +18,8 @@ export default function TopPage() {
       <PageContainer className="max-w-7xl space-y-8">
         
         {/* 上部：検索バーエリア */}
-        <section className="max-w-2xl mx-auto">
+        <section className="max-w-2xl mx-auto space-y-3">
+          <h1 className="text-center text-lg font-bold md:text-xl">医薬品の出荷状況を検索</h1>
           <SearchBar />
         </section>
 

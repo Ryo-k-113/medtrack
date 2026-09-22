@@ -44,8 +44,8 @@ export const DrugSummary = () => {
       <div className="mt-1 flex items-start gap-2">
         <BookmarkButton drugId={drug.id} className="mt-1" />
         <div>
-          {/* 医薬品名 */}
-          <h2 className="text-lg font-bold md:text-xl">{drug.name}</h2>
+          {/* 医薬品名（このページの主題なのでh1にする） */}
+          <h1 className="text-lg font-bold md:text-xl">{drug.name}</h1>
           {/* 成分名 */}
           <p className="text-sm text-weak">{drug.GenericName.name}</p>
         </div>
