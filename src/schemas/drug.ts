@@ -46,6 +46,9 @@ export const packageUnitFormSchema = z.object({
     .length(14, "14桁で入力してください"),
 
   // 任意項目
+  // 内訳（「10錠×10」）と注記（「広口開栓型」）。タグに出るため長さを抑える
+  breakdown: z.string().max(30, "30文字以内で入力してください").nullable().optional(),
+  variant: z.string().max(30, "30文字以内で入力してください").nullable().optional(),
   unifiedCode: optionalCodeField(9),
   gs1DispensingCode: optionalCodeField(14), 
   hotCode: optionalCodeField(13), 

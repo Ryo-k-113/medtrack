@@ -32,6 +32,8 @@ export const DraftPackageUnitEditDialog = ({
     resolver: zodResolver(packageUnitEditFormSchema),
     values: {
       name: packageUnit?.name ?? "",
+      breakdown: packageUnit?.breakdown ?? "",
+      variant: packageUnit?.variant ?? "",
       publishStatus: packageUnit?.publishStatus ?? "DRAFT",
       gs1SalesCode: packageUnit?.gs1SalesCode ?? "",
       gs1DispensingCode: packageUnit?.gs1DispensingCode ?? "",

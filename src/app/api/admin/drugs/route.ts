@@ -126,6 +126,8 @@ export const POST = async (request: NextRequest) => {
         PackageUnits: { 
           create: packageUnits.map((pkg) => ({
             name: pkg.name,
+            breakdown: pkg.breakdown || null,
+            variant: pkg.variant || null,
             gs1SalesCode: pkg.gs1SalesCode,
             gs1DispensingCode: pkg.gs1DispensingCode || null,
             hotCode: pkg.hotCode || null,
