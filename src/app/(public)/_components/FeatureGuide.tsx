@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, ChevronUp, History, JapaneseYen, Package, ScanLine } from "lucide-react"
+import { ChevronDown, ChevronUp, History, Package, ScanLine, Tag } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
@@ -50,7 +50,7 @@ const FEATURES = [
       "包装詳細ページでは告知の履歴を確認できます。更新情報カレンダーでは告知日での検索も可能です。",
   },
   {
-    Icon: JapaneseYen,
+    Icon: Tag,
     iconClassName: "bg-status-limited/40 text-status-limited-foreground",
     title: "薬価と添付文書",
     description:
@@ -104,20 +104,23 @@ export const FeatureGuide = () => {
       >
         {FEATURES.map(({ Icon, iconClassName, title, description }) => (
           <Card key={title} className="shadow-sm">
-            <CardContent className="flex items-start gap-3 px-4 py-4 md:px-5">
-              <span
-                className={cn(
-                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-                  iconClassName
-                )}
-              >
-                <Icon className="h-5 w-5" />
-              </span>
-
-              <div className="space-y-1">
+            <CardContent className="space-y-2 px-4 py-4 md:px-5">
+              {/* 1段目：アイコンと見出し（縦の中心をそろえる） */}
+              <div className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    // 詳細ページの見出しのアイコンと同じ大きさ（モバイル24px・md以上32px）
+                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg md:h-8 md:w-8",
+                    iconClassName
+                  )}
+                >
+                  <Icon className="h-4 w-4 md:h-5 md:w-5" aria-hidden="true" />
+                </span>
                 <h3 className="font-bold">{title}</h3>
-                <p className="text-sm text-weak">{description}</p>
               </div>
+
+              {/* 2段目：説明（カードの幅いっぱいに使う） */}
+              <p className="text-sm text-weak">{description}</p>
             </CardContent>
           </Card>
         ))}

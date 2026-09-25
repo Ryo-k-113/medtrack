@@ -1,7 +1,6 @@
-import { Package } from "lucide-react"
 import type { CurrentShippingStatus } from "@prisma/client"
 import { cn } from "@/lib/utils"
-import { STATUS_CHIP_CLASS } from "@/constants/statusChip"
+import { STATUS_CHIP_CLASS, STATUS_ICON } from "@/constants/statusChip"
 
 type StatusGuideItem = {
   label: string
@@ -33,19 +32,23 @@ export const ShippingStatusGuide = ({
     >
       <span className="shrink-0">出荷状況:</span>
       <div className="flex items-center gap-1.5 md:flex-wrap">
-        {STATUS_GUIDE_ITEMS.map((item) => (
-          <span
-            key={item.status}
-            className={cn(
-              // 横スクロール時に縮まないようshrink-0を持たせる
-              "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-2 py-1 font-semibold select-none",
-              STATUS_CHIP_CLASS[item.status]
-            )}
-          >
-            <Package className="h-3 w-3" />
-            {item.label}
-          </span>
-        ))}
+        {STATUS_GUIDE_ITEMS.map((item) => {
+          const Icon = STATUS_ICON[item.status]
+
+          return (
+            <span
+              key={item.status}
+              className={cn(
+                // 横スクロール時に縮まないようshrink-0を持たせる
+                "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-2 py-1 font-semibold select-none",
+                STATUS_CHIP_CLASS[item.status]
+              )}
+            >
+              <Icon className="h-3 w-3" aria-hidden="true" />
+              {item.label}
+            </span>
+          )
+        })}
       </div>
     </div>
   )

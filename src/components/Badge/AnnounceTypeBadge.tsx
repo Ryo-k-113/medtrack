@@ -1,6 +1,7 @@
 import type { AnnounceType } from "@prisma/client"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { STATUS_ICON } from "@/constants/statusChip"
 
 type AnnounceTypeBadgeProps = {
   status: AnnounceType
@@ -37,16 +38,19 @@ export const AnnounceTypeBadge = ({
   className,
 }: AnnounceTypeBadgeProps) => {
   const { label, className: statusClassName } = ANNOUNCE_TYPE_MAP[status]
+  // 出荷状況の絞り込み・包装チップと共通のアイコン
+  const Icon = STATUS_ICON[status]
 
   return (
     <Badge
       className={cn(
-        "py-1",
+        "shrink-0 gap-1 whitespace-nowrap py-1",
         statusClassName,
         inactive && "opacity-50 line-through",
         className
       )}
     >
+      <Icon className="h-3 w-3 shrink-0" aria-hidden="true" />
       {label}
     </Badge>
   )

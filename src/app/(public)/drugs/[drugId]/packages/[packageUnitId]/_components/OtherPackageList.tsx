@@ -1,5 +1,6 @@
 "use client"
 
+import { Boxes } from "lucide-react"
 import { PackageStatusCard } from "./PackageStatusCard"
 import { SectionCard } from "@/components/Card/SectionCard"
 import { OtherPackageListSkeleton } from "./OtherPackageListSkeleton"
@@ -16,7 +17,7 @@ export const OtherPackageList = () => {
   if (otherPackageUnits.length === 0) return null
 
   return (
-    <SectionCard title="他の包装形態">
+    <SectionCard title="他の包装形態" icon={Boxes}>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-4">
         {otherPackageUnits.map((pkg) => (
           <PackageStatusCard

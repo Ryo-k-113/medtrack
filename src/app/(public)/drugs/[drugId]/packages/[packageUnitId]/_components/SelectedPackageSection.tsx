@@ -1,5 +1,6 @@
 "use client"
 
+import { Package } from "lucide-react"
 import { SectionCard } from "@/components/Card/SectionCard"
 import { PackageStatusCard } from "./PackageStatusCard"
 import { SelectedPackageSectionSkeleton } from "./SelectedPackageSectionSkeleton"
@@ -28,7 +29,7 @@ export const SelectedPackageSection = () => {
   if (isLoading || !packageUnit) return <SelectedPackageSectionSkeleton />
 
   return (
-    <SectionCard title="包装情報" className="space-y-3">
+    <SectionCard title="包装情報" icon={Package} className="space-y-3">
 
       {/* 現在の包装 */}
       <PackageStatusCard
