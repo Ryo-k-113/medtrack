@@ -1,8 +1,7 @@
 import Link from "next/link"
-import { Package } from "lucide-react"
 import type { CurrentShippingStatus } from "@prisma/client"
 import { cn } from "@/lib/utils"
-import { STATUS_CHIP_CLASS } from "@/constants/statusChip"
+import { STATUS_CHIP_CLASS, STATUS_ICON } from "@/constants/statusChip"
 
 type PackageStatusTagProps = {
   href: string
@@ -18,6 +17,9 @@ export const PackageStatusTag = ({
   status, 
   className 
 }: PackageStatusTagProps) => {
+  // 出荷状況を色だけでなくアイコンの形でも示す
+  const Icon = STATUS_ICON[status]
+
   return (
     <Link
       href={href}
@@ -29,7 +31,7 @@ export const PackageStatusTag = ({
         className
       )}
     >
-      <Package className="h-3 w-3" />
+      <Icon className="h-3 w-3 shrink-0" aria-hidden="true" />
       {label}
     </Link>
   )
