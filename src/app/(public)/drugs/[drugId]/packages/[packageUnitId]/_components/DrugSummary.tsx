@@ -1,7 +1,7 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import { ProductTypeTag } from "@/app/(public)/search/_components/ProductTypeTag"
+import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
 import { SectionCard } from "@/components/Card/SectionCard"
 import { BookmarkButton } from "@/components/Button/BookmarkButton"
 import { DrugSummarySkeleton } from "./DrugSummarySkeleton"
@@ -16,7 +16,7 @@ export const DrugSummary = () => {
   return (
     <SectionCard>
       <div className="flex items-center gap-1.5">
-        <ProductTypeTag type={drug.productType} />
+        <ProductTypeTag type={drug.productType} className="px-2 py-1" />
         {drug.isSelectMedical && (
           <Badge className="rounded-md">選定療養</Badge>
         )}
