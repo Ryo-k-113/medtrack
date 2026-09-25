@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ExternalLink } from "lucide-react"
+import { CircleChevronDown, ExternalLink } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { badgeVariants } from "@/components/ui/badge"
 import { PackageStatusTagList } from "./PackageStatusTagList"
@@ -71,8 +71,16 @@ export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) 
         </div>
 
 
-        {/* 下段：包装単位ごとの出荷状況タグ */}
-        <PackageStatusTagList drugId={drug.id} packageUnits={drug.PackageUnits} />
+        {/* 下段：包装単位ごとの出荷状況タグ
+            カード自体は押せないため、包装のタグを押すと詳細へ進めることを案内する */}
+        <div className="space-y-2">
+          <p className="flex items-center gap-0.5 text-xs text-weak">
+            包装を選択して、詳細ページへ
+            {/* 下の包装チップを指す */}
+            <CircleChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+          </p>
+          <PackageStatusTagList drugId={drug.id} packageUnits={drug.PackageUnits} />
+        </div>
       </CardContent>
     </Card>
   )
