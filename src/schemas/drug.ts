@@ -80,7 +80,6 @@ export const drugFormSchema = z.object({
     }),
 
   //  任意項目
-  packageInsertUrl: z.string().transform((val) => (val === "" ? null : val)),
   drugPriceListingCode: optionalCodeField(12),
   
   price: z.preprocess(

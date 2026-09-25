@@ -1,11 +1,14 @@
-import { FileText } from "lucide-react"
+import Link from "next/link"
+import { ExternalLink } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { IconTooltipLink } from "@/components/Tooltip/IconTooltipLink"
+import { badgeVariants } from "@/components/ui/badge"
 import { PackageStatusTagList } from "./PackageStatusTagList"
 import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
 import { CompanyTag } from "@/components/Badge/CompanyTag"
 import { BookmarkButton } from "@/components/Button/BookmarkButton"
 import type { SearchDrugResult } from "@/types/search"
+import { buildPackageInsertUrl } from "@/utils/packageInsert"
+import { cn } from "@/lib/utils"
 
 
 type DrugCardProps = {
@@ -14,23 +17,37 @@ type DrugCardProps = {
 }
 
 export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) => {
+  // 添付文書はPMDAの該当ページを開く（YJコードから作る）
+  const packageInsertUrl = buildPackageInsertUrl(drug.yjCode)
+
   return (
     <Card className="shadow">
       <CardContent className="px-4 py-4 space-y-4 md:px-6">
 
         {/* 上段：区分タグ、販売会社タグ、添付文書リンク */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <ProductTypeTag type={drug.productType} />
-            <CompanyTag name={drug.SalesCompany.name} />
+            {/* 区分はモバイルで1文字表示 */}
+            <ProductTypeTag type={drug.productType} compact className="shrink-0 whitespace-nowrap" />
+            {/* 販売会社 */}
+            <CompanyTag name={drug.SalesCompany.name} compact />
           </div>
 
-          {drug.packageInsertUrl && (  
-            <IconTooltipLink
-              href={drug.packageInsertUrl}
-              icon={FileText}
-              tooltipText="添付文書を開く"
-            />
+          {/* 添付文書（PMDA）へのリンク */}
+          {packageInsertUrl && (
+            <Link
+              href={packageInsertUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="添付文書（PMDAのページが新しいタブで開きます）"
+              className={cn(
+                badgeVariants({ variant: "outline", size: "compact" }),
+                "shrink-0 gap-1 rounded-md border-primary/30 bg-background text-primary hover:border-primary hover:bg-primary/5"
+              )}
+            >
+              添付文書
+              <ExternalLink className="h-3 w-3" aria-hidden="true" />
+            </Link>
           )}
         </div>
 

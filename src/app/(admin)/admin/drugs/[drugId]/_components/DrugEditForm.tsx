@@ -40,7 +40,6 @@ export const DrugEditForm = () => {
       yjCode: drug?.yjCode ?? "",
       price: drug?.price ?? "", 
       drugPriceListingCode: drug?.drugPriceListingCode ?? "",
-      packageInsertUrl: drug?.packageInsertUrl ?? "",
       productType: drug?.productType ?? "",
       isSelectMedical: drug?.isSelectMedical ?? false,
       isAuthorizedGeneric: drug?.isAuthorizedGeneric ?? false,

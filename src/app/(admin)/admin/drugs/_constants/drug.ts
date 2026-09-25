@@ -53,7 +53,6 @@ export const DEFAULT_DRUG_FORM_VALUES: CreateDrugFormInput = {
   unitId: "",
   yjCode: "",
   drugPriceListingCode: "",
-  packageInsertUrl: "",
   productType: "",
   salesCompanyId: "",
   manufacturingCompanyId: "",

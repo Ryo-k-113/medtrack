@@ -5,6 +5,7 @@ import { PageContainer } from "@/components/Layout/PageContainer"
 import { usePackageDetail } from "@/hooks/usePackageDetail"
 import { DrugSummary } from "./_components/DrugSummary"
 import { SelectedPackageSection } from "./_components/SelectedPackageSection"
+import { PackageInsertLinkCard } from "./_components/PackageInsertLinkCard"
 import { DrugInfoSection } from "./_components/DrugInfoSection"
 import { OtherPackageList } from "./_components/OtherPackageList"
 import { PackageShippingAnnouncements } from "./_components/PackageShippingAnnouncements"
@@ -24,6 +25,9 @@ export default function PackageDetailPage() {
 
       {/* 選択中の包装とコード情報 */}
       <SelectedPackageSection />
+
+      {/* 添付文書・インタビューフォーム（PMDA） */}
+      <PackageInsertLinkCard />
 
       {/* 他の包装形態 */}
       <OtherPackageList />

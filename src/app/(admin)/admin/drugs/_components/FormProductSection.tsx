@@ -91,12 +91,6 @@ export const FormProductSection = ({
             required
           />
 
-          <FormInput 
-            name="packageInsertUrl" 
-            label="医薬品情報URL" 
-            placeholder="https://www.pmda.go.jp/" 
-          />
-
           <FormDatePicker 
             name="transitionalMeasuresDate"
             label="経過措置日"
