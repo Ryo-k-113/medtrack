@@ -1,5 +1,6 @@
 "use client"
 
+import { Database } from "lucide-react"
 import { SectionCard } from "@/components/Card/SectionCard"
 import { DrugInfoSectionSkeleton } from "./DrugInfoSectionSkeleton"
 import { usePackageDetail } from "@/hooks/usePackageDetail"
@@ -19,7 +20,7 @@ export const DrugInfoSection = () => {
   if (isLoading || !drug) return <DrugInfoSectionSkeleton />
 
   return (
-    <SectionCard title="薬品情報">
+    <SectionCard title="薬品情報" icon={Database}>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <InfoBox
           label="薬価"

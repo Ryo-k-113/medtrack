@@ -1,5 +1,6 @@
 "use client"
 
+import { History } from "lucide-react"
 import { BaseTable } from "@/components/Table/BaseTable"
 import { PackageShippingAnnouncementColumns } from "./PackageShippingAnnouncementColumns"
 import { SectionCard } from "@/components/Card/SectionCard"
@@ -16,7 +17,7 @@ export const PackageShippingAnnouncements = () => {
   if (isLoading || !shippingAnnouncements) return <PackageShippingAnnouncementsSkeleton />
 
   return (
-    <SectionCard title="告知履歴">
+    <SectionCard title="告知履歴" icon={History}>
       {/* 画面幅により表示分け */}
 
       {/* モバイル */}
