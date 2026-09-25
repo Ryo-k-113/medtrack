@@ -6,6 +6,7 @@ import { ProductTypeTag } from "@/components/Badge/ProductTypeTag"
 import { CompanyTag } from "@/components/Badge/CompanyTag"
 import { BookmarkButton } from "@/components/Button/BookmarkButton"
 import type { SearchDrugResult } from "@/types/search"
+import { buildPackageInsertUrl } from "@/utils/packageInsert"
 
 
 type DrugCardProps = {
@@ -14,6 +15,9 @@ type DrugCardProps = {
 }
 
 export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) => {
+  // 添付文書はPMDAの該当ページを開く（YJコードから作る）
+  const packageInsertUrl = buildPackageInsertUrl(drug.yjCode)
+
   return (
     <Card className="shadow">
       <CardContent className="px-4 py-4 space-y-4 md:px-6">
@@ -25,9 +29,9 @@ export const DrugCard = ({ drug, notifyBookmarkChange = false }: DrugCardProps) 
             <CompanyTag name={drug.SalesCompany.name} />
           </div>
 
-          {drug.packageInsertUrl && (  
+          {packageInsertUrl && (
             <IconTooltipLink
-              href={drug.packageInsertUrl}
+              href={packageInsertUrl}
               icon={FileText}
               tooltipText="添付文書を開く"
             />
