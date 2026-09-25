@@ -11,7 +11,7 @@ export type PackageDetailResult = Pick<
 > & {
   Drug: Pick<
     Drug,
-    "id" | "name" | "yjCode" | "productType" | "isSelectMedical" | "price" | "packageInsertUrl"
+    "id" | "name" | "yjCode" | "productType" | "isSelectMedical" | "price"
   > & {
     Unit: Pick<Unit, "id" | "name">
     GenericName: Pick<GenericName, "id" | "name">

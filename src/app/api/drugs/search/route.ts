@@ -58,7 +58,6 @@ export const GET = async (request: NextRequest) => {
           yjCode: true,
           productType: true,
           price: true,
-          packageInsertUrl: true,
           Unit: { select: { id: true, name: true } },
           GenericName: { select: { id: true, name: true } },
           SalesCompany: { select: { id: true, name: true } },

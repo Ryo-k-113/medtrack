@@ -5,7 +5,7 @@ import type { GenericName, PharmaceuticalCompany, Unit } from "@prisma/client"
 /** 検索結果の医薬品カードの型 */
 export type SearchDrugResult = Pick<
   Drug,
-  "id" | "name" | "yjCode" | "productType" | "price" | "packageInsertUrl"
+  "id" | "name" | "yjCode" | "productType" | "price"
 > & {
   Unit: Pick<Unit, "id" | "name">
   GenericName: Pick<GenericName, "id" | "name">

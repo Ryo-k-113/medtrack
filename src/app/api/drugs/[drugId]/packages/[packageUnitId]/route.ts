@@ -37,7 +37,6 @@ export const GET = async (
             productType: true,
             isSelectMedical: true,
             price: true,
-            packageInsertUrl: true,
             Unit: { select: { id: true, name: true } },
             GenericName: { select: { id: true, name: true } },
             SalesCompany: { select: { id: true, name: true } },
