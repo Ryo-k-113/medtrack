@@ -1,23 +1,28 @@
 import { Building2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { ResponsiveLabel } from "@/components/Badge/ResponsiveLabel"
 import { cn } from "@/lib/utils"
+import { toShortCompanyName } from "@/utils/companyName"
 
 type CompanyTagProps = {
   name: string
+  compact?: boolean  //モバイルでは略語での表示
   className?: string
 }
 
-/**
- * 販売会社のタグ
- * 色付きの製品区分（分類）と見分けられるよう、白地に枠線とアイコンの控えめな見た目にする
- * 後発品ではメーカーで選ぶことも多いため、文字色は薄くしすぎない
- */
-export const CompanyTag = ({ name, className }: CompanyTagProps) => (
-  <Badge
-    variant="outline"
-    className={cn("gap-1 rounded-md bg-background font-medium text-foreground", className)}
-  >
-    <Building2 className="h-3 w-3 shrink-0 text-weak" />
-    {name}
-  </Badge>
-)
+/**  販売会社のタグ  */
+export const CompanyTag = ({ name, compact = false, className }: CompanyTagProps) => {
+  // compact のときだけ略称にする
+  const shortName = compact ? toShortCompanyName(name) : name
+
+  return (
+    <Badge
+      variant="outline"
+      size={compact ? "compact" : "default"}
+      className={cn("gap-1 rounded-md bg-background font-medium text-foreground", className)}
+    >
+      <Building2 className="h-3 w-3 shrink-0 text-weak" />
+      <ResponsiveLabel short={shortName} full={name} />
+    </Badge>
+  )
+}
