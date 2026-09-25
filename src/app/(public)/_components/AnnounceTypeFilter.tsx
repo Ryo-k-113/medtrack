@@ -2,7 +2,7 @@
 
 import type { AnnounceType } from "@prisma/client"
 import { cn } from "@/lib/utils"
-import { STATUS_CHIP_CLASS } from "@/constants/statusChip"
+import { STATUS_CHIP_CLASS, STATUS_ICON } from "@/constants/statusChip"
 
 // 告知タイプの選択肢
 const ANNOUNCE_TYPE_OPTIONS: { value: AnnounceType; label: string }[] = [
@@ -13,9 +13,9 @@ const ANNOUNCE_TYPE_OPTIONS: { value: AnnounceType; label: string }[] = [
   { value: "TRANSFER_OF_SALE", label: "販売移管" },
 ]
 
-// チップ共通のスタイル
+// チップ共通のスタイル（アイコンと文字の横並び）
 const CHIP_CLASS =
-  "shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold transition-colors"
+  "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-1.5 text-xs font-semibold transition-colors"
 
 // 未選択時のスタイル
 const CHIP_INACTIVE_CLASS = "border-border bg-background text-weak hover:bg-surface"
@@ -68,6 +68,8 @@ export const AnnounceTypeFilter = ({
       {/* 告知タイプごとのチップ */}
       {ANNOUNCE_TYPE_OPTIONS.map((option) => {
         const isSelected = selected.includes(option.value)
+        // 検索結果の出荷状況ガイド・包装チップと共通アイコン
+        const Icon = STATUS_ICON[option.value]
 
         return (
           <button
@@ -80,6 +82,7 @@ export const AnnounceTypeFilter = ({
               isSelected ? STATUS_CHIP_CLASS[option.value] : CHIP_INACTIVE_CLASS
             )}
           >
+            <Icon className="h-3 w-3" aria-hidden="true" />
             {option.label}
           </button>
         )
