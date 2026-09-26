@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Bookmark } from "lucide-react"
 import { toast } from "sonner"
 import {
@@ -9,6 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useBookmarks } from "@/hooks/useBookmarks"
+import { SignupPromptDialog } from "@/components/auth/SignupPromptDialog"
 import { cn } from "@/lib/utils"
 
 
@@ -21,14 +23,16 @@ type BookmarkButtonProps = {
 // 医薬品のブックマークを追加・解除するボタン
 export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonProps) => {
   const { isBookmarked, toggleBookmark, addBookmark, isLoggedIn } = useBookmarks()
+  // 未ログインで押されたときの、無料登録の案内
+  const [isSignupPromptOpen, setIsSignupPromptOpen] = useState(false)
 
   const bookmarked = isBookmarked(drugId)
   const label = bookmarked ? "ブックマークを解除" : "ブックマークに追加"
 
   const handleClick = async () => {
-    // 未ログイン時はログインを案内する
+    // 未ログイン時は、その場で登録できるよう案内を開く
     if (!isLoggedIn) {
-      toast.error("ブックマークにはログインが必要です")
+      setIsSignupPromptOpen(true)
       return
     }
 
@@ -84,6 +88,12 @@ export const BookmarkButton = ({ drugId, drugName, className }: BookmarkButtonPr
           <p>{label}</p>
         </TooltipContent>
       </Tooltip>
+
+      <SignupPromptDialog
+        open={isSignupPromptOpen}
+        onOpenChange={setIsSignupPromptOpen}
+        title="ブックマークは無料登録で使えます"
+      />
     </TooltipProvider>
   )
 }
