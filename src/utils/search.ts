@@ -8,6 +8,23 @@ import { toHalfWidth, toHiragana, toKatakana } from "@/utils/text"
 const CODE_KEYWORD_PATTERN = /^[0-9A-Za-z]{5,}$/
 
 /**
+ * 複数検索の区切りとして受け付ける文字（半角カンマ・全角カンマ・読点）
+ * 「・」は成分名に含まれ、空白は絞り込みの区切りに使うため対象外
+ */
+const MULTI_KEYWORD_SEPARATOR = /[,，、]/
+
+/**
+ * 複数検索のキーワードに分ける
+ * 日本語入力のままでも区切れるよう、「,」に加えて「，」「、」でも分ける
+ * （例：「アムロジピン、ロスバスタチン」→ ["アムロジピン", "ロスバスタチン"]）
+ */
+export const splitMultiKeywords = (query: string | null | undefined): string[] =>
+  (query ?? "")
+    .split(MULTI_KEYWORD_SEPARATOR)
+    .map((keyword) => keyword.trim())
+    .filter(Boolean)
+
+/**
  * 検索キーワードを単語に分ける
  * 全角スペースで区切られていても分けられるよう、半角に揃えてから分割する
  * （例：「ロキソ　６０　サワイ」→ ["ロキソ", "60", "サワイ"]）
