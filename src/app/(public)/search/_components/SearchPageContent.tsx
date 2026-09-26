@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation"
 import { useMe } from "@/hooks/useMe"
 import { PageContainer } from "@/components/Layout/PageContainer"
 import { SearchBar } from "@/app/(public)/_components/SearchBar"
+import { splitMultiKeywords } from "@/utils/search"
 import { SearchResults } from "./SearchResults"
 
 
@@ -16,11 +17,8 @@ export const SearchPageContent = () => {
   const searchParams = useSearchParams()
   const { isLoggedIn, isLoading } = useMe()
 
-  const keywords = (searchParams.get("query") ?? "")
-    .split(",")
-    .map((keyword) => keyword.trim())
-    .filter((keyword) => keyword.length > 0)
-    .slice(0, MAX_KEYWORDS)
+  // URLを直接入力された場合も「、」などで区切れるよう、検索バーと同じ分け方にする
+  const keywords = splitMultiKeywords(searchParams.get("query")).slice(0, MAX_KEYWORDS)
 
   // 結果を表示できる件数（ログイン状態の確認中は、会員に鍵が一瞬見えないよう制限しない）
   const unlockedCount = isLoggedIn || isLoading ? MAX_KEYWORDS : MAX_KEYWORDS_GUEST

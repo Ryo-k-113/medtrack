@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { SearchBox } from "@/components/Form/SearchBox"
 import { useMe } from "@/hooks/useMe"
+import { splitMultiKeywords } from "@/utils/search"
 
 type SearchFormData = {
   keyword: string
@@ -32,10 +33,7 @@ export const SearchBar = ({ defaultKeyword = "", className }: SearchBarProps) =>
 
   // 検索の実行
   const handleSearch = searchForm.handleSubmit(({ keyword }) => {
-    const keywords = keyword
-      .split(",")
-      .map((k) => k.trim())
-      .filter((k) => k.length > 0)
+    const keywords = splitMultiKeywords(keyword)
 
     if (keywords.length > MAX_KEYWORDS) {
       toast.error(`検索キーワードは${MAX_KEYWORDS}件までです`)
@@ -43,6 +41,7 @@ export const SearchBar = ({ defaultKeyword = "", className }: SearchBarProps) =>
     }
 
     // キーワードが空の場合はqueryなしで遷移し、検索結果ページ側の案内表示に委ねる
+    // 区切りは「、」などで入力されても、URLでは「,」にそろえる
     const query = keywords.length > 0
       ? `?query=${encodeURIComponent(keywords.join(","))}`
       : ""
@@ -63,8 +62,8 @@ export const SearchBar = ({ defaultKeyword = "", className }: SearchBarProps) =>
         </form>
         <p className="mt-2 text-sm text-weak">
           {isGuest
-            ? "「,」で区切ると3件まで同時に検索できます（2件目からは無料登録で表示）"
-            : "複数検索する場合は「,」で区切って検索してください。(最大3件)"}
+            ? "「,」や「、」で区切ると3件まで同時に検索できます（2件目からは無料登録で表示）"
+            : "複数検索する場合は「,」や「、」で区切って検索してください。(最大3件)"}
         </p>
       </div>
     </FormProvider>

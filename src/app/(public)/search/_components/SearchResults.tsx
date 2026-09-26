@@ -6,6 +6,7 @@ import { BaseTabs } from "@/components/Tabs/BaseTabs"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { SearchResultTab } from "./SearchResultTab"
 import { LockedResultTab } from "./LockedResultTab"
+import { SearchEmptyState } from "./SearchEmptyState"
 
 
 type Props = {
@@ -25,12 +26,9 @@ export const SearchResults = ({ keywords, unlockedCount }: Props) => {
   const result2 = useDrugSearch(keywords[2] ?? "", productTypes)
   const results = [result0, result1, result2].slice(0, keywords.length)
 
+  // キーワードがないときは、検索例と検索のコツを表示
   if (keywords.length === 0) {
-    return (
-      <div className="py-10 md:py-16 text-center text-weak">
-        検索キーワードを入力してください
-      </div>
-    )
+    return <SearchEmptyState />
   }
 
   // タブの見出し（鍵付きは鍵のアイコンを付ける）
