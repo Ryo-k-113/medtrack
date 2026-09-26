@@ -7,7 +7,8 @@ type SectionCardProps = {
   icon?: LucideIcon 
   headerAction?: React.ReactNode
   children: React.ReactNode
-  className?: string
+  cardClassName?: string  // カード本体のクラス 
+  className?: string  // コンテンツのクラス
 }
 
 // 各ページのセクションを囲む共通カード
@@ -16,9 +17,10 @@ export const SectionCard = ({
   icon: Icon,
   headerAction,
   children,
+  cardClassName,
   className,
 }: SectionCardProps) => (
-  <Card className="bg-background p-4 text-foreground shadow-sm md:rounded-2xl md:p-6">
+  <Card className={cn("bg-background p-4 text-foreground shadow-sm md:rounded-2xl md:p-6", cardClassName)}>
     {(title || headerAction) && (
       <CardHeader className="mb-4 flex-row items-center justify-between space-y-0 p-0">
         {title && (
