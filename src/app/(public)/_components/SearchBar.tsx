@@ -10,19 +10,21 @@ type SearchFormData = {
   keyword: string
 }
 
-// 未ログイン時は1件、ログイン時は3件まで同時検索できる
-const MAX_KEYWORDS_GUEST = 1
-const MAX_KEYWORDS_MEMBER = 3
+// 同時に検索できるキーワードの数
+// 未ログインでも3件まで検索でき、2件目以降は検索結果ページで無料登録を案内する
+const MAX_KEYWORDS = 3
 
 type SearchBarProps = {
   defaultKeyword?: string
+  /** 外側の余白など（置く場所ごとに指定する） */
+  className?: string
 }
 
-export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
+export const SearchBar = ({ defaultKeyword = "", className }: SearchBarProps) => {
   const router = useRouter()
-  const { isLoggedIn } = useMe()
-
-  const maxKeywords = isLoggedIn ? MAX_KEYWORDS_MEMBER : MAX_KEYWORDS_GUEST
+  const { isLoggedIn, isLoading } = useMe()
+  // ログイン状態の確認中は会員向けの案内を出し、表示が切り替わってちらつかないようにする
+  const isGuest = !isLoading && !isLoggedIn
 
   const searchForm = useForm<SearchFormData>({
     values: { keyword: defaultKeyword },
@@ -35,12 +37,8 @@ export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
       .map((k) => k.trim())
       .filter((k) => k.length > 0)
 
-    if (keywords.length > maxKeywords) {
-      toast.error(
-        isLoggedIn
-          ? `検索キーワードは${maxKeywords}件までです`
-          : `未ログインの場合、検索は1件までです。複数同時検索するにはログインしてください`
-      )
+    if (keywords.length > MAX_KEYWORDS) {
+      toast.error(`検索キーワードは${MAX_KEYWORDS}件までです`)
       return
     }
 
@@ -54,7 +52,7 @@ export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
 
   return (
     <FormProvider {...searchForm}>
-      <div className="py-4 md:py-8">
+      <div className={className}>
         <form onSubmit={handleSearch}>
           <SearchBox
             name="keyword"
@@ -64,7 +62,9 @@ export const SearchBar = ({ defaultKeyword = "" }: SearchBarProps) => {
           />
         </form>
         <p className="mt-2 text-sm text-weak">
-          複数検索する場合は「,」で区切って検索してください。(最大3件)
+          {isGuest
+            ? "「,」で区切ると3件まで同時に検索できます（2件目からは無料登録で表示）"
+            : "複数検索する場合は「,」で区切って検索してください。(最大3件)"}
         </p>
       </div>
     </FormProvider>

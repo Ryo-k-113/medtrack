@@ -24,7 +24,7 @@ export default function TopPage() {
             <Search className="h-5 w-5 text-primary md:h-6 md:w-6" aria-hidden="true" />
             医薬品の出荷状況を検索
           </h1>
-          <SearchBar />
+          <SearchBar className="py-4 md:py-8" />
         </section>
 
         {/* できることの案内（畳める） */}

@@ -3,9 +3,12 @@ import { PageContainer } from "@/components/Layout/PageContainer"
 
 export const SearchPageSkeleton = () => {
   return (
-    <PageContainer className="max-w-5xl space-y-12">
-      {/* 検索バー */}
-      <Skeleton className="h-12 w-full rounded-lg" />
+    <PageContainer className="max-w-5xl space-y-8">
+      {/* 検索バーと補足文 */}
+      <div className="space-y-2 md:py-8">
+        <Skeleton className="h-12 w-full rounded-lg" />
+        <Skeleton className="h-5 w-72 max-w-full" />
+      </div>
 
       <div className="space-y-4">
         {/* タブ */}
