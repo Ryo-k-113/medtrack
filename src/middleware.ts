@@ -36,6 +36,10 @@ export const middleware = async (request: NextRequest) => {
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
+          // 延長したログイン情報を、この後に動く Route Handler やページにも渡す
+          // （リクエスト側にも書き込まないと、古いログイン情報のまま Supabase に問い合わせてしまう）
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+
           ref.response = NextResponse.next({ request })
 
           cookiesToSet.forEach(({ name, value, options }) =>
@@ -53,13 +57,22 @@ export const middleware = async (request: NextRequest) => {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // リダイレクトの応答にも、延長したログイン情報を引き継ぐ
+  // （引き継がないと、ブラウザに古いログイン情報が残ったままになる）
+  const redirectWithSession = (url: URL) => {
+    const response = NextResponse.redirect(url)
+    ref.response.cookies.getAll().forEach((cookie) => response.cookies.set(cookie))
+
+    return response
+  }
+
   // 元のクエリは引き継がず、遷移先だけを差し替える
   const redirectTo = (path: string) => {
     const url = request.nextUrl.clone()
     url.pathname = path
     url.search = ""
 
-    return NextResponse.redirect(url)
+    return redirectWithSession(url)
   }
 
   // 管理者ログインページは、認証状態にかかわらずそのまま表示する
@@ -74,7 +87,7 @@ export const middleware = async (request: NextRequest) => {
       url.search = ""
       url.searchParams.set(REDIRECT_TO_QUERY_KEY, `${pathname}${search}`)
 
-      return NextResponse.redirect(url)
+      return redirectWithSession(url)
     }
 
     // 管理画面の存在を伏せるため、ログインページには送らない
