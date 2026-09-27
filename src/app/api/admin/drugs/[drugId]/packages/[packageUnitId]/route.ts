@@ -9,13 +9,13 @@ import type { PackageUnitDetailResponse, UpdatePackageUnitRequest,
 /** 包装情報・告示履歴・製品情報を取得 */
 export const GET = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string } }
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
-  const { packageUnitId, drugId } = params;
+  const { packageUnitId, drugId } = await params;
 
   try {
     const packageUnit = await prisma.packageUnit.findUnique({
@@ -82,14 +82,14 @@ export const GET = async (
 //* 包装情報の更新 */
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string } }
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   // 製品IDと包装IDを取得
-  const { packageUnitId, drugId } = params;
+  const { packageUnitId, drugId } = await params;
   
   try {
     // リクエストbodyの取得
@@ -144,13 +144,13 @@ export const PUT = async (
 // 包装の削除（ShippingAnnouncementもカスケード削除）
 export const DELETE = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string } }
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
-  const { packageUnitId } = params;
+  const { packageUnitId } = await params;
 
   try {
     await prisma.packageUnit.delete({

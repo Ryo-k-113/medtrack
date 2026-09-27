@@ -8,13 +8,13 @@ import type { UpdateAnnounceRequest, UpdateAnnounceResponse } from "@/types/admi
 /** PUT: 告示情報の更新（processStatusがPENDING、かつ非表示化されていない場合）*/
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string; announceId: string } }
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string; announceId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
-  const { drugId, packageUnitId, announceId } = params
+  const { drugId, packageUnitId, announceId } = await params
   const body: UpdateAnnounceRequest = await request.json()
   const { announcedDate, effectiveDate, announceType } = body
 

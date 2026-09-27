@@ -6,9 +6,9 @@ import type { GetPackageDetailResponse } from "@/types/package"
 /** 包装詳細・告知履歴・他の包装形態を取得（公開） */
 export const GET = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string } }
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string }> }
 ) => {
-  const { drugId, packageUnitId } = params
+  const { drugId, packageUnitId } = await params
 
   try {
     const packageUnit = await prisma.packageUnit.findUnique({

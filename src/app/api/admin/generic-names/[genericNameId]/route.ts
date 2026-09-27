@@ -8,7 +8,7 @@ import type { UpdateGenericNameRequest, UpdateGenericNameResponse } from "@/type
 /** 成分名を更新  */
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { genericNameId: string } } 
+  { params }: { params: Promise<{ genericNameId: string }> } 
 ) => {
 
   // 認証チェック
@@ -16,7 +16,7 @@ export const PUT = async (
   if (errorResponse) return errorResponse
   
   // 成分名IDの取得
-  const { genericNameId } = params;
+  const { genericNameId } = await params;
 
   try {
     // リクエストbodyを取得

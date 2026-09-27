@@ -8,14 +8,14 @@ import type { InactivateAnnounceRequest, InactivateAnnounceResponse } from "@/ty
 /** POST: 告示の非表示（INACTIVE化）（processStatusがCOMPLETED、かつ非表示化されていない場合）*/
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string; announceId: string; }}
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string; announceId: string; }> }
 ) => {
 
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
-  const { drugId, packageUnitId, announceId } = params
+  const { drugId, packageUnitId, announceId } = await params
 
   try {
     const body: InactivateAnnounceRequest = await request.json()

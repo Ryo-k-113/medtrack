@@ -7,13 +7,13 @@ import type { PublishPackageUnitResponse } from "@/types/admin/draft"
 /** 下書きの包装を公開する */
 export const PATCH = async (
   request: NextRequest,
-  { params }: { params: { packageUnitId: string } }
+  { params }: { params: Promise<{ packageUnitId: string }> }
 ) => {
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
   // 包装IDを取得
-  const packageUnitId = params.packageUnitId
+  const packageUnitId = (await params).packageUnitId
 
   try {
     // 対象の包装を公開ステータスへ変更

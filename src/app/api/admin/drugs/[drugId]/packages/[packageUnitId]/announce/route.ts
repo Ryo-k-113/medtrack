@@ -9,13 +9,13 @@ import type { CreateAnnounceRequest, CreateAnnounceResponse } from "@/types/admi
 /** 告示履歴の登録 */
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { drugId: string; packageUnitId: string } }
+  { params }: { params: Promise<{ drugId: string; packageUnitId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
-  const { packageUnitId } = params;
+  const { packageUnitId } = await params;
 
   try {
     const body: CreateAnnounceRequest = await request.json()
