@@ -14,12 +14,12 @@ import type {
 
 
 /** 医薬品情報と包装情報一覧を取得 */ 
-export const GET = async (request: NextRequest, { params }: { params: { drugId: string } }) => {
+export const GET = async (request: NextRequest, { params }: { params: Promise<{ drugId: string }> }) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
-  const { drugId } = params;
+  const { drugId } = await params;
 
   try {
     const drug = await prisma.drug.findUnique({
@@ -80,13 +80,13 @@ export const GET = async (request: NextRequest, { params }: { params: { drugId: 
 /** 医薬品の更新 */
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { drugId: string } }
+  { params }: { params: Promise<{ drugId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
    
-  const { drugId } = params;
+  const { drugId } = await params;
 
   try {
     const body: UpdateDrugRequest = await request.json()
@@ -148,13 +148,13 @@ export const PUT = async (
 /** 医薬品の削除(包装情報もカスケードで削除) */
 export const DELETE = async (
   request: NextRequest,
-  { params }: { params: { drugId: string } }
+  { params }: { params: Promise<{ drugId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
    
-  const { drugId } = params;
+  const { drugId } = await params;
 
   try {
     await prisma.drug.delete({
@@ -177,13 +177,13 @@ export const DELETE = async (
 /** 医薬品に新規包装を追加 */
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { drugId: string } }
+  { params }: { params: Promise<{ drugId: string }> }
 ) => {
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
   
-  const { drugId } = params;
+  const { drugId } = await params;
 
   try {
     const body: AddPackageUnitRequest = await request.json()

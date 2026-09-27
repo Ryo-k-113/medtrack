@@ -8,7 +8,7 @@ import type { UpdateUnitRequest, UpdateUnitResponse } from "@/types/admin/unit"
 /** 規格単位を更新 */
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { unitId: string } } 
+  { params }: { params: Promise<{ unitId: string }> } 
 ) => {
 
   // 認証チェック
@@ -16,7 +16,7 @@ export const PUT = async (
   if (errorResponse) return errorResponse
   
   // 規格単位IDの取得
-  const { unitId } = params;
+  const { unitId } = await params;
 
   try {
     // リクエストbodyを取得

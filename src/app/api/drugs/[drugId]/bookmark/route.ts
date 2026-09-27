@@ -14,7 +14,7 @@ const MAX_BOOKMARKS = 1000
 /** ブックマークの登録 */
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { drugId: string } }
+  { params }: { params: Promise<{ drugId: string }> }
 ) => {
   // 認証チェック
   const currentUser = await getCurrentUser()
@@ -32,7 +32,7 @@ export const POST = async (
     }
 
     // パスとボディで対象がずれている場合は不正なリクエストとして扱う
-    if (drugId !== Number(params.drugId)) {
+    if (drugId !== Number((await params).drugId)) {
       return NextResponse.json(
         { message: "医薬品IDが一致しません" },
         { status: 400 }
@@ -83,7 +83,7 @@ export const POST = async (
 /** ブックマークの解除 */
 export const DELETE = async (
   request: NextRequest,
-  { params }: { params: { drugId: string } }
+  { params }: { params: Promise<{ drugId: string }> }
 ) => {
   // 認証チェック
   const currentUser = await getCurrentUser()
@@ -92,7 +92,7 @@ export const DELETE = async (
     return NextResponse.json({ message: "認証が必要です" }, { status: 401 })
   }
 
-  const drugId = Number(params.drugId)
+  const drugId = Number((await params).drugId)
 
   if (!drugId) {
     return NextResponse.json({ message: "医薬品IDが不正です" }, { status: 400 })

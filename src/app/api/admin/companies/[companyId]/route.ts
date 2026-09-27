@@ -9,7 +9,7 @@ import type { UpdateCompanyRequest, UpdateCompanyResponse } from "@/types/admin/
 /**  製薬会社を更新  */
 export const PUT = async (
   request: NextRequest,
-  { params }: { params: { companyId: string } }
+  { params }: { params: Promise<{ companyId: string }> }
 ) => {
 
   // 認証チェック
@@ -17,7 +17,7 @@ export const PUT = async (
   if (errorResponse) return errorResponse
   
   // 製薬会社IDの取得
-  const { companyId } = params;
+  const { companyId } = await params;
 
   try {
     // リクエストbodyを取得
