@@ -38,6 +38,8 @@ export default function GlobalError({
           <p style={{ fontSize: "14px", color: "#555" }}>
             時間をおいて、もう一度お試しください。
           </p>
+          {/* ルートレイアウトごと置き換わった状態のため、Link ではなくページを読み込み直して戻す */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a
             href="/"
             style={{ fontSize: "14px", color: "#2563eb", textDecoration: "underline" }}
