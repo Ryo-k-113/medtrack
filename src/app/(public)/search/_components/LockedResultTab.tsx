@@ -25,7 +25,7 @@ export const LockedResultTab = ({ keyword, result }: LockedResultTabProps) => {
     <TabsContent value={keyword} className="pt-4">
       <div className="grid">
         <div
-          ref={(element) => element?.setAttribute("inert", "")}
+          inert
           aria-hidden="true"
           className="pointer-events-none col-start-1 row-start-1 max-h-[560px] select-none space-y-4 overflow-hidden blur-[3px]"
         >
