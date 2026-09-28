@@ -6,6 +6,7 @@ import { SectionCard } from "@/components/Card/SectionCard"
 import { BatchJobStatusBadge } from "@/components/Badge/BatchJobStatusBadge"
 import { BatchErrorMessage } from "./BatchErrorMessage"
 import { formatDateTime } from "@/utils/format"
+import { useNow } from "@/hooks/useNow"
 import { STUCK_RUNNING_MINUTES, STALE_LAST_RUN_HOURS } from "@/constants/batch"
 import type { BatchLog } from "@/types/admin/batch"
 import { cn } from "@/lib/utils"
@@ -26,8 +27,10 @@ export const BatchJobCard = ({
   isRunning,
   onRun,
 }: BatchJobCardProps) => {
+  // 経過時間は1分ごとに更新する
+  const now = useNow()
   const elapsedMs = latestLog
-    ? Date.now() - new Date(latestLog.startedAt).getTime()
+    ? now - new Date(latestLog.startedAt).getTime()
     : 0
 
   // 実行中のまま滞留

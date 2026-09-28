@@ -1,30 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { ChevronDown, ChevronUp, History, Package, ScanLine, Tag } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { cn } from "@/lib/utils"
 
 /** 畳んだ状態を保持するキー */
 const COLLAPSED_KEY = "FeatureGuideCollapsed"
-
-/** ブラウザの設定で保存領域を使えない場合があるため、失敗しても表示を妨げない */
-const readCollapsed = () => {
-  try {
-    // 保存が無い場合は畳んだまま（一度開いた人にだけ、開いた状態を引き継ぐ）
-    return localStorage.getItem(COLLAPSED_KEY) !== "false"
-  } catch {
-    return true
-  }
-}
-
-const saveCollapsed = (collapsed: boolean) => {
-  try {
-    localStorage.setItem(COLLAPSED_KEY, String(collapsed))
-  } catch {
-    // 保存できない場合は、このページを開いている間だけ反映する
-  }
-}
 
 /** できること一覧 */
 const FEATURES = [
@@ -64,17 +46,12 @@ const FEATURES = [
  */
 export const FeatureGuide = () => {
   // 更新情報を先に見せるため、初めは畳んでおく（開いた状態は端末に保存して引き継ぐ）
-  const [isCollapsed, setIsCollapsed] = useState(true)
-
-  useEffect(() => {
-    setIsCollapsed(readCollapsed())
-  }, [])
+  // 保存が無い場合は畳んだまま（一度開いた人にだけ、開いた状態を引き継ぐ）
+  const [storedCollapsed, setStoredCollapsed] = useLocalStorage(COLLAPSED_KEY)
+  const isCollapsed = storedCollapsed !== "false"
 
   const handleToggle = () => {
-    setIsCollapsed((prev) => {
-      saveCollapsed(!prev)
-      return !prev
-    })
+    setStoredCollapsed(String(!isCollapsed))
   }
 
   return (
@@ -109,7 +86,6 @@ export const FeatureGuide = () => {
               <div className="flex items-center gap-2">
                 <span
                   className={cn(
-                    // 詳細ページの見出しのアイコンと同じ大きさ（モバイル24px・md以上32px）
                     "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg md:h-8 md:w-8",
                     iconClassName
                   )}
@@ -119,7 +95,7 @@ export const FeatureGuide = () => {
                 <h3 className="font-bold">{title}</h3>
               </div>
 
-              {/* 2段目：説明（カードの幅いっぱいに使う） */}
+              {/* 2段目：説明 */}
               <p className="text-sm text-weak">{description}</p>
             </CardContent>
           </Card>

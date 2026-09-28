@@ -1,6 +1,6 @@
 "use client"
 
-import { forwardRef, type ComponentPropsWithoutRef } from "react"
+import type { ComponentProps } from "react"
 import { Check, Lock, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { GoogleLoginButton } from "@/components/auth/GoogleLoginButton"
@@ -20,8 +20,7 @@ type SignupPromptTitleProps = {
 
 /**
  * 案内の見出し（鍵のアイコン＋文言）
- * ダイアログでは DialogTitle の中に置くため、見出しの中に入れられる span で作る
- * （DialogTitle の既定の文字の大きさ・字間を受け継がないよう、ここで指定しきる）
+ * ダイアログでは DialogTitle の中に置くため、見出しの中に入れられる span で作成
  */
 export const SignupPromptTitle = ({ title, className }: SignupPromptTitleProps) => (
   <span className={cn("flex items-center gap-2 text-base font-bold tracking-normal md:text-lg", className)}>
@@ -35,19 +34,16 @@ export const SignupPromptTitle = ({ title, className }: SignupPromptTitleProps) 
 /**
  * 登録後に使える機能の一覧
  */
-export const SignupPromptBenefits = forwardRef<HTMLUListElement, ComponentPropsWithoutRef<"ul">>(
-  ({ className, ...props }, ref) => (
-    <ul ref={ref} className={cn("space-y-1.5", className)} {...props}>
-      {MEMBER_BENEFITS.map((benefit) => (
-        <li key={benefit} className="flex items-start gap-1.5 text-sm text-weak">
-          <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-          {benefit}
-        </li>
-      ))}
-    </ul>
-  )
+export const SignupPromptBenefits = ({ className, ...props }: ComponentProps<"ul">) => (
+  <ul className={cn("space-y-1.5", className)} {...props}>
+    {MEMBER_BENEFITS.map((benefit) => (
+      <li key={benefit} className="flex items-start gap-1.5 text-sm text-weak">
+        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+        {benefit}
+      </li>
+    ))}
+  </ul>
 )
-SignupPromptBenefits.displayName = "SignupPromptBenefits"
 
 /**
  * 登録ボタンとログインへの案内
