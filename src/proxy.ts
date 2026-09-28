@@ -22,8 +22,11 @@ const ADMIN_PATH = "/admin"
 const ADMIN_LOGIN_PATH = "/admin/login"
 
 
-/** 認証が必要なページへのアクセスを制御する */
-export const middleware = async (request: NextRequest) => {
+/**
+ * 認証が必要なページへのアクセスを制御する
+ * （Next.js 16 で middleware から proxy に名前が変わった）
+ */
+export const proxy = async (request: NextRequest) => {
   const { pathname, search } = request.nextUrl
 
   // setAllで差し替えるため、参照を保持できる形で持つ
