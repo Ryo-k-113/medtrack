@@ -27,6 +27,8 @@ export const GoogleLoginButton = ({
       ? `?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(redirectTo)}`
       : ""
 
+    // ページではなく、Google の認証画面へ送り出す API のため、ページごと遷移する
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.assign(`/api/auth/google${query}`)
   }
 
