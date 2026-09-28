@@ -1,28 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { X } from "lucide-react"
 import { useMe } from "@/hooks/useMe"
+import { useLocalStorage } from "@/hooks/useLocalStorage"
 
 /** 閉じた状態を保持するキー */
 const DISMISSED_KEY = "BannerDismissed"
-
-/** ブラウザの設定で保存領域を使えない場合があるため、失敗しても表示を妨げない */
-const readDismissed = () => {
-  try {
-    return localStorage.getItem(DISMISSED_KEY) === "true"
-  } catch {
-    return false
-  }
-}
-
-const saveDismissed = () => {
-  try {
-    localStorage.setItem(DISMISSED_KEY, "true")
-  } catch {
-    // 保存できない場合は、このページを開いている間だけ非表示にする
-  }
-}
 
 /**
  * Topページのバナー
@@ -31,16 +14,12 @@ const saveDismissed = () => {
 export const TopBanner = () => {
   const { isLoggedIn, isLoading } = useMe()
 
-  // localStorageはサーバーでは読めないため、初期値は非表示にして描画後に反映する
-  const [isDismissed, setIsDismissed] = useState(true)
-
-  useEffect(() => {
-    setIsDismissed(readDismissed())
-  }, [])
+  // localStorageはサーバーでは読めないため、サーバーと最初の描画では非表示にし、その後に保存値を反映する
+  const [storedDismissed, setStoredDismissed] = useLocalStorage(DISMISSED_KEY, "true")
+  const isDismissed = storedDismissed === "true"
 
   const handleDismiss = () => {
-    setIsDismissed(true)
-    saveDismissed()
+    setStoredDismissed("true")
   }
 
   if (isLoading || isLoggedIn || isDismissed) return null
