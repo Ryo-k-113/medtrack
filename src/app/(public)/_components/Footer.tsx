@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { ThreadsIcon, XIcon } from "./SocialIcons"
+import { Logo } from "@/components/Logo/Logo"
 
 /** お問い合わせ先（Googleフォーム） */
 const CONTACT_FORM_URL = "https://forms.gle/bez83YenoKxbWNrV9"
@@ -28,7 +29,9 @@ export const Footer = () => {
       <div className="mx-auto max-w-7xl px-5 py-5 md:px-10 md:py-8">
         {/* 上段：サービス名・SNS・リンク */}
         <div className="grid grid-cols-[1fr_auto] items-start gap-x-6 gap-y-4">
-          <p className="text-lg font-bold md:text-2xl">MedTrack</p>
+          <p className="text-lg md:text-2xl">
+            <Logo variant="inverse" />
+          </p>
 
           <ul className="col-start-1 flex items-center gap-3">
             {SOCIAL_LINKS.map(({ href, label, Icon }) => (

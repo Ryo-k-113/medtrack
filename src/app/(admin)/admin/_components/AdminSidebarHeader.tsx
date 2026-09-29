@@ -4,6 +4,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Logo } from "@/components/Logo/Logo"
 
 
 export const AdminSidebarHeader = () => {
@@ -14,8 +15,8 @@ export const AdminSidebarHeader = () => {
       open ? "justify-between" : "justify-center"
     }`}>
       {open && (
-        <div className="font-bold text-primary text-2xl px-2">
-          MedTrack
+        <div className="text-2xl px-2">
+          <Logo />
         </div>
       )}
       <SidebarTrigger className="h-8 w-8 border border-border shrink-0" />

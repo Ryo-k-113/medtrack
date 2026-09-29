@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { FormInput } from "@/components/Form/FormInput"
 import { PasswordInput } from "@/components/Form/PasswordInput"
 import { authSchema, type AuthFormData, type CurrentUser } from "@/types/auth"
+import { Logo } from "@/components/Logo/Logo"
 
 
 export const AdminLoginForm = () => {
@@ -72,7 +73,9 @@ export const AdminLoginForm = () => {
 
             {/* タイトル */}
             <div className="mb-12">
-              <h1 className="text-4xl font-bold text-primary">MedTrack</h1>
+              <h1 className="text-4xl">
+                <Logo />
+              </h1>
               <p className="text-lg mt-2">
                 管理者ログイン
               </p>

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { BaseDropdown } from "@/components/Dropdown/BaseDropdown"
 import { UserMenuItems } from "./userMenuItems"
+import { Logo } from "@/components/Logo/Logo"
 import { LogIn, UserPlus } from "lucide-react"
 
 /** ヘッダーのメニューの見た目（ログイン中・未ログインで共通） */
@@ -116,8 +117,10 @@ export const Header = () => {
     <header className="sticky left-0 right-0 top-0 z-50 border-b  backdrop-blur-sm transition-all">
       <div className="flex size-full items-center justify-between px-5 py-3 md:px-10 md:py-4">
         {/* ロゴは全ページ共通のため見出しにしない（h1は各ページの主題に使う） */}
-        <div className="text-xl font-bold text-primary md:text-3xl">
-          <Link href="/">MedTrack</Link>
+        <div className="text-xl md:text-2xl">
+          <Link href="/" className="block">
+            <Logo />
+          </Link>
         </div>
 
         {!isLoading && (
