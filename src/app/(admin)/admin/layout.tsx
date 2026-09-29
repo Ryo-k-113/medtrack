@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import { Pill, Building, FlaskConical, Ruler, Package, Timer } from 'lucide-react';
+import { Logo } from "@/components/Logo/Logo"
 
 
 export default function AdminLayout({
@@ -116,7 +117,9 @@ export default function AdminLayout({
 
           {/* モバイルのみ */}
           <header className="flex justify-between h-14 items-center gap-4 border-b border-border px-4 bg-background md:hidden shrink-0">
-              <h1 className="font-bold text-xl text-primary">MedTrack</h1>
+              <h1 className="text-xl">
+                <Logo />
+              </h1>
               <SidebarTrigger />
           </header>
 
