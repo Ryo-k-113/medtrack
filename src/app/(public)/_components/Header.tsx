@@ -118,7 +118,7 @@ export const Header = () => {
       <div className="flex size-full items-center justify-between px-5 py-3 md:px-10 md:py-4">
         {/* ロゴは全ページ共通のため見出しにしない（h1は各ページの主題に使う） */}
         <div className="text-xl md:text-2xl">
-          <Link href="/">
+          <Link href="/" className="block">
             <Logo />
           </Link>
         </div>

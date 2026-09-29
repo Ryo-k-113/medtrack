@@ -27,7 +27,7 @@ export const Logo = ({ variant = "default", className }: LogoProps) => {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2",
+        "flex w-fit items-center gap-2",
         variant === "default" ? "text-primary" : "text-white",
         className,
       )}
