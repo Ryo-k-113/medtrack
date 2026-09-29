@@ -47,6 +47,7 @@ dev.db
 
 # claude code local settings
 .claude/settings.local.json
+.claude/launch.json
 
 # seed の元データ（ライセンス確認前・サイズが大きいため）
 /prisma/seed/raw/

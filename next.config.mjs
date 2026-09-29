@@ -24,13 +24,6 @@ export default withSentryConfig(nextConfig, {
   // Sentryへの利用統計の送信は行わない
   telemetry: false,
 
-  webpack: {
-    // 定期実行の監視（App RouterのRoute Handlerには未対応のため、現状は効果なし）
-    automaticVercelMonitors: true,
-
-    treeshake: {
-      // 本番のバンドルからSDKのデバッグ用ログを取り除く
-      removeDebugLogging: true,
-    },
-  },
+  // webpack向けの設定（定期実行の監視・デバッグ用ログの除去）はTurbopackのビルドでは効かないため置かない
+  // 定期実行の状況は管理画面のバッチ履歴で確認する
 });
