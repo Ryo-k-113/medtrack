@@ -84,6 +84,10 @@ export type DrugEditPackageUnitCard = Pick<PackageUnit,
 /** 医薬品情報と包装取得のレスポンス型 */
 export type GetDrugEditResponse = {
   data: Drug & {
+    GenericName: { id: number; name: string }
+    Unit: { id: number; name: string }
+    SalesCompany: { id: number; name: string }
+    ManufacturingCompany: { id: number; name: string }
     PackageUnits: DrugEditPackageUnitCard[]
   }
 }

@@ -9,25 +9,15 @@ import { FormProductSection } from "@/app/(admin)/admin/drugs/_components/FormPr
 import { DrugEditActions } from "./DrugEditActions"
 import { DrugEditFormSkeleton } from "./DrugEditFormSkeleton"
 import { fetcher } from "@/utils/fetcher"
-import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
 import { useAdminDrug } from "../_hooks/useAdminDrug"
 import { drugEditFormSchema, type DrugEditFormData, type DrugEditFormInput } from "@/types/admin/drug";
-
+import { toSelectOption } from "@/utils/selectOption"
 
 
 export const DrugEditForm = () => {
   const router = useRouter()
 
   const [isDeleting, setIsDeleting] = useState(false)
-
-  // 製薬会社、規格単位、成分名の一覧取得
-  const {
-    companyOptions,
-    unitOptions,
-    genericNameOptions,
-    isLoading: isOptionsLoading,
-    error: optionsError,
-  } = useDrugFormOptions()
 
   //製品と包装データの取得
   const { drugId, drug, isDrugLoading, mutate, error } = useAdminDrug()
@@ -86,12 +76,12 @@ export const DrugEditForm = () => {
       setIsDeleting(false)
     }
   }
-  
+
   // ローディング表示
-  if (isDrugLoading || isOptionsLoading) return <DrugEditFormSkeleton />
+  if (isDrugLoading) return <DrugEditFormSkeleton />
 
   // エラー表示
-  if (error || optionsError) return <div>エラーが発生しました</div>
+  if (error) return <div>エラーが発生しました</div>
 
   return (
     <div>
@@ -100,10 +90,12 @@ export const DrugEditForm = () => {
 
           {/* 製品情報 */}
           <div className="py-10">
+            {/* 登録済みの値 */}
             <FormProductSection
-              companyOptions={companyOptions}
-              unitOptions={unitOptions}
-              genericNameOptions={genericNameOptions}
+              registeredGenericName={toSelectOption(drug?.GenericName)}
+              registeredUnit={toSelectOption(drug?.Unit)}
+              registeredSalesCompany={toSelectOption(drug?.SalesCompany)}
+              registeredManufacturingCompany={toSelectOption(drug?.ManufacturingCompany)}
               editActions={
                 <DrugEditActions 
                 onDelete={handleDelete} 

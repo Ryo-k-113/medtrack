@@ -1,25 +1,49 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client"
 import type {  GetCompaniesResponse, CreateCompanyRequest, CreateCompanyResponse } from "@/types/admin/company"
 import { getAdminUser } from "@/app/api/admin/_lib/getAdminUser"
 import { getUniqueErrorMessage } from "@/app/api/admin/_lib/getUniqueErrorMessage"
 
 
-/** 製薬会社一覧の取得 */
-export const GET = async () => {
+/**
+ * 製薬会社一覧の取得
+ * limit を指定しない場合は全件を返す（製薬会社の管理画面）
+ * search・limit を指定した場合は、名前で絞り込んで上限まで返す（医薬品フォームの選択欄）
+ */
+export const GET = async (request: NextRequest) => {
 
   // 認証チェック
   const { errorResponse } = await getAdminUser()
   if (errorResponse) return errorResponse
 
   try {
+    const { searchParams } = new URL(request.url)
 
-    const companies = await prisma.pharmaceuticalCompany.findMany({
-      orderBy: { id: "asc" },
-    })
+    // 取得件数の上限（未指定なら全件）
+    const limitParam = searchParams.get("limit")
+    const limit = limitParam ? Math.min(50, Math.max(1, Number(limitParam) || 10)) : undefined
+
+    // 検索キーワード（会社名で検索）
+    const search = searchParams.get("search")?.trim()
+
+    const where: Prisma.PharmaceuticalCompanyWhereInput = {
+      ...(search && {
+        name: { contains: search, mode: "insensitive" },
+      }),
+    }
+
+    const [companies, totalCount] = await Promise.all([
+      prisma.pharmaceuticalCompany.findMany({
+        where,
+        orderBy: { id: "asc" },
+        take: limit,
+      }),
+      prisma.pharmaceuticalCompany.count({ where }),
+    ])
 
     // レスポンスを返す
-    return NextResponse.json<GetCompaniesResponse>({ companies }, { status: 200 })
+    return NextResponse.json<GetCompaniesResponse>({ companies, totalCount }, { status: 200 })
     
   } catch (error) {
     if (error instanceof Error)

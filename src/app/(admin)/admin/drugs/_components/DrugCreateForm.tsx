@@ -12,15 +12,10 @@ import { createDrugFormSchema,type CreateDrugFormData, type CreateDrugFormInput,
 import {  DEFAULT_DRUG_FORM_VALUES } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { fetcher } from "@/utils/fetcher"
 import { useRouter } from "next/navigation"
-import { useDrugFormOptions } from "@/hooks/useDrugFormOptions"
 
 
 export const DrugCreateForm = () => {
   const router = useRouter();
-
-  // 製薬会社、規格単位、成分名の一覧取得
-  const { companyOptions, unitOptions, genericNameOptions, isLoading } = useDrugFormOptions()
-
 
   const form = useForm<CreateDrugFormInput, unknown, CreateDrugFormData>({
     mode: "onBlur",
@@ -52,8 +47,6 @@ export const DrugCreateForm = () => {
       }
     }
   }
-  
-  if (isLoading) return <div>読み込み中...</div>
 
   return (
     <div>
@@ -66,11 +59,7 @@ export const DrugCreateForm = () => {
             className="space-y-8"
           >
             {/*  製品エリア */}
-            <FormProductSection 
-              companyOptions={companyOptions}
-              unitOptions={unitOptions}
-              genericNameOptions={genericNameOptions}
-            />
+            <FormProductSection />
 
             {/* 包装規格エリア */}
             <FormPackageUnitSection />

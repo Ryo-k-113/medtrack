@@ -13,6 +13,7 @@ export type Company = PharmaceuticalCompany
 /** 製薬会社一覧取得のレスポンス型 */
 export type GetCompaniesResponse = {
   companies: Company[]
+  totalCount: number
 }
 
 

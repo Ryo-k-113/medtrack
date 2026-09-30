@@ -1,7 +1,7 @@
 "use client"
 
 import { useQueryStates, parseAsInteger, parseAsString } from "nuqs"
-import { useDataFetch } from "@/hooks/useDataFetch"
+import { usePaginatedFetch } from "@/hooks/usePaginatedFetch"
 
 
 type UseOffsetPaginatedFetchOptions = {
@@ -29,23 +29,12 @@ export const useOffsetPaginatedFetch = <T extends { totalCount?: number }>(
 
   const { page, limit: pageSize, search } = params
 
-  // クエリパラメータの組み立て
-  const query = new URLSearchParams({
-    page: String(page),
-    limit: String(pageSize),
-    ...(search && { search }),
+  // データ取得（URLクエリの値で取得する）
+  const { data, totalPages, isLoading, error, mutate } = usePaginatedFetch<T>(baseUrl, {
+    page,
+    limit: pageSize,
+    search,
   })
-
-  // データ取得
-  const { data, isLoading, error, mutate } = useDataFetch<T>(
-    `${baseUrl}?${query.toString()}`
-  )
-
-  // データ件数の取得
-  const totalCount = data?.totalCount ?? 0
-
-  // 表示件数からページ数を算出
-  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
 
   // 表示件数の変更（表示件数が変わったら1ページ目に戻す）
