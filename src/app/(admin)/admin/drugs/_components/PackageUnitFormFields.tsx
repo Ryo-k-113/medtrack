@@ -1,7 +1,6 @@
 "use client"
 import { FormInput } from "@/components/Form/FormInput"
 import { FormSelectBox } from "@/components/Form/FormSelectBox"
-import { FormDatePicker } from "@/components/Form/FormDatePicker"
 import { FormPublishStatusToggle } from "@/app/(admin)/admin/drugs/_components/FormPublishStatusToggle"
 import { SHIPPING_STATUS_OPTIONS } from "../_constants/drug"
 import { cn } from "@/lib/utils"
@@ -9,20 +8,17 @@ import { cn } from "@/lib/utils"
 
 type PackageUnitFormFieldsProps = {
   showShippingStatus?: boolean
-  showDateFields?: boolean
-  className?: string   
-  basicClassName?: string   
-  codeClassName?: string    
-  dateClassName?: string 
+  className?: string
+  basicClassName?: string
+  codeClassName?: string
 }
 
+// 販売中止日・販売移管日は告知の登録で更新
 export const PackageUnitFormFields = ({
   showShippingStatus = false,
-  showDateFields = false,
   className,
   basicClassName,
   codeClassName,
-  dateClassName,
 }: PackageUnitFormFieldsProps) => {
   return (
     <div className={cn("space-y-4 py-4", className)}>
@@ -50,7 +46,7 @@ export const PackageUnitFormFields = ({
           />
         )}
 
-        {/* 内訳・注記（包装名だけで分からない中身と、同名の包装の見分け） */}
+        {/* 内訳・注記（同名の包装の見分けと中身） */}
         <FormInput
           name="breakdown"
           label="内訳"
@@ -72,19 +68,6 @@ export const PackageUnitFormFields = ({
         <FormInput name="hotCode" label="HOTコード" />
       </div>
 
-      {/* 日付情報 */}
-      {showDateFields && (
-        <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4", dateClassName)}>
-          <FormDatePicker
-            name="discontinuedDate"
-            label="販売中止日"
-          />
-          <FormDatePicker
-            name="salesTransferDate"
-            label="販売移管日"
-          />
-        </div>
-      )}
     </div>
   )
 }
