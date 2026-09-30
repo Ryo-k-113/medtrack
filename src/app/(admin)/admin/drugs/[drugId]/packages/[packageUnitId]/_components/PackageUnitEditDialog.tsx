@@ -8,7 +8,7 @@ import { Pencil, Save } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
-import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
+import { PackageUnitFormFields, SHIPPING_STATUS_CORRECTION_NOTE } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
 
 import { useAdminPackageUnit } from "../_hooks/useAdminPackageUnit"
 import { fetcher } from "@/utils/fetcher"
@@ -32,6 +32,7 @@ export const PackageUnitEditDialog = () => {
       breakdown: packageUnit?.breakdown ?? "",
       variant: packageUnit?.variant ?? "",
       publishStatus: packageUnit?.publishStatus ?? "DRAFT",
+      currentShippingStatus: packageUnit?.currentShippingStatus ?? "",
       gs1SalesCode: packageUnit?.gs1SalesCode ?? "",
       gs1DispensingCode: packageUnit?.gs1DispensingCode ?? "",
       unifiedCode: packageUnit?.unifiedCode ?? "",
@@ -110,7 +111,10 @@ export const PackageUnitEditDialog = () => {
         >  
           {/* 編集フォーム */}
           <form id="packageUnitEditForm" onSubmit={handleSubmit(onSubmit)}>
-            <PackageUnitFormFields />
+            <PackageUnitFormFields
+              showShippingStatus
+              shippingStatusDescription={SHIPPING_STATUS_CORRECTION_NOTE}
+            />
           </form>
         </BaseDialog>
     </FormProvider>

@@ -100,6 +100,7 @@ export const PUT = async (
       breakdown,
       variant,
       publishStatus,
+      currentShippingStatus,
       gs1SalesCode,
       gs1DispensingCode,
       hotCode,
@@ -117,6 +118,8 @@ export const PUT = async (
         breakdown: breakdown || null,
         variant: variant || null,
         publishStatus,
+        // データの誤りの修正用（実際の変更は告知の登録とバッチで反映する）
+        currentShippingStatus,
         gs1SalesCode,
         gs1DispensingCode: gs1DispensingCode || null,
         hotCode: hotCode || null,
