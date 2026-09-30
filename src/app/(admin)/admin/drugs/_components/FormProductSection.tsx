@@ -18,6 +18,7 @@ type FormProductSectionProps = {
   registeredUnit?: SelectOption | null;
   registeredSalesCompany?: SelectOption | null;
   registeredManufacturingCompany?: SelectOption | null;
+  showTransitionalMeasuresDate?: boolean;
   editActions?: React.ReactNode
 };
 
@@ -26,6 +27,7 @@ export const FormProductSection = ({
   registeredUnit,
   registeredSalesCompany,
   registeredManufacturingCompany,
+  showTransitionalMeasuresDate = false,
   editActions,
 }: FormProductSectionProps) => {
   // マスタ（成分名・規格単位・製薬会社）の候補は、入力した文字でAPIを検索して取得する
@@ -109,10 +111,13 @@ export const FormProductSection = ({
             required
           />
 
-          <FormDatePicker 
-            name="transitionalMeasuresDate"
-            label="経過措置日"
-          />
+          {/* 経過措置日は編集時のみ表示*/}
+          {showTransitionalMeasuresDate && (
+            <FormDatePicker
+              name="transitionalMeasuresDate"
+              label="経過措置日"
+            />
+          )}
         </div>
 
         {/* チェックボックス */}

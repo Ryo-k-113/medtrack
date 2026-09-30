@@ -58,6 +58,5 @@ export const DEFAULT_DRUG_FORM_VALUES: CreateDrugFormInput = {
   manufacturingCompanyId: "",
   isSelectMedical: false,
   isAuthorizedGeneric: false,
-  transitionalMeasuresDate: null,
   packageUnits: [DEFAULT_PACKAGE_UNIT],
 }
