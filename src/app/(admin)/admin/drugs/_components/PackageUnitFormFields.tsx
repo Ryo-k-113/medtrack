@@ -6,8 +6,14 @@ import { SHIPPING_STATUS_OPTIONS } from "../_constants/drug"
 import { cn } from "@/lib/utils"
 
 
+/** 包装の編集で出荷状況の欄に添える注意書き（実際の変更は告知から行う） */
+export const SHIPPING_STATUS_CORRECTION_NOTE =
+  "データの誤りの修正用です。出荷状況が実際に変わった場合は、告知を登録してください"
+
 type PackageUnitFormFieldsProps = {
   showShippingStatus?: boolean
+  /** 出荷状況の欄の下に表示する説明 */
+  shippingStatusDescription?: string
   className?: string
   basicClassName?: string
   codeClassName?: string
@@ -16,6 +22,7 @@ type PackageUnitFormFieldsProps = {
 // 販売中止日・販売移管日は告知の登録で更新
 export const PackageUnitFormFields = ({
   showShippingStatus = false,
+  shippingStatusDescription,
   className,
   basicClassName,
   codeClassName,
@@ -42,6 +49,7 @@ export const PackageUnitFormFields = ({
             name="currentShippingStatus"
             label="出荷ステータス"
             options={SHIPPING_STATUS_OPTIONS}
+            description={shippingStatusDescription}
             required
           />
         )}

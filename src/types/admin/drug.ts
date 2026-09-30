@@ -173,6 +173,7 @@ export type PackageUnitDetailResponse = {
 //* 包装編集フォームのスキーマ */
 export const packageUnitEditFormSchema = packageUnitFormSchema.pick({
   name: true,
+  currentShippingStatus: true,
   breakdown: true,
   variant: true,
   publishStatus: true,

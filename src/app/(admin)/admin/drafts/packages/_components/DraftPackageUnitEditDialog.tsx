@@ -6,7 +6,7 @@ import { toast } from "sonner"
 import { Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BaseDialog } from "@/components/Dialog/BaseDialog"
-import { PackageUnitFormFields } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
+import { PackageUnitFormFields, SHIPPING_STATUS_CORRECTION_NOTE } from "@/app/(admin)/admin/drugs/_components/PackageUnitFormFields"
 import { fetcher } from "@/utils/fetcher"
 import { packageUnitEditFormSchema, type PackageUnitEditFormData, type PackageUnitEditFormInput } from "@/types/admin/drug"
 import type { DraftPackageUnit } from "@/types/admin/draft"
@@ -35,6 +35,7 @@ export const DraftPackageUnitEditDialog = ({
       breakdown: packageUnit?.breakdown ?? "",
       variant: packageUnit?.variant ?? "",
       publishStatus: packageUnit?.publishStatus ?? "DRAFT",
+      currentShippingStatus: packageUnit?.currentShippingStatus ?? "",
       gs1SalesCode: packageUnit?.gs1SalesCode ?? "",
       gs1DispensingCode: packageUnit?.gs1DispensingCode ?? "",
       unifiedCode: packageUnit?.unifiedCode ?? "",
@@ -105,7 +106,10 @@ export const DraftPackageUnitEditDialog = ({
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4 py-2"
         >
-          <PackageUnitFormFields />
+          <PackageUnitFormFields
+            showShippingStatus
+            shippingStatusDescription={SHIPPING_STATUS_CORRECTION_NOTE}
+          />
          
         </form>
       </BaseDialog>
