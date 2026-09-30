@@ -27,6 +27,11 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
         id: parseInt(drugId), 
       },
       include: {
+        // 成分名・規格単位・製薬会社の表示名（編集フォームの選択済み）
+        GenericName: { select: { id: true, name: true } },
+        Unit: { select: { id: true, name: true } },
+        SalesCompany: { select: { id: true, name: true } },
+        ManufacturingCompany: { select: { id: true, name: true } },
         // 包装情報の表示項目
         PackageUnits: {
           select: {
