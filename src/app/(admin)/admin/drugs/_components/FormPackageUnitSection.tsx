@@ -5,23 +5,7 @@ import { useFormContext } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { FormPackageUnitCard } from "./FormPackageUnitCard"
-
-
-//包装を追加した時の初期値
-const emptyPackageUnit = {
-  name: "",
-  currentShippingStatus: "",
-  announcementDate: null,
-  effectiveDate: null,
-  gs1DispensingCode: "",
-  gs1SalesCode: "",
-  unifiedCode: "",
-  hotCode: "",
-  salesTransferDate: null,
-  discontinuedDate: null,
-  transitionalDate: null,
-  publishStatus: "DRAFT",
-}
+import { DEFAULT_PACKAGE_UNIT } from "@/app/(admin)/admin/drugs/_constants/drug"
 
 export const FormPackageUnitSection = () => {
   const { control } = useFormContext() 
@@ -51,7 +35,8 @@ export const FormPackageUnitSection = () => {
         type="button"
         variant="outline"
         className="w-full border-dashed border-2"
-        onClick={() => append(emptyPackageUnit)}
+        // 1つ目の包装と同じ初期値で追加する
+        onClick={() => append(DEFAULT_PACKAGE_UNIT)}
       >
         <Plus className="h-4 w-4 mr-2" />
         包装を追加する

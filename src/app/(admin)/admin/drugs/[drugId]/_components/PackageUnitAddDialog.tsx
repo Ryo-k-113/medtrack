@@ -100,10 +100,8 @@ export const PackageUnitAddDialog = () => {
             {/* 包装フォームアイテム */}
             <PackageUnitFormFields
               showShippingStatus
-              showDateFields
               basicClassName="md:grid-cols-2 w-4/5"
               codeClassName="md:grid-cols-5"
-              dateClassName="md:grid-cols-5"
             />
           </form>
         </FormProvider>

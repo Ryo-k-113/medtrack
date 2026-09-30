@@ -39,6 +39,10 @@ export const DrugEditForm = () => {
       manufacturingCompanyId: drug?.manufacturingCompanyId
         ? String(drug.manufacturingCompanyId)
         : "",
+      // APIは日付を文字列で返すため、日付選択で扱える Date に戻す
+      transitionalMeasuresDate: drug?.transitionalMeasuresDate
+        ? new Date(drug.transitionalMeasuresDate)
+        : null,
     }
   })
 
@@ -96,6 +100,7 @@ export const DrugEditForm = () => {
               registeredUnit={toSelectOption(drug?.Unit)}
               registeredSalesCompany={toSelectOption(drug?.SalesCompany)}
               registeredManufacturingCompany={toSelectOption(drug?.ManufacturingCompany)}
+              showTransitionalMeasuresDate
               editActions={
                 <DrugEditActions 
                 onDelete={handleDelete} 

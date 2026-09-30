@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button"
 import { FormInput } from "@/components/Form/FormInput"
 import { FormSelectBox } from "@/components/Form/FormSelectBox"
-import { FormDatePicker } from "@/components/Form/FormDatePicker"
 import { FormPublishStatusToggle } from "./FormPublishStatusToggle"
 import { SHIPPING_STATUS_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { Trash2 } from "lucide-react"
@@ -84,18 +83,7 @@ export const FormPackageUnitCard = ({
         />
       </div>
 
-      {/* 日付情報 */}
-      <div className="p-4 grid grid-cols-1 md:grid-cols-5 gap-4">
-        <FormDatePicker
-          name={`packageUnits.${index}.discontinuedDate`}
-          label="販売中止日"
-        />
-        <FormDatePicker
-          name={`packageUnits.${index}.salesTransferDate`}
-          label="販売移管日"
-        />
-      </div>
-
+      {/* 販売中止日・販売移管日は新規登録の時点では決まっていないため置かない（決まったら告知として登録する） */}
     </div>
   )
 }
