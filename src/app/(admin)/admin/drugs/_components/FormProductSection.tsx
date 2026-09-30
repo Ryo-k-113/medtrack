@@ -2,25 +2,39 @@
 import { FormInput } from "@/components/Form/FormInput"
 import { FormSelectBox } from "@/components/Form/FormSelectBox"
 import { FormCheckbox } from "@/components/Form/FormCheckbox"
-import { FormCombobox } from "@/components/Form/FormCombobox"
 import { PRODUCT_TYPE_OPTIONS } from "@/app/(admin)/admin/drugs/_constants/drug"
 import { SelectOption } from "@/types/ui/select"
 import { FormDatePicker } from "@/components/Form/FormDatePicker"
+import { FormAsyncCombobox } from "@/components/Form/FormAsyncCombobox"
+import { useGenericNameOptions } from "@/app/(admin)/admin/drugs/_hooks/useGenericNameOptions"
+import { useUnitOptions } from "@/app/(admin)/admin/drugs/_hooks/useUnitOptions"
+import { useCompanyOptions } from "@/app/(admin)/admin/drugs/_hooks/useCompanyOptions"
 
 
+// registered〜 は編集中の医薬品に登録済みの値（新規登録では渡さない）
+// 候補の検索結果に無くても、選択欄に名前を表示するために使う
 type FormProductSectionProps = {
-  companyOptions: readonly SelectOption[];
-  unitOptions: readonly SelectOption[];
-  genericNameOptions: readonly SelectOption[];
+  registeredGenericName?: SelectOption | null;
+  registeredUnit?: SelectOption | null;
+  registeredSalesCompany?: SelectOption | null;
+  registeredManufacturingCompany?: SelectOption | null;
   editActions?: React.ReactNode
 };
 
 export const FormProductSection = ({
-  companyOptions,
-  unitOptions,
-  genericNameOptions,
+  registeredGenericName,
+  registeredUnit,
+  registeredSalesCompany,
+  registeredManufacturingCompany,
   editActions,
 }: FormProductSectionProps) => {
+  // マスタ（成分名・規格単位・製薬会社）の候補は、入力した文字でAPIを検索して取得する
+  // 検索キーワードは選択欄ごとのため、販売会社と製造会社もそれぞれ呼び出す
+  const genericNameSearch = useGenericNameOptions()
+  const unitSearch = useUnitOptions()
+  const salesCompanySearch = useCompanyOptions()
+  const manufacturingCompanySearch = useCompanyOptions()
+
   return (
     <div className="border rounded-md bg-background shadow-sm">
       <div className="flex justify-between items-center border-b px-6 py-4">
@@ -37,10 +51,11 @@ export const FormProductSection = ({
             placeholder="例: ロキソニン錠" 
             required
           />
-          <FormCombobox 
-            name="genericNameId" 
-            label="成分名" 
-            options={genericNameOptions} 
+          <FormAsyncCombobox
+            name="genericNameId"
+            label="成分名"
+            search={genericNameSearch}
+            registeredOption={registeredGenericName}
             required
           />
           <FormInput 
@@ -49,10 +64,11 @@ export const FormProductSection = ({
             type="number" 
             placeholder="例: 10.5" 
           />
-          <FormCombobox 
-            name="unitId" 
-            label="規格単位" 
-            options={unitOptions} 
+          <FormAsyncCombobox
+            name="unitId"
+            label="規格単位"
+            search={unitSearch}
+            registeredOption={registeredUnit}
             required
           />
         </div>
@@ -68,16 +84,18 @@ export const FormProductSection = ({
             name="drugPriceListingCode" 
             label="薬価収載コード" 
           />
-          <FormCombobox 
-            name="salesCompanyId" 
-            label="販売会社" 
-            options={companyOptions} 
+          <FormAsyncCombobox
+            name="salesCompanyId"
+            label="販売会社"
+            search={salesCompanySearch}
+            registeredOption={registeredSalesCompany}
             required
           />
-          <FormCombobox 
-            name="manufacturingCompanyId" 
-            label="製造会社" 
-            options={companyOptions} 
+          <FormAsyncCombobox
+            name="manufacturingCompanyId"
+            label="製造会社"
+            search={manufacturingCompanySearch}
+            registeredOption={registeredManufacturingCompany}
             required
           />
         </div>
