@@ -25,11 +25,10 @@ export const DrugCreateForm = () => {
 
   const { 
     handleSubmit,
-    formState: { isSubmitting ,errors} 
+    formState: { isSubmitting }
   } = form;
-  console.log(errors)
+
   const onSubmit = async (data: CreateDrugFormData) => {
-    console.log(data)
     try {
       const response = await fetcher({
         url: "/api/admin/drugs",
