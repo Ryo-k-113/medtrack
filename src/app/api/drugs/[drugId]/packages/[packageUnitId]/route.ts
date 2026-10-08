@@ -56,7 +56,14 @@ export const GET = async (
         },
         shippingAnnouncements: {
           where: { publishStatus: "PUBLISHED" },
-          select: { id: true, announcedDate: true, effectiveDate: true, announceType: true },
+          select: {
+            id: true,
+            announcedDate: true,
+            effectiveDate: true,
+            announceType: true,
+            isAfterStockDepletion: true,
+            processStatus: true,
+          },
           orderBy: { announcedDate: "desc" },
         },
       },

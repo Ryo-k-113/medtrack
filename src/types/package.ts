@@ -22,7 +22,10 @@ export type PackageDetailResult = Pick<
       "id" | "name" | "breakdown" | "variant" | "currentShippingStatus"
     >[]
   }
-  shippingAnnouncements: Pick<ShippingAnnouncement, "id" | "announcedDate" | "effectiveDate" | "announceType">[]
+  shippingAnnouncements: Pick<
+    ShippingAnnouncement,
+    "id" | "announcedDate" | "effectiveDate" | "announceType" | "isAfterStockDepletion" | "processStatus"
+  >[]
 }
 
 /** 包装詳細取得のレスポンス型 */
