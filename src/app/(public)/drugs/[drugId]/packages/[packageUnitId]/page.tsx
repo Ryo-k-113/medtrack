@@ -18,7 +18,7 @@ export default function PackageDetailPage() {
   if (!isLoading && !packageUnit) notFound()
 
   return (
-    <PageContainer className="space-y-6">
+    <PageContainer className="space-y-4 md:space-y-6">
 
       {/* 医薬品の基本情報 */}
       <DrugSummary />

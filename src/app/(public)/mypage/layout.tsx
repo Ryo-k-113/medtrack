@@ -88,7 +88,7 @@ export default function MyPageLayout({
       </nav>
 
       {/* コンテンツ */}
-      <main className="min-w-0 flex-1 px-5 py-6 md:px-0 md:py-0">
+      <main className="min-w-0 flex-1 px-4 py-6 md:px-0 md:py-0">
         {children}
       </main>
     </div>

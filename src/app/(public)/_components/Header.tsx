@@ -115,7 +115,7 @@ export const Header = () => {
 
   return (
     <header className="sticky left-0 right-0 top-0 z-50 border-b  backdrop-blur-sm transition-all">
-      <div className="flex size-full items-center justify-between px-5 py-3 md:px-10 md:py-4">
+      <div className="flex size-full items-center justify-between px-4 py-3 md:px-10 md:py-4">
         {/* ロゴは全ページ共通のため見出しにしない（h1は各ページの主題に使う） */}
         <div className="text-xl md:text-2xl">
           <Link href="/" className="block">
