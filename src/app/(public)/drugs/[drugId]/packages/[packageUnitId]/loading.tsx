@@ -7,7 +7,7 @@ import { PackageShippingAnnouncementsSkeleton } from "./_components/PackageShipp
 
 export default function PackageDetailLoading() {
   return (
-    <PageContainer className="space-y-6">
+    <PageContainer className="space-y-4 md:space-y-6">
       <DrugSummarySkeleton />
       <SelectedPackageSectionSkeleton />
       <DrugInfoSectionSkeleton />

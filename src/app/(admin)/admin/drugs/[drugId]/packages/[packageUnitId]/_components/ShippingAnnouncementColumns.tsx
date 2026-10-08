@@ -4,6 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { EyeOff, Pencil, PencilOff } from "lucide-react"
 import { formatDate } from "@/utils/format"
 import { AnnounceTypeBadge } from "@/components/Badge/AnnounceTypeBadge"
+import { StockDepletionTag } from "@/components/Badge/StockDepletionTag"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { ShippingAnnouncement } from "@/types/drug"
@@ -63,11 +64,14 @@ export const ShippingAnnouncementColumns = ({
       const announceType = info.getValue()
       const isInactive = info.row.original.publishStatus === "INACTIVE"
       return announceType ? (
-        <AnnounceTypeBadge
-          status={announceType}
-          inactive={isInactive}
-          className="rounded-md"
-        />
+        <div className="flex flex-wrap items-center gap-1">
+          <AnnounceTypeBadge
+            status={announceType}
+            inactive={isInactive}
+            className="rounded-md"
+          />
+          {info.row.original.isAfterStockDepletion && <StockDepletionTag />}
+        </div>
       ) : "-"
     },
   }),

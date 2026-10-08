@@ -10,6 +10,8 @@ export type PackageAnnouncementItem = {
   announceType: AnnounceType | null
   announcedDate: string | null
   effectiveDate: string | null
+  /** 在庫消尽後に適用される告知か（適用日は目安） */
+  isAfterStockDepletion: boolean
   PackageUnit: {
     id: number
     name: string

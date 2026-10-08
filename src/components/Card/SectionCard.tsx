@@ -20,7 +20,7 @@ export const SectionCard = ({
   cardClassName,
   className,
 }: SectionCardProps) => (
-  <Card className={cn("bg-background p-4 text-foreground shadow-sm md:rounded-2xl md:p-6", cardClassName)}>
+  <Card className={cn("rounded-xl bg-background p-4 text-foreground shadow-sm md:rounded-2xl md:p-6", cardClassName)}>
     {(title || headerAction) && (
       <CardHeader className="mb-4 flex-row items-center justify-between space-y-0 p-0">
         {title && (

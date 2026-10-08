@@ -26,7 +26,7 @@ const EXTERNAL_LINK_PROPS = { target: "_blank", rel: "noopener noreferrer" }
 export const Footer = () => {
   return (
     <footer className="mt-auto bg-primary/90 text-white">
-      <div className="mx-auto max-w-7xl px-5 py-5 md:px-10 md:py-8">
+      <div className="mx-auto max-w-7xl px-4 py-5 md:px-10 md:py-8">
         {/* 上段：サービス名・SNS・リンク */}
         <div className="grid grid-cols-[1fr_auto] items-start gap-x-6 gap-y-4">
           <p className="text-lg md:text-2xl">

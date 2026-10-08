@@ -1,4 +1,5 @@
 import Link from "next/link"
+import type { ReactNode } from "react"
 import { ChevronRight } from "lucide-react"
 import type { CurrentShippingStatus } from "@prisma/client"
 import { ShippingStatusBadge } from "@/components/Badge/ShippingStatusBadge"
@@ -6,12 +7,11 @@ import { cn } from "@/lib/utils"
 
 type PackageStatusCardProps = {
   name:       string
-  status:     CurrentShippingStatus
-  /** 内訳（「10錠×10」） */
-  breakdown?: string | null
-  /** 注記（「広口開栓型」）。同じ包装名を見分けるための補足 */
-  variant?:   string | null
+  status:     CurrentShippingStatus 
+  breakdown?: string | null  // 内訳（「10錠×10」）
+  variant?:   string | null // 注記:「広口開栓型」同じ包装名の時の補足 
   href?:       string
+  scheduleTags?: ReactNode[] // 予定のタグ（販売移管・販売中止など） 
   className?: string
 }
 
@@ -30,18 +30,22 @@ export const PackageStatusCard = ({
   breakdown,
   variant,
   href,
+  scheduleTags = [],
   className,
 }: PackageStatusCardProps) => {
 
   const baseClassName = cn(
-    "relative flex flex-col items-start justify-center gap-2 rounded-lg border p-4 font-semibold text-md",
+    "relative flex flex-col items-start justify-center gap-2 rounded-lg border p-3 font-semibold md:p-4 text-md",
     STATUS_CARD_CLASS[status],
     className,
   )
 
   const content = (
     <>
-      <ShippingStatusBadge status={status} className="rounded-md" />
+      <div className="flex flex-wrap items-center gap-2">
+        <ShippingStatusBadge status={status} className="rounded-md" />
+        <span className="hidden sm:contents">{scheduleTags}</span>
+      </div>
       <div className="group-hover:text-primary">
         <p>{name}</p>
 
@@ -49,6 +53,13 @@ export const PackageStatusCard = ({
         {variant && <p className="text-xs font-normal text-weak">{variant}</p>}
         {breakdown && <p className="text-xs font-normal text-weak">内訳 {breakdown}</p>}
       </div>
+
+      {/* モバイルは、包装名の下に区切り線を挟んで表示*/}
+      {scheduleTags.length > 0 && (
+        <div className="flex w-full flex-col items-start gap-1.5 border-t border-dashed pt-2 sm:hidden">
+          {scheduleTags}
+        </div>
+      )}
     </>
   )
 

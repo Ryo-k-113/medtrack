@@ -19,7 +19,7 @@ export const POST = async (
 
   try {
     const body: CreateAnnounceRequest = await request.json()
-    const { announceType, announcedDate, effectiveDate } = body
+    const { announceType, announcedDate, effectiveDate, isAfterStockDepletion } = body
 
     // 告示種別・告示日・適用日は必須
     const announcedAt = toUTCDate(announcedDate)
@@ -41,11 +41,13 @@ export const POST = async (
           announceType,
           announcedDate: announcedAt,
           effectiveDate: effectiveAt,
+          isAfterStockDepletion,
           packageUnitId: parseInt(packageUnitId),
         }
       })
 
       // 販売中止・販売移管の場合は日付を更新
+      // 在庫消尽後の告知も、目安の日付を入れる
       const updateData: Record<string, unknown> = {}
       if (announceType === "DISCONTINUED_SALE") {
         updateData.discontinuedDate = effectiveAt

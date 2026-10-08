@@ -189,6 +189,7 @@ model ShippingAnnouncement {
   announcedDate   DateTime                @map("announced_date") // 告示日
   effectiveDate   DateTime                @map("effective_date") // 適用日
   announceType    AnnounceType            @map("announce_type")
+  isAfterStockDepletion Boolean           @default(false) @map("is_after_stock_depletion") //在庫消尽後に適用される告知か
   publishStatus   AnnouncePublishStatus   @default(PUBLISHED) @map("publish_status")
   processStatus   ProcessStatus           @default(PENDING) @map("process_status")
   createdAt       DateTime                @default(now()) @map("created_at")

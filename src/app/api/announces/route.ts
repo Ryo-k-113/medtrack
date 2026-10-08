@@ -61,6 +61,7 @@ export const GET = async (request: NextRequest) => {
           announceType: true,
           announcedDate: true,
           effectiveDate: true,
+          isAfterStockDepletion: true,
           PackageUnit: {
             select: {
               id: true,

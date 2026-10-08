@@ -62,7 +62,7 @@ export const AuthForm = ({
 
   return (
     <div className="flex flex-1 flex-col items-center">
-      <div className="w-full max-w-md px-5 pt-10 sm:my-auto sm:py-10">
+      <div className="w-full max-w-md px-4 pt-10 sm:my-auto sm:py-10">
         <FormProvider {...form}>
           <div className="space-y-4 sm:space-y-8">
 

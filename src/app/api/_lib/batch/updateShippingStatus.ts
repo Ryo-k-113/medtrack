@@ -1,18 +1,9 @@
-import type { AnnounceType, BatchProcessingLog, CurrentShippingStatus } from "@prisma/client"
+import type { BatchProcessingLog } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { toBatchError } from "@/app/api/_lib/batch/toBatchError"
 import { STUCK_RUNNING_MINUTES } from "@/constants/batch"
 import { getJstToday } from "@/utils/date"
-
-
-/** 告知タイプを出荷状況へ変換する */
-const SHIPPING_STATUS_BY_ANNOUNCE_TYPE: Record<AnnounceType, CurrentShippingStatus> = {
-  NORMAL_SHIPMENT: "NORMAL_SHIPMENT",
-  LIMITED_SHIPMENT: "LIMITED_SHIPMENT",
-  SHIPMENT_SUSPENDED: "SHIPMENT_SUSPENDED",
-  DISCONTINUED_SALE: "DISCONTINUED_SALE",
-  TRANSFER_OF_SALE: "DISCONTINUED_SALE", // 販売移管は販売中止として扱う
-}
+import { SHIPPING_STATUS_BY_ANNOUNCE_TYPE } from "@/utils/announce"
 
 
 /** 出荷状況の更新の実行結果 */
