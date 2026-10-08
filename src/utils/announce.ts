@@ -22,8 +22,6 @@ const SCHEDULE_ANNOUNCE_TYPES: AnnounceType[] = ["DISCONTINUED_SALE", "TRANSFER_
 /**
  * 予定のタグに出す告知（販売中止・販売移管のみ）を、適用日の早い順に取り出す
  * - 未反映の告知：これからの予定として出す
- * - 反映済みの販売移管・在庫消尽後の販売中止：出荷状況がその告知の内容のままであれば、経緯として出し続ける
- *   （後から別の告知で出荷状況が変わった場合は出さない）
  * @param announcements - 包装の告知（公開中のもの）
  * @param currentStatus - 包装の現在の出荷状況
  */

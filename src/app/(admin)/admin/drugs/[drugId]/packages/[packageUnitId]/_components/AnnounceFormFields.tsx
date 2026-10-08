@@ -37,7 +37,7 @@ export const AnnounceFormFields = ({ className }: AnnounceFormFieldsProps) => {
       <FormCheckbox
         name="isAfterStockDepletion"
         label="在庫消尽後"
-        description="在庫がなくなり次第ステータスが変わります。適用日には目安の月初を入れます（「2026年12月頃」）。目安が無ければ告知日と同日に設定（「在庫消尽次第」と表示）"
+        description="在庫がなくなり次第ステータスが変わります。適用日には目安の月初を設定。目安が無ければ告知日と同日に設定"
       />
     </div>
   )

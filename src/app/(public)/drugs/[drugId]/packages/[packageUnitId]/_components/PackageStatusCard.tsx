@@ -7,14 +7,11 @@ import { cn } from "@/lib/utils"
 
 type PackageStatusCardProps = {
   name:       string
-  status:     CurrentShippingStatus
-  /** 内訳（「10錠×10」） */
-  breakdown?: string | null
-  /** 注記（「広口開栓型」）。同じ包装名を見分けるための補足 */
-  variant?:   string | null
+  status:     CurrentShippingStatus 
+  breakdown?: string | null  // 内訳（「10錠×10」）
+  variant?:   string | null // 注記:「広口開栓型」同じ包装名の時の補足 
   href?:       string
-  /** 予定のタグ（販売移管・販売中止など） */
-  scheduleTags?: ReactNode[]
+  scheduleTags?: ReactNode[] // 予定のタグ（販売移管・販売中止など） 
   className?: string
 }
 

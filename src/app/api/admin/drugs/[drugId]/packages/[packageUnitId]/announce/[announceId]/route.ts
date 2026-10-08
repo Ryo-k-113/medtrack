@@ -60,8 +60,7 @@ export const PUT = async (
         }
       })
 
-      // 販売中止・販売移管の場合は適用日に合わせて日付を更新
-      // 販売中止・販売移管から別の種別に変えた場合は、販売中止日、販売移管日を空にする
+      // 販売中止・販売移管の場合は適用日に合わせて日付を更新(告知種別が変わった場合は日付を空に)
       const updateData: Record<string, unknown> = {}
       if (announceType === "DISCONTINUED_SALE") {
         updateData.discontinuedDate = effectiveAt
