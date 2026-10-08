@@ -24,6 +24,7 @@ export const AnnounceForm = () => {
     defaultValues: {
       effectiveDate: null,
       announceType: null,
+      isAfterStockDepletion: false,
     }
   })
 

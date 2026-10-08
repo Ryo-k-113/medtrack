@@ -105,10 +105,10 @@ export const drugFormSchema = z.object({
 
 
 //----------------------------
-//  告示情報フォームのベーススキーマ
+//  告知情報フォームのベーススキーマ
 //----------------------------
 
-/** 告示情報のスキーマ */ 
+/** 告知情報のスキーマ */ 
 export const announceFormSchema = z.object({
   announcedDate: z
     .date()
@@ -119,12 +119,15 @@ export const announceFormSchema = z.object({
   effectiveDate: z
     .date()
     .nullable()
-    .refine((val) => val !== null, "実施日は必須です")
+    .refine((val) => val !== null, "適用日は必須です")
     .transform((date) => date.toISOString()),
 
   announceType: z
     .enum(AnnounceType)
     .nullable()
     .refine((val) => val !== null, "告示種別は必須です"),
+
+  // 在庫消尽後に適用される告知か
+  isAfterStockDepletion: z.boolean(),
 });
 

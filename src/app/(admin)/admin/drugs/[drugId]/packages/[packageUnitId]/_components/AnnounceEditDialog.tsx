@@ -41,6 +41,7 @@ export const AnnounceEditDialog = ({
         ? new Date(history.effectiveDate)
         : null,
       announceType: history?.announceType ?? null,
+      isAfterStockDepletion: history?.isAfterStockDepletion ?? false,
     }
   })
 
