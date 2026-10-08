@@ -1,6 +1,7 @@
 import type { CurrentShippingStatus } from "@prisma/client"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { STATUS_ICON } from "@/constants/statusChip"
 
 type ShippingStatusBadgeProps = {
   status: CurrentShippingStatus
@@ -31,9 +32,12 @@ export const ShippingStatusBadge = ({
   className,
 }: ShippingStatusBadgeProps) => {
   const { label, className: statusClassName } = SHIPPING_STATUS_MAP[status]
+  // 告知種別のバッジ・出荷状況の絞り込みと共通のアイコン
+  const Icon = STATUS_ICON[status]
 
   return (
-    <Badge className={cn("py-1",statusClassName, className)}>
+    <Badge className={cn("gap-1 whitespace-nowrap py-1", statusClassName, className)}>
+      <Icon className="h-3 w-3 shrink-0" aria-hidden="true" />
       {label}
     </Badge>
   )
