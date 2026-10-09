@@ -10,7 +10,7 @@ import { useAdminPackageUnit } from "./_hooks/useAdminPackageUnit"
 
 
 export default function AdminPackageUnitPage() {
-  const { drugId, packageUnit, isLoading } = useAdminPackageUnit()
+  const { drugId, packageUnit, drug, isLoading } = useAdminPackageUnit()
 
   // ローディング画面
   if(isLoading) return <AdminPackageUnitEditLoading />
@@ -21,6 +21,8 @@ export default function AdminPackageUnitPage() {
       {/* タイトルエリア */}
       <AdminPageTitle 
         title={packageUnit.name}
+        // どの製品の包装か分かるよう、包装名の下に製品名を出す
+        subtitle={drug?.name}
         backTo={`/admin/drugs/${drugId}`}
         backButtonText="製品詳細へ戻る"
       />
