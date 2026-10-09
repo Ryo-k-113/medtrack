@@ -30,6 +30,8 @@ type FormSelectBoxProps<T extends string> = {
   placeholder?: string;
   required?: boolean;
   description?: string;
+  /** 選択肢ごとの配色（選択肢と、選択後の入力欄に付ける。告示種別の色分けなど） */
+  optionClassNames?: Partial<Record<T, string>>;
   className?: string;
 };
 
@@ -40,6 +42,7 @@ export const FormSelectBox = <T extends string> ({
   placeholder = "選択してください",
   required = false,
   description,
+  optionClassNames,
   className
 }: FormSelectBoxProps<T>) => {
   const { control } = useFormContext();
@@ -62,8 +65,10 @@ export const FormSelectBox = <T extends string> ({
             onValueChange={field.onChange} 
             value={field.value}
           >
-            <SelectTrigger 
+            <SelectTrigger
               id={name}
+              // 選択済みの値に配色があれば、入力欄にも同じ色を付ける
+              className={cn(optionClassNames?.[field.value as T])}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
@@ -71,7 +76,12 @@ export const FormSelectBox = <T extends string> ({
               {/* セレクトアイテム */}
             <SelectContent position="popper">
               {options.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
+                <SelectItem
+                  key={opt.value}
+                  value={opt.value}
+                  // 配色がある選択肢は、隣と色が繋がらないよう枠と間隔を付ける
+                  className={cn(optionClassNames?.[opt.value] && ["my-1 border", optionClassNames[opt.value]])}
+                >
                   {opt.label}
                 </SelectItem>
               ))}
