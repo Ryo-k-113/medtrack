@@ -27,7 +27,7 @@ export const POST = async (
 
     if (!announceType || !announcedAt || !effectiveAt) {
       return NextResponse.json(
-        { message: "告示種別・告示日・適用日は必須です" },
+        { message: "告知種別・告知日・適用日は必須です" },
         { status: 400 }
       )
     }
@@ -67,7 +67,7 @@ export const POST = async (
     })
 
     return NextResponse.json<CreateAnnounceResponse>(
-      { message: "告示情報を登録しました"},
+      { message: "告知情報を登録しました"},
       { status: 201 }
     )
 

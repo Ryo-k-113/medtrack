@@ -56,13 +56,13 @@ export const POST = async (
     })
 
     return NextResponse.json<InactivateAnnounceResponse>(
-      { message: "告示を非表示にしました" },
+      { message: "告知を非表示にしました" },
       { status: 200 }
     )
 
   } catch (error) {
     if (error instanceof Error && error.message === "NOT_FOUND") {
-      return NextResponse.json({ message: "対象の告示は非表示にできません" }, { status: 404 })
+      return NextResponse.json({ message: "対象の告知は非表示にできません" }, { status: 404 })
     }
     if (error) {
       return NextResponse.json({ message: "エラーが発生しました" }, { status: 400 })

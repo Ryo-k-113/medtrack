@@ -113,7 +113,7 @@ export const announceFormSchema = z.object({
   announcedDate: z
     .date()
     .nullable()
-    .refine((val) => val !== null, "告示日は必須です")
+    .refine((val) => val !== null, "告知日は必須です")
     .transform((date) => date.toISOString()),
 
   effectiveDate: z
@@ -125,7 +125,7 @@ export const announceFormSchema = z.object({
   announceType: z
     .enum(AnnounceType)
     .nullable()
-    .refine((val) => val !== null, "告示種別は必須です"),
+    .refine((val) => val !== null, "告知種別は必須です"),
 
   // 在庫消尽後に適用される告知か
   isAfterStockDepletion: z.boolean(),

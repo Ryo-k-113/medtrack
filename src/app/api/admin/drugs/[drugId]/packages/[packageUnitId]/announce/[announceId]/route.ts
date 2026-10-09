@@ -24,7 +24,7 @@ export const PUT = async (
 
   if (!announceType || !announcedAt || !effectiveAt) {
     return NextResponse.json(
-      { message: "告示種別・告示日・適用日は必須です" },
+      { message: "告知種別・告知日・適用日は必須です" },
       { status: 400 }
     )
   }
@@ -86,13 +86,13 @@ export const PUT = async (
     // 指定された条件に一致するレコードが存在しない場合はエラー
     if (!isUpdated) {
       return NextResponse.json(
-        { message: "対象の告示は編集できません" },
+        { message: "対象の告知は編集できません" },
         { status: 404 }
       )
     }
 
     return NextResponse.json<UpdateAnnounceResponse>(
-      { message: "告示を更新しました" },{ status: 200 }
+      { message: "告知を更新しました" },{ status: 200 }
     )
   } catch {
     return NextResponse.json(

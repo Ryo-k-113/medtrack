@@ -68,7 +68,7 @@ export const InactivateAnnounceDialog = ({
       <BaseDialog
         isOpen={isOpen}
         onClose={handleClose}
-        title="告示を非表示にする"
+        title="告知を非表示にする"
         description="この操作は取り消せません。必要であれば出荷状況を変更してください。"
         className="max-w-md"
         actions={
