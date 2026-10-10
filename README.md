@@ -11,11 +11,15 @@ https://medtrack.jp
 このアプリは、医薬品の出荷状況を **発注や在庫確認の場面ですぐ確かめたい** と考えている医療機関の方に、  
 出荷状況がメーカーごとの告知に散らばっていて、情報が追いにくいという課題を、  **包装ごとの出荷状況をひとつの画面で確認できる**  Webアプリです。
 
-<!-- 画像に置き換える -->
 
-| ![トップページ]() | ![検索結果]() | ![包装詳細]() |![マイページ]() |
-| :---: | :---: | :---: |:---: |
-| **トップページ** | **検索結果** | **包装詳細** | **マイページ** |
+https://github.com/user-attachments/assets/dd9f8dad-3209-4d5e-b599-e36eb5bd5289
+
+
+
+
+| <img width="2856" height="1582" alt="トップページ" src="https://github.com/user-attachments/assets/dc3dd81a-15d8-4d9a-85f2-1435b8c606e2" />| <img width="2864" height="1594" alt="検索結果" src="https://github.com/user-attachments/assets/6bd933cb-c897-4e1d-94e8-6e9cd2a02c24" />| <img width="2884" height="3567" alt="包装詳細ページ" src="https://github.com/user-attachments/assets/54e1d838-3dd5-4bf0-90a9-cc4e149fc76f" />|
+| :---: | :---: | :---: |
+| **トップページ** | **検索結果** | **包装詳細** | 
 
 ## 主要機能
 - **医薬品の検索**: 製品名・成分名・YJ・GS1・統一商品コードで検索
@@ -23,11 +27,12 @@ https://medtrack.jp
 - **告知の履歴と予定**: 告知日・適用日の履歴と、販売中止・販売移管の予定を表示
 - **医薬品の更新情報**: その日に出た告知の一覧を、カレンダーで日付を選択し確認
 - **医薬品のブックマーク**: マイページでブックマークした医薬品を表示
+  
 
 
 ## システム構成図
 
-![システム構成図]()
+<img width="3320" height="1440" alt="システム構成図" src="https://github.com/user-attachments/assets/6cfb6dae-934b-45d1-9abd-ed32a52bacf9" />
 
 ## 使用技術
 
@@ -66,7 +71,8 @@ https://medtrack.jp
 
 ## データベース設計
 
-![ER図]()
+<img width="1714" height="1134" alt="ER図" src="https://github.com/user-attachments/assets/9c828b7f-f309-4d9b-a9cc-521c6dd3e529" />
+
 
 ## 開発環境のセットアップ
 
