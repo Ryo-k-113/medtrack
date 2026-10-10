@@ -32,7 +32,7 @@ export const ShippingAnnouncementColumns = ({
   onInactivate,
 }: ColumnsProps) => [
   columnHelper.accessor("announcedDate", {
-    header: "告示日",
+    header: "告知日",
     size: 120,
     cell: (info) => {
       const isInactive = info.row.original.publishStatus === "INACTIVE"

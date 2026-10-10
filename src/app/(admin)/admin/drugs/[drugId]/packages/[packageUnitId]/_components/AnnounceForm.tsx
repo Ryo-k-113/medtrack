@@ -49,7 +49,7 @@ export const AnnounceForm = () => {
   return (
     <div className="border rounded-lg p-5 bg-background shadow-sm mb-4">
       <div className="flex justify-between items-center border-b pb-4 mb-4">  
-        <h3 className="font-bold">出荷告示</h3>
+        <h3 className="font-bold">出荷告知</h3>
       </div>
 
       <FormProvider {...form}>

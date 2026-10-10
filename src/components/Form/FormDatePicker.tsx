@@ -22,6 +22,8 @@ type FormDatePickerProps = {
   placeholder?: string;
   className?: string;
   required?: boolean;
+  yearsBefore?: number;
+  yearsAfter?: number;
 };
 
 export function FormDatePicker({ 
@@ -30,9 +32,16 @@ export function FormDatePicker({
   placeholder = "日付を選択" ,
   className,
   required = false,
+  yearsBefore = 10,
+  yearsAfter = 10,
 }: FormDatePickerProps) {
   const { control } = useFormContext();
   const [isOpen, setIsOpen] = useState(false)
+
+  // 年の選択肢の範囲
+  const thisYear = new Date().getFullYear()
+  const startMonth = new Date(thisYear - yearsBefore, 0, 1)
+  const endMonth = new Date(thisYear + yearsAfter, 11, 31)
 
   return (
     <Controller
@@ -85,6 +94,15 @@ export function FormDatePicker({
                 } 
                 disabled={(date) => date < new Date("1900-01-01")}
                 locale={ja}
+                captionLayout="dropdown"
+                startMonth={startMonth}
+                endMonth={endMonth}
+                // 未選択のときは、選択済みの日付か今日の月を開く
+                defaultMonth={field.value ?? undefined}
+                className="[--cell-size:2.5rem]"
+                classNames={{
+                  dropdown_root: "has-focus:ring-ring/50 has-focus:ring-[3px] relative rounded-md",
+                }}
               />
             </PopoverContent>
           </Popover>

@@ -23,7 +23,7 @@ export const InfoCard = ({
   className,
 }: InfoCardProps) => {
   return (
-    <Card className={cn("w-full max-w-xl shadow-sm border", className)}>
+    <Card className={cn("w-full shadow-sm border", className)}>
       <CardHeader className="p-6">
         <div className="flex flex-row items-center justify-between pb-4 border-b">
           <CardTitle className="text-md font-bold">{title}</CardTitle>

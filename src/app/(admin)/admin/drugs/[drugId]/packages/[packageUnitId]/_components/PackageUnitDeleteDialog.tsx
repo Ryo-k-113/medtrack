@@ -49,7 +49,7 @@ export const PackageUnitDeleteDialog = () => {
           </Button>
         }
         title="削除しますか？"
-        description="紐づく全ての告示履歴も削除されます。この操作は取り消せません。"
+        description="紐づく全ての告知履歴も削除されます。この操作は取り消せません。"
         actionLabel="削除する"
         onAction={handleDelete}
         isLoading={isDeleting}

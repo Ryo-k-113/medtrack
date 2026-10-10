@@ -27,7 +27,7 @@ export const ShippingAnnouncementList = () => {
   return (
     <div className="border rounded-lg p-5 bg-background shadow-sm mb-4">
       <div className="border-b pb-4">
-        <h3 className="font-bold">告示履歴</h3>
+        <h3 className="font-bold">告知履歴</h3>
       </div>
 
       {/* 告示履歴のテーブル */}

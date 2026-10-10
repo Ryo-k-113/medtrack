@@ -59,7 +59,7 @@ export const DrugEditActions = ({
                 <AlertDialogDescription
                   className="text-foreground"
                 >
-                製品に紐づく全ての包装・告示履歴も削除されます。
+                製品に紐づく全ての包装・告知履歴も削除されます。
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

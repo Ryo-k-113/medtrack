@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 type AdminPageTitleProps = {
   title: string
+  subtitle?: string
   backTo?: string     
   backButtonText?: string
   isLoading?: boolean    
@@ -14,6 +15,7 @@ type AdminPageTitleProps = {
 
 export const AdminPageTitle = ({
   title,
+  subtitle,
   backTo,
   backButtonText = "戻る",
   isLoading = false,
@@ -33,6 +35,7 @@ export const AdminPageTitle = ({
         <h2 className="text-lg font-bold text-foreground">
           {title}
         </h2>
+        {subtitle && <p className="text-sm text-weak">{subtitle}</p>}
       </div>
 
       <div className="flex items-center gap-3">

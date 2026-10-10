@@ -1,13 +1,14 @@
 import { ProductType, CurrentShippingStatus, AnnounceType } from "@prisma/client"
 import { PublishStatus } from "@prisma/client"
 import type { CreateDrugFormInput, CreatePackageUnitFormInput } from "@/types/admin/drug"
+import { STATUS_CHIP_CLASS } from "@/constants/statusChip"
 
 
 //出荷ステータス
 export const SHIPPING_STATUS_OPTIONS = [
   { label: "通常出荷", value: CurrentShippingStatus.NORMAL_SHIPMENT },
   { label: "限定出荷", value: CurrentShippingStatus.LIMITED_SHIPMENT },
-  { label: "供給停止", value: CurrentShippingStatus.SHIPMENT_SUSPENDED },
+  { label: "出荷停止", value: CurrentShippingStatus.SHIPMENT_SUSPENDED },
   { label: "販売中止", value: CurrentShippingStatus.DISCONTINUED_SALE },
 ] as const satisfies readonly { label: string; value: CurrentShippingStatus }[]
 
@@ -23,10 +24,22 @@ export const PRODUCT_TYPE_OPTIONS = [
 export const ANNOUNCE_TYPE_OPTIONS = [
   { label: "通常出荷", value: AnnounceType.NORMAL_SHIPMENT },
   { label: "限定出荷", value: AnnounceType.LIMITED_SHIPMENT },
-  { label: "供給停止", value: AnnounceType.SHIPMENT_SUSPENDED },
+  { label: "出荷停止", value: AnnounceType.SHIPMENT_SUSPENDED },
   { label: "販売中止", value: AnnounceType.DISCONTINUED_SALE },
   { label: "販売移管", value: AnnounceType.TRANSFER_OF_SALE },
 ] as const satisfies readonly { label: string; value: AnnounceType }[]
+
+/**
+ * 告知種別のセレクトの配色（選択肢と、選択後の入力欄）
+ * 出荷状況のチップと同じ色にし、ホバー・キーボード操作中は少し濃くする
+ */
+export const ANNOUNCE_TYPE_SELECT_CLASS: Record<AnnounceType, string> = {
+  NORMAL_SHIPMENT: `${STATUS_CHIP_CLASS.NORMAL_SHIPMENT} hover:bg-status-normal/40 focus:bg-status-normal/40 focus:text-status-normal-foreground`,
+  LIMITED_SHIPMENT: `${STATUS_CHIP_CLASS.LIMITED_SHIPMENT} hover:bg-status-limited/40 focus:bg-status-limited/40 focus:text-status-limited-foreground`,
+  SHIPMENT_SUSPENDED: `${STATUS_CHIP_CLASS.SHIPMENT_SUSPENDED} hover:bg-status-stop/40 focus:bg-status-stop/40 focus:text-status-stop-foreground`,
+  DISCONTINUED_SALE: `${STATUS_CHIP_CLASS.DISCONTINUED_SALE} hover:bg-status-discontinued/40 focus:bg-status-discontinued/40 focus:text-status-discontinued`,
+  TRANSFER_OF_SALE: `${STATUS_CHIP_CLASS.TRANSFER_OF_SALE} hover:bg-status-transfer/40 focus:bg-status-transfer/40 focus:text-status-transfer-foreground`,
+}
 
 
 

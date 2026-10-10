@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 type FormCheckboxProps = {
   name: string;
   label: string;
-  description?: string;
+  description?: React.ReactNode;
   className?: string; 
 };
 
@@ -28,9 +28,9 @@ export const FormCheckbox = ({
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
+        <Field data-invalid={fieldState.invalid} className="gap-1">
           <div 
-            className={cn("flex items-center space-x-3","rounded-md border p-4 bg-white",className
+            className={cn("flex items-center space-x-3","rounded-md border px-4 py-3 bg-white",className
             )}
           >
             <Checkbox
@@ -44,7 +44,7 @@ export const FormCheckbox = ({
             </FieldLabel>
           </div>
           {/* 説明文の表示 */}
-          {description && <FieldDescription>{description}</FieldDescription>}
+          {description && <FieldDescription className="text-xs sm:text-sm">{description}</FieldDescription>}
 
           {/* エラーメッセージの表示 */}
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

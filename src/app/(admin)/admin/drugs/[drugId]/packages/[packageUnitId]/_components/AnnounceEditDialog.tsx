@@ -73,7 +73,7 @@ export const AnnounceEditDialog = ({
     <BaseDialog
       isOpen={isOpen}
       onClose={handleClose}
-      title="告示を編集する"
+      title="告知を編集する"
       className="w-full sm:max-w-xl"
       actions={
         <div className="flex justify-end gap-4">
