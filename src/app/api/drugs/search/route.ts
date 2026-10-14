@@ -76,7 +76,13 @@ export const GET = async (request: NextRequest) => {
             orderBy: { id: "asc" },
           },
         },
-        orderBy: { id: "asc" },
+        // 規格 → 剤形 → 医薬品名の順に並べる（同じ規格の製品をまとめて表示する）
+        orderBy: [
+          { Unit: { name: "asc" } },
+          { dosageForm: "asc" },
+          { name: "asc" },
+          { id: "asc" },
+        ],
         skip: (page - 1) * limit,
         take: limit,
       }),
