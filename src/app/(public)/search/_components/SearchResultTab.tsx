@@ -1,4 +1,3 @@
-import type { ProductType } from "@prisma/client"
 import { TabsContent } from "@/components/ui/tabs"
 import { PaginationControl } from "@/components/Pagination/PaginationControl"
 import { PaginationPageSize } from "@/components/Pagination/PaginationPageSize"
@@ -6,20 +5,22 @@ import { DrugCard } from "./DrugCard"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { ShippingStatusGuide } from "./ShippingStatusGuide"
 import { SearchResultTabSkeleton } from "./SearchResultTabSkeleton"
-import { ProductTypeFilter } from "./ProductTypeFilter"
+import { SearchFilterSelect } from "./SearchFilterSelect"
+import { DOSAGE_FORM_FILTER_OPTIONS, PRODUCT_TYPE_FILTER_OPTIONS } from "@/constants/searchFilter"
+import type { SearchFilters } from "@/types/search"
 
 type Props = {
   keyword: string
   result:  ReturnType<typeof useDrugSearch>
-  productTypes: ProductType[]
-  onChangeProductTypes: (types: ProductType[]) => void
+  filters: SearchFilters
+  onChangeFilters: (filters: SearchFilters) => void
 }
 
 export const SearchResultTab = ({
   keyword,
   result,
-  productTypes,
-  onChangeProductTypes,
+  filters,
+  onChangeFilters,
 }: Props) => {
   const {
     drugs,
@@ -41,11 +42,19 @@ export const SearchResultTab = ({
         {/* 出荷ステータスガイド */}
         <ShippingStatusGuide className="justify-start" />
 
-        {/* 製品区分の絞り込みと1ページあたりの表示件数（ラベルはそれぞれの上に置く） */}
+        {/* 製品区分・剤形の絞り込みと1ページあたりの表示件数（ラベルはそれぞれの上に置く） */}
         <div className="flex flex-wrap items-end justify-end gap-x-3 gap-y-2 self-end md:self-auto">
-          <ProductTypeFilter
-            selected={productTypes}
-            onChange={onChangeProductTypes}
+          <SearchFilterSelect
+            label="製品区分"
+            options={PRODUCT_TYPE_FILTER_OPTIONS}
+            selected={filters.productTypes}
+            onChange={(productTypes) => onChangeFilters({ ...filters, productTypes })}
+          />
+          <SearchFilterSelect
+            label="剤形"
+            options={DOSAGE_FORM_FILTER_OPTIONS}
+            selected={filters.dosageForms}
+            onChange={(dosageForms) => onChangeFilters({ ...filters, dosageForms })}
           />
           <PaginationPageSize
             limit={pageSize}
