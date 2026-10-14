@@ -1,9 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import type { ProductType } from "@prisma/client"
 import { useDataFetch } from "@/hooks/useDataFetch"
-import type { SearchDrugsResponse } from "@/types/search"
+import type { SearchDrugsResponse, SearchFilters } from "@/types/search"
 
 const DEFAULT_PAGE_SIZE = 10
 
@@ -11,14 +10,16 @@ const DEFAULT_PAGE_SIZE = 10
  * キーワード単位で医薬品を検索するカスタムフック（offsetページネーション対応）
  * 複数キーワードのタブを同時に扱えるよう、ページ状態はURLクエリではなくフック内に保持する
  * @param keyword - 検索キーワード（空文字の場合は結果を取得しない）
- * @param productTypes - 絞り込む製品区分（空の場合は絞り込まない）
+ * @param filters - 製品区分・剤形の絞り込み条件（空の配列は絞り込まない）
  * @returns 検索結果、ページ情報、ローディング状態、エラー、ページ操作関数
  */
-export const useDrugSearch = (keyword: string, productTypes: ProductType[] = []) => {
+export const useDrugSearch = (keyword: string, filters: SearchFilters) => {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   // 絞り込み条件が変わったら1ページ目に戻すため、ページ番号は条件とセットで持つ
-  const filterKey = [...productTypes].sort().join(",")
+  const productTypesKey = [...filters.productTypes].sort().join(",")
+  const dosageFormsKey = [...filters.dosageForms].sort().join(",")
+  const filterKey = `${productTypesKey}|${dosageFormsKey}`
   const [pageState, setPageState] = useState({ filterKey, page: 1 })
   const page = pageState.filterKey === filterKey ? pageState.page : 1
 
@@ -26,7 +27,8 @@ export const useDrugSearch = (keyword: string, productTypes: ProductType[] = [])
     keyword,
     page: String(page), 
     limit: String(pageSize),
-    ...(filterKey && { productTypes: filterKey }),
+    ...(productTypesKey && { productTypes: productTypesKey }),
+    ...(dosageFormsKey && { dosageForms: dosageFormsKey }),
   })
 
   const { data, isLoading, error } = useDataFetch<SearchDrugsResponse>(

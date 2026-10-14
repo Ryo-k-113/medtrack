@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { ProductType, type Prisma } from "@prisma/client"
+import { DosageForm, ProductType, type Prisma } from "@prisma/client"
 import { buildDrugSearchCondition } from "@/app/api/_lib/buildDrugSearchCondition"
 import type { SearchDrugsResponse } from "@/types/search"
 
 
-/** 絞り込みで受け付ける製品区分 */
-const PRODUCT_TYPES: string[] = Object.values(ProductType)
-
-/** カンマ区切りの製品区分を読み取る */
-const parseProductTypes = (value: string | null): ProductType[] =>
+/**
+ * カンマ区切りの値を、受け付ける値（enum の値）だけに絞って読み取る
+ * @param value - クエリの値（例："TABLET,CAPSULE"）
+ * @param allowed - 受け付ける値の一覧
+ */
+const parseEnumList = <T extends string>(value: string | null, allowed: readonly T[]): T[] =>
   (value ?? "")
     .split(",")
-    .filter((type): type is ProductType => PRODUCT_TYPES.includes(type))
+    .filter((item): item is T => (allowed as readonly string[]).includes(item))
 
 
 /** 医薬品の検索（公開・offsetページネーション） */
@@ -37,8 +38,9 @@ export const GET = async (request: NextRequest) => {
     // 1ページの表示件数
     const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit")) || 10))
 
-    // 製品区分の絞り込み（指定がなければ絞り込まない）
-    const productTypes = parseProductTypes(searchParams.get("productTypes"))
+    // 製品区分・剤形の絞り込み（指定がなければ絞り込まない）
+    const productTypes = parseEnumList(searchParams.get("productTypes"), Object.values(ProductType))
+    const dosageForms = parseEnumList(searchParams.get("dosageForms"), Object.values(DosageForm))
 
     // 公開中の包装が1つ以上あり、キーワードに一致する医薬品を検索
     const where: Prisma.DrugWhereInput = {
@@ -47,6 +49,7 @@ export const GET = async (request: NextRequest) => {
       },
       ...keywordCondition,
       ...(productTypes.length > 0 && { productType: { in: productTypes } }),
+      ...(dosageForms.length > 0 && { dosageForm: { in: dosageForms } }),
     }
 
     const [drugs, totalCount] = await Promise.all([

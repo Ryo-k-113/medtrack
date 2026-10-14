@@ -1,7 +1,7 @@
 
 import { useState } from "react"
 import { Lock } from "lucide-react"
-import type { ProductType } from "@prisma/client"
+import type { SearchFilters } from "@/types/search"
 import { BaseTabs } from "@/components/Tabs/BaseTabs"
 import { useDrugSearch } from "@/hooks/useDrugSearch"
 import { SearchResultTab } from "./SearchResultTab"
@@ -9,21 +9,29 @@ import { LockedResultTab } from "./LockedResultTab"
 import { SearchEmptyState } from "./SearchEmptyState"
 
 
+/** 絞り込みなし */
+const EMPTY_FILTERS: SearchFilters = { productTypes: [], dosageForms: [] }
+
 type Props = {
   keywords: string[]
   unlockedCount: number  // 検索可能なキーワード数
 }
 
 export const SearchResults = ({ keywords, unlockedCount }: Props) => {
-  // 製品区分の絞り込み（すべてのキーワードのタブに共通で適用する）
-  const [productTypes, setProductTypes] = useState<ProductType[]>([])
+  // 製品区分・剤形の絞り込み（キーワードのタブごとに別々に持つ）
+  // キーワードをキーにして持ち、まだ絞り込んでいないタブは EMPTY_FILTERS を使う
+  const [filtersByKeyword, setFiltersByKeyword] = useState<Record<string, SearchFilters>>({})
+  const getFilters = (keyword: string) => filtersByKeyword[keyword] ?? EMPTY_FILTERS
+  const changeFilters = (keyword: string, filters: SearchFilters) => {
+    setFiltersByKeyword((prev) => ({ ...prev, [keyword]: filters }))
+  }
 
   // 鍵付きのキーワードも検索し、件数とぼかした結果を見せて登録案内
   const isLocked = (index: number) => index >= unlockedCount
 
-  const result0 = useDrugSearch(keywords[0] ?? "", productTypes)
-  const result1 = useDrugSearch(keywords[1] ?? "", productTypes)
-  const result2 = useDrugSearch(keywords[2] ?? "", productTypes)
+  const result0 = useDrugSearch(keywords[0] ?? "", getFilters(keywords[0] ?? ""))
+  const result1 = useDrugSearch(keywords[1] ?? "", getFilters(keywords[1] ?? ""))
+  const result2 = useDrugSearch(keywords[2] ?? "", getFilters(keywords[2] ?? ""))
   const results = [result0, result1, result2].slice(0, keywords.length)
 
   // キーワードがないときは、検索例と検索のコツを表示
@@ -65,8 +73,8 @@ export const SearchResults = ({ keywords, unlockedCount }: Props) => {
         key={keyword}
         keyword={keyword}
         result={results[index]}
-        productTypes={productTypes}
-        onChangeProductTypes={setProductTypes}
+        filters={getFilters(keyword)}
+        onChangeFilters={(filters) => changeFilters(keyword, filters)}
       />
     )
   }
