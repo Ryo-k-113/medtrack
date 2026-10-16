@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createServerClient } from "@supabase/ssr"
 import { COOKIE_OPTIONS } from "@/lib/supabase/cookieOptions"
+import { isSupabaseSessionCookie } from "@/lib/supabase/sessionCookie"
 import { REDIRECT_TO_QUERY_KEY } from "@/constants/auth"
 
 /** 未認証時の遷移先 */
@@ -24,7 +25,6 @@ const ADMIN_LOGIN_PATH = "/admin/login"
 
 /**
  * 認証が必要なページへのアクセスを制御する
- * （Next.js 16 で middleware から proxy に名前が変わった）
  */
 export const proxy = async (request: NextRequest) => {
   const { pathname, search } = request.nextUrl
@@ -40,7 +40,6 @@ export const proxy = async (request: NextRequest) => {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
           // 延長したログイン情報を、この後に動く Route Handler やページにも渡す
-          // （リクエスト側にも書き込まないと、古いログイン情報のまま Supabase に問い合わせてしまう）
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
 
           ref.response = NextResponse.next({ request })
@@ -56,12 +55,14 @@ export const proxy = async (request: NextRequest) => {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // ログインの Cookie が無いアクセスは、Supabase に問い合わせずに未ログインとして扱う
+  const hasSessionCookie = request.cookies.getAll().some(isSupabaseSessionCookie)
+
+  const user = hasSessionCookie
+    ? (await supabase.auth.getUser()).data.user
+    : null
 
   // リダイレクトの応答にも、延長したログイン情報を引き継ぐ
-  // （引き継がないと、ブラウザに古いログイン情報が残ったままになる）
   const redirectWithSession = (url: URL) => {
     const response = NextResponse.redirect(url)
     ref.response.cookies.getAll().forEach((cookie) => response.cookies.set(cookie))
@@ -115,7 +116,6 @@ export const proxy = async (request: NextRequest) => {
 }
 
 export const config = {
-  
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)",
   ],
